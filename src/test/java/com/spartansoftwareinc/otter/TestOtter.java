@@ -23,9 +23,9 @@ public class TestOtter {
         // assert size
         checkEvent(events.get(0), START_TMX);
         checkEvent(events.get(1), START_HEADER);
-        checkEvent(events.get(2), PROPERTY);
-        checkEvent(events.get(3), PROPERTY);
-        checkEvent(events.get(4), PROPERTY);
+        checkProperty(events.get(2), "type1", "Property");
+        checkProperty(events.get(3), "type2", "Property with o-encoding");
+        checkProperty(events.get(4), "type3", "Property with lang \"fr\"");
         checkEvent(events.get(5), NOTE);
         checkEvent(events.get(6), NOTE);
         checkEvent(events.get(7), END_HEADER);
@@ -33,9 +33,16 @@ public class TestOtter {
         checkEvent(events.get(9), END_BODY);
         checkEvent(events.get(10), END_TMX);
     }
-    
+
+    private void checkProperty(TMXEvent e, String propertyType, String value) {
+        checkEvent(e, PROPERTY);
+        PropertyEvent p = e.asPropertyEvent();
+        assertNotNull(p);
+        assertEquals(propertyType, p.getType());
+        assertEquals(value, p.getValue());
+    }
     private void checkEvent(TMXEvent e, TMXEventType type) {
-        assertEquals(type, e.getType());
+        assertEquals(type, e.getEventType());
     }
     
     private List<TMXEvent> readEvents(TMXEventReader r) throws Exception {

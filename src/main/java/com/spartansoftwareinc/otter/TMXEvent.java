@@ -1,14 +1,20 @@
 package com.spartansoftwareinc.otter;
 
 public class TMXEvent {
-    private TMXEventType type;
+    private TMXEventType eventType;
     
     protected TMXEvent(TMXEventType type) {
-        this.type = type;
+        this.eventType = type;
     }
     
-    public TMXEventType getType() {
-        return type;
+    public TMXEventType getEventType() {
+        return eventType;
     }
     
+    public PropertyEvent asPropertyEvent() {
+        if (eventType == TMXEventType.PROPERTY) {
+            return (PropertyEvent)this;
+        }
+        throw new IllegalStateException(eventType.toString() + " event is not a property");
+    }
 }

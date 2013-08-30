@@ -4,8 +4,11 @@ import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.xml.namespace.QName;
+import javax.xml.stream.Location;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.events.Attribute;
 import javax.xml.stream.events.Characters;
 import javax.xml.stream.events.EndElement;
 import javax.xml.stream.events.StartElement;
@@ -71,7 +74,9 @@ public class TMXEventReader {
             elements("tmx", "body").attach(new BodyHandler());
         }}.build();
     }
-    
+        
+    static final QName TYPE = new QName("type");
+
     class TMXHandler extends DefaultElementHandler<TMXEventSink> {
         @Override
         public void startElement(StartElement element, TMXEventSink data)
@@ -99,20 +104,24 @@ public class TMXEventReader {
         }
     }
     class PropertyHandler extends DefaultElementHandler<TMXEventSink> {
+        private StringBuilder value = new StringBuilder();
+        private String type = null;
         @Override
         public void startElement(StartElement element, TMXEventSink data)
                 throws SNAXUserException {
-            // TODO Handle attributes, start buffering
+            value.setLength(0);
+            type = attrVal(element, TYPE);
         }
         @Override
         public void characters(StartElement parent, Characters characters,
                 TMXEventSink data) throws SNAXUserException {
-            // TODO handle
+            value.append(characters.getData());
         }
         @Override
         public void endElement(EndElement element, TMXEventSink data)
                 throws SNAXUserException {
-            addEvent(new TMXEvent(PROPERTY));
+            require(type != null, element.getLocation(), "Property type was not set");
+            addEvent(new PropertyEvent(type, value.toString()));
         }
     }
     class NoteHandler extends DefaultElementHandler<TMXEventSink> {
@@ -143,5 +152,15 @@ public class TMXEventReader {
                 throws SNAXUserException {
             addEvent(new TMXEvent(END_BODY));
         }
+    }
+    
+    private void require(boolean condition, Location location, String message) {
+        if (!condition) {
+            throw new OtterException(message, location);
+        }
+    }
+    private String attrVal(StartElement el, QName attrName) {
+        Attribute a = el.getAttributeByName(attrName);
+        return (a == null) ? null : a.getValue();
     }
 }
