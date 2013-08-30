@@ -26,8 +26,8 @@ public class TestOtter {
         checkProperty(events.get(2), "type1", "Property");
         checkProperty(events.get(3), "type2", "Property with o-encoding");
         checkProperty(events.get(4), "type3", "Property with lang \"fr\"");
-        checkEvent(events.get(5), NOTE);
-        checkEvent(events.get(6), NOTE);
+        checkNote(events.get(5), "This is a note with an encoding.");
+        checkNote(events.get(6), "This is a note with lang \"en\".");
         checkEvent(events.get(7), END_HEADER);
         checkEvent(events.get(8), START_BODY);
         checkEvent(events.get(9), END_BODY);
@@ -40,6 +40,12 @@ public class TestOtter {
         assertNotNull(p);
         assertEquals(propertyType, p.getType());
         assertEquals(value, p.getValue());
+    }
+    private void checkNote(TMXEvent e, String note) {
+        checkEvent(e, NOTE);
+        Note n = e.getNote();
+        assertNotNull(n);
+        assertEquals(note, n.getContent());
     }
     private void checkEvent(TMXEvent e, TMXEventType type) {
         assertEquals(type, e.getEventType());

@@ -125,20 +125,21 @@ public class TMXEventReader {
         }
     }
     class NoteHandler extends DefaultElementHandler<TMXEventSink> {
+        private StringBuilder value = new StringBuilder();
         @Override
         public void startElement(StartElement element, TMXEventSink data)
                 throws SNAXUserException {
-            // TODO Handle attributes, start buffering
+            value.setLength(0);
         }
         @Override
         public void characters(StartElement parent, Characters characters,
                 TMXEventSink data) throws SNAXUserException {
-            // TODO handle
+            value.append(characters.getData());
         }
         @Override
         public void endElement(EndElement element, TMXEventSink data)
                 throws SNAXUserException {
-            addEvent(new TMXEvent(NOTE));
+            addEvent(new TMXEvent(NOTE, new Note(value.toString())));
         }
     }
     class BodyHandler extends DefaultElementHandler<TMXEventSink> {

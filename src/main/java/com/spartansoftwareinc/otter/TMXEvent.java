@@ -23,4 +23,11 @@ public class TMXEvent {
         }
         throw new IllegalStateException(eventType.toString() + " event is not a property");
     }
+    
+    public Note getNote() {
+        if (eventType == TMXEventType.NOTE) {
+            return (Note)resource;
+        }
+        throw new IllegalStateException(eventType.toString() + " event is not a note");
+    }
 }
