@@ -35,6 +35,13 @@ public class TMXEvent {
         if (eventType == TMXEventType.START_HEADER) {
             return (Header)resource;
         }
-        throw new IllegalStateException(eventType.toString() + " event is not a note");
+        throw new IllegalStateException(eventType.toString() + " event is not a header");
+    }
+    
+    public TU getTU() {
+        if (eventType == TMXEventType.TU) {
+            return (TU)resource;
+        }
+        throw new IllegalStateException(eventType.toString() + " event is not a TU");
     }
 }

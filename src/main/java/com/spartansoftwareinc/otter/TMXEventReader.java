@@ -8,7 +8,6 @@ import javax.xml.namespace.QName;
 import javax.xml.stream.Location;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.events.Attribute;
 import javax.xml.stream.events.Characters;
 import javax.xml.stream.events.EndElement;
 import javax.xml.stream.events.StartElement;
@@ -20,6 +19,7 @@ import net.sundell.snax.SNAXParser;
 import net.sundell.snax.SNAXUserException;
 
 import static com.spartansoftwareinc.otter.TMXEventType.*;
+import static com.spartansoftwareinc.otter.Util.*;
 
 public class TMXEventReader {
     
@@ -31,10 +31,10 @@ public class TMXEventReader {
     private TMXEventReader(Reader r) throws XMLStreamException {
         XMLInputFactory factory = XMLInputFactory.newFactory();
         parser = SNAXParser.createParser(factory, buildModel());
-        parser.startParsing(r, new TMXEventSink());
+        parser.startParsing(r, new SegmentBuilder());
     }
     
-    private SNAXParser<TMXEventSink> parser;
+    private SNAXParser<SegmentBuilder> parser;
     private List<TMXEvent> events = new ArrayList<TMXEvent>();
 
     public boolean hasNext() throws XMLStreamException {
@@ -57,21 +57,20 @@ public class TMXEventReader {
         throw new IllegalStateException("No event available");
     }
     
-    class TMXEventSink {
-        
-    }
-    
     protected void addEvent(TMXEvent event) {
         events.add(event);
     }
     
-    private NodeModel<TMXEventSink> buildModel() {
-        return new NodeModelBuilder<TMXEventSink>() {{
+    private NodeModel<SegmentBuilder> buildModel() {
+        return new NodeModelBuilder<SegmentBuilder>() {{
             elements("tmx").attach(new TMXHandler());
             elements("tmx", "header").attach(new HeaderHandler());
             elements("tmx", "header", "prop").attach(new HeaderPropertyHandler());
             elements("tmx", "header", "note").attach(new HeaderNoteHandler());
             elements("tmx", "body").attach(new BodyHandler());
+            elements("tmx", "body", "tu").attach(new TuHandler());
+            elements("tmx", "body", "tu", "tuv").attach(new TuvHandler());
+            elements("tmx", "body", "tu", "tuv", "seg").attach(new SegHandler());
         }}.build();
     }
         
@@ -89,22 +88,22 @@ public class TMXEventReader {
     static final QName CHANGEDATE = new QName("changedate");
     static final QName CHANGEID = new QName("changeid");
 
-    class TMXHandler extends DefaultElementHandler<TMXEventSink> {
+    class TMXHandler extends DefaultElementHandler<SegmentBuilder> {
         @Override
-        public void startElement(StartElement element, TMXEventSink data)
+        public void startElement(StartElement element, SegmentBuilder data)
                 throws SNAXUserException {
             // TODO verify version
             addEvent(new TMXEvent(START_TMX));
         }
         @Override
-        public void endElement(EndElement element, TMXEventSink data)
+        public void endElement(EndElement element, SegmentBuilder data)
                 throws SNAXUserException {
             addEvent(new TMXEvent(END_TMX));
         }
     }
-    class HeaderHandler extends DefaultElementHandler<TMXEventSink> {
+    class HeaderHandler extends DefaultElementHandler<SegmentBuilder> {
         @Override
-        public void startElement(StartElement element, TMXEventSink data)
+        public void startElement(StartElement element, SegmentBuilder data)
                 throws SNAXUserException {
             Header header = new Header();
             header.setAdminLang(attrVal(element, ADMINLANG));
@@ -122,70 +121,94 @@ public class TMXEventReader {
             addEvent(new TMXEvent(START_HEADER, header));
         }
         @Override
-        public void endElement(EndElement element, TMXEventSink data)
+        public void endElement(EndElement element, SegmentBuilder data)
                 throws SNAXUserException {
             addEvent(new TMXEvent(END_HEADER));
         }
     }
-    class HeaderPropertyHandler extends DefaultElementHandler<TMXEventSink> {
+    class HeaderPropertyHandler extends DefaultElementHandler<SegmentBuilder> {
         private StringBuilder value = new StringBuilder();
         private String type = null;
         @Override
-        public void startElement(StartElement element, TMXEventSink data)
+        public void startElement(StartElement element, SegmentBuilder data)
                 throws SNAXUserException {
             value.setLength(0);
             type = attrVal(element, TYPE);
         }
         @Override
         public void characters(StartElement parent, Characters characters,
-                TMXEventSink data) throws SNAXUserException {
+                SegmentBuilder data) throws SNAXUserException {
             value.append(characters.getData());
         }
         @Override
-        public void endElement(EndElement element, TMXEventSink data)
+        public void endElement(EndElement element, SegmentBuilder data)
                 throws SNAXUserException {
             require(type != null, element.getLocation(), "Property type was not set");
             addEvent(new TMXEvent(HEADER_PROPERTY, new Property(type, value.toString())));
         }
     }
-    class HeaderNoteHandler extends DefaultElementHandler<TMXEventSink> {
+    class HeaderNoteHandler extends DefaultElementHandler<SegmentBuilder> {
         private StringBuilder value = new StringBuilder();
         @Override
-        public void startElement(StartElement element, TMXEventSink data)
+        public void startElement(StartElement element, SegmentBuilder data)
                 throws SNAXUserException {
             value.setLength(0);
         }
         @Override
         public void characters(StartElement parent, Characters characters,
-                TMXEventSink data) throws SNAXUserException {
+                SegmentBuilder data) throws SNAXUserException {
             value.append(characters.getData());
         }
         @Override
-        public void endElement(EndElement element, TMXEventSink data)
+        public void endElement(EndElement element, SegmentBuilder data)
                 throws SNAXUserException {
             addEvent(new TMXEvent(HEADER_NOTE, new Note(value.toString())));
         }
     }
-    class BodyHandler extends DefaultElementHandler<TMXEventSink> {
+    class BodyHandler extends DefaultElementHandler<SegmentBuilder> {
         @Override
-        public void startElement(StartElement element, TMXEventSink data)
+        public void startElement(StartElement element, SegmentBuilder data)
                 throws SNAXUserException {
             addEvent(new TMXEvent(START_BODY));
         }
         @Override
-        public void endElement(EndElement element, TMXEventSink data)
+        public void endElement(EndElement element, SegmentBuilder data)
                 throws SNAXUserException {
             addEvent(new TMXEvent(END_BODY));
         }
     }
-    
-    private void require(boolean condition, Location location, String message) {
-        if (!condition) {
-            throw new OtterException(message, location);
+    class TuHandler extends DefaultElementHandler<SegmentBuilder> {
+        @Override
+        public void startElement(StartElement element, SegmentBuilder data)
+                throws SNAXUserException {
+            data.startTu(element);
+        }
+        @Override
+        public void endElement(EndElement element, SegmentBuilder data)
+                throws SNAXUserException {
+            addEvent(new TMXEvent(TU, data.getTu()));
         }
     }
-    private String attrVal(StartElement el, QName attrName) {
-        Attribute a = el.getAttributeByName(attrName);
-        return (a == null) ? null : a.getValue();
+    class TuvHandler extends DefaultElementHandler<SegmentBuilder> {
+        @Override
+        public void startElement(StartElement element, SegmentBuilder data)
+                throws SNAXUserException {
+            data.startTuv(element);
+        }
+        @Override
+        public void endElement(EndElement element, SegmentBuilder data)
+                throws SNAXUserException {
+            data.endTuv();
+        }
     }
+    class SegHandler extends DefaultElementHandler<SegmentBuilder> {
+        // Buffer goes in the sink so I can handle inline codes
+        @Override
+        public void characters(StartElement parent, Characters characters,
+                SegmentBuilder data) throws SNAXUserException {
+            data.addSegmentContent(characters.getData());
+        }
+    }    
+
+
 }

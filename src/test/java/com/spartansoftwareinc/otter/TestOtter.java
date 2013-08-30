@@ -4,6 +4,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import static com.spartansoftwareinc.otter.TMXEventType.*;
 
@@ -49,6 +50,26 @@ public class TestOtter {
         checkEvent(events.get(9), END_BODY);
         checkEvent(events.get(10), END_TMX);
     }
+    
+    @Test
+    public void testBody() throws Exception {
+        InputStream is = getClass().getResourceAsStream("/body.tmx");
+        // XXX Who handles BOMs?
+        TMXEventReader reader = TMXEventReader.createTMXEventReader(
+                            new InputStreamReader(is, "UTF-8"));
+        List<TU> tus = readTUs(reader);
+        assertNotNull(tus);
+        assertEquals(1, tus.size());
+        TU tu = tus.get(0);
+        Map<String, TUV> tuvs = tu.getTuvs();
+        assertEquals(2, tuvs.size());
+        TUV enTuv = tuvs.get("EN-US");
+        assertNotNull(enTuv);
+        assertEquals("Hello world!", enTuv.getContent());
+        TUV frTuv = tuvs.get("FR-FR");
+        assertNotNull(frTuv);
+        assertEquals("Bonjour tout le monde!", frTuv.getContent());
+    }
 
     private void checkProperty(TMXEvent e, String propertyType, String value) {
         checkEvent(e, HEADER_PROPERTY);
@@ -65,6 +86,18 @@ public class TestOtter {
     }
     private void checkEvent(TMXEvent e, TMXEventType type) {
         assertEquals(type, e.getEventType());
+    }
+    
+    private List<TU> readTUs(TMXEventReader r) throws Exception {
+        List<TMXEvent> events = readEvents(r);
+        List<TU> tus = new ArrayList<TU>();
+        for (TMXEvent e : events) {
+            if (e.getEventType() == TU) {
+                assertNotNull(e.getTU());
+                tus.add(e.getTU());
+            }
+        }
+        return tus;
     }
     
     private List<TMXEvent> readEvents(TMXEventReader r) throws Exception {
