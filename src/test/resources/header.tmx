@@ -1,0 +1,24 @@
+<?xml version="1.0" ?>
+<!DOCTYPE tmx SYSTEM "tmx14.dtd">
+<tmx version="1.4">
+<header
+	 creationtool="TRADOS Translator's Workbench for Windows"
+	 creationtoolversion="Edition 8 Build 863"
+	 segtype="sentence"
+	 o-tmf="TW4Win 2.0 Format"
+	 adminlang="EN-US"
+	 srclang="EN-US"
+	 datatype="rtf"
+	 creationdate="20100223T044327Z"
+	 creationid="TESTERSON"
+>
+<prop type="type1">Property</prop>
+<prop type="type2" o-encoding="ASCII">Property with o-encoding</prop>
+<prop type="type3" xml:lang="fr">Property with lang "fr"</prop>
+<note o-encoding="ASCII">This is a note with an encoding.</note>
+<note xml:lang="en">This is a note with lang "en".</note>
+<!-- TODO: ude elements -->
+</header>
+<body>
+</body>
+</tmx>
