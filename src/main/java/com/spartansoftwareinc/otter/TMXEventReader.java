@@ -121,7 +121,7 @@ public class TMXEventReader {
         public void endElement(EndElement element, TMXEventSink data)
                 throws SNAXUserException {
             require(type != null, element.getLocation(), "Property type was not set");
-            addEvent(new PropertyEvent(type, value.toString()));
+            addEvent(new TMXEvent(PROPERTY, new Property(type, value.toString())));
         }
     }
     class NoteHandler extends DefaultElementHandler<TMXEventSink> {

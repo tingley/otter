@@ -36,7 +36,7 @@ public class TestOtter {
 
     private void checkProperty(TMXEvent e, String propertyType, String value) {
         checkEvent(e, PROPERTY);
-        PropertyEvent p = e.asPropertyEvent();
+        Property p = e.getProperty();
         assertNotNull(p);
         assertEquals(propertyType, p.getType());
         assertEquals(value, p.getValue());

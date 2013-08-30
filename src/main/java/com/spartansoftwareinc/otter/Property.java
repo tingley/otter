@@ -1,11 +1,7 @@
 package com.spartansoftwareinc.otter;
 
-public class PropertyEvent extends TMXEvent {
+public class Property {
 
-    public PropertyEvent() {
-        super(TMXEventType.PROPERTY);
-    }
-    
     public String type, value;
     
     public String getType() {
@@ -24,8 +20,7 @@ public class PropertyEvent extends TMXEvent {
         this.value = value;
     }
 
-    public PropertyEvent(String type, String value) {
-        this();
+    public Property(String type, String value) {
         this.type = type;
         this.value = value;
     }
