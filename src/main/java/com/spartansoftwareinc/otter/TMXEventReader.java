@@ -76,6 +76,18 @@ public class TMXEventReader {
     }
         
     static final QName TYPE = new QName("type");
+    static final QName CREATIONTOOL = new QName("creationtool");
+    static final QName CREATIONTOOLVERSION = new QName("creationtoolversion");
+    static final QName SEGTYPE = new QName("segtype");
+    static final QName TMF = new QName("o-tmf");
+    static final QName ADMINLANG = new QName("adminlang");
+    static final QName SRCLANG = new QName("srclang");
+    static final QName DATATYPE = new QName("datatype");
+    static final QName ENCODING = new QName("o-encoding");
+    static final QName CREATIONDATE = new QName("creationdate");
+    static final QName CREATIONID = new QName("creationid");
+    static final QName CHANGEDATE = new QName("changedate");
+    static final QName CHANGEID = new QName("changeid");
 
     class TMXHandler extends DefaultElementHandler<TMXEventSink> {
         @Override
@@ -94,8 +106,20 @@ public class TMXEventReader {
         @Override
         public void startElement(StartElement element, TMXEventSink data)
                 throws SNAXUserException {
-            // TODO Handle attributes
-            addEvent(new TMXEvent(START_HEADER));
+            Header header = new Header();
+            header.setAdminLang(attrVal(element, ADMINLANG));
+            header.setChangeDate(attrVal(element, CHANGEDATE));
+            header.setChangeId(attrVal(element, CHANGEID));
+            header.setCreationDate(attrVal(element, CREATIONDATE));
+            header.setCreationId(attrVal(element, CREATIONID));
+            header.setCreationTool(attrVal(element, CREATIONTOOL));
+            header.setCreationToolVersion(attrVal(element, CREATIONTOOLVERSION));
+            header.setDataType(attrVal(element, DATATYPE));
+            header.setEncoding(attrVal(element, ENCODING));
+            header.setSegType(attrVal(element, SEGTYPE));
+            header.setSrcLang(attrVal(element, SRCLANG));
+            header.setTmf(attrVal(element, TMF));
+            addEvent(new TMXEvent(START_HEADER, header));
         }
         @Override
         public void endElement(EndElement element, TMXEventSink data)

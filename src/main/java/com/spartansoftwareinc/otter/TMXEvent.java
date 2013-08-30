@@ -30,4 +30,11 @@ public class TMXEvent {
         }
         throw new IllegalStateException(eventType.toString() + " event is not a note");
     }
+    
+    public Header getHeader() {
+        if (eventType == TMXEventType.START_HEADER) {
+            return (Header)resource;
+        }
+        throw new IllegalStateException(eventType.toString() + " event is not a note");
+    }
 }

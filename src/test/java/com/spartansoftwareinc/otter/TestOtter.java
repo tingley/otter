@@ -20,9 +20,25 @@ public class TestOtter {
                             new InputStreamReader(is, "UTF-8"));
         List<TMXEvent> events = readEvents(reader);
         assertNotNull(events);
-        // assert size
         checkEvent(events.get(0), START_TMX);
+        // Check the header
         checkEvent(events.get(1), START_HEADER);
+        Header header = events.get(1).getHeader();
+        assertNotNull(header);
+        assertEquals("TRADOS Translator's Workbench for Windows", header.getCreationTool());
+        assertEquals("Edition 8 Build 863", header.getCreationToolVersion());
+        assertEquals("sentence", header.getSegType());
+        assertEquals("TW4Win 2.0 Format", header.getTmf());
+        assertEquals("EN-US", header.getAdminLang());
+        assertEquals("EN-US", header.getSrcLang());
+        assertEquals("rtf", header.getDataType());
+        // Optional ones
+        assertEquals("20100223T044327Z", header.getCreationDate());
+        assertEquals("TESTERSON", header.getCreationId());
+        assertNull(header.getEncoding());
+        assertNull(header.getChangeDate());
+        assertNull(header.getChangeId());
+
         checkProperty(events.get(2), "type1", "Property");
         checkProperty(events.get(3), "type2", "Property with o-encoding");
         checkProperty(events.get(4), "type3", "Property with lang \"fr\"");
