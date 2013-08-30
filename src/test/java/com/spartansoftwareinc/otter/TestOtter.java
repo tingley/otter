@@ -51,14 +51,14 @@ public class TestOtter {
     }
 
     private void checkProperty(TMXEvent e, String propertyType, String value) {
-        checkEvent(e, PROPERTY);
+        checkEvent(e, HEADER_PROPERTY);
         Property p = e.getProperty();
         assertNotNull(p);
         assertEquals(propertyType, p.getType());
         assertEquals(value, p.getValue());
     }
     private void checkNote(TMXEvent e, String note) {
-        checkEvent(e, NOTE);
+        checkEvent(e, HEADER_NOTE);
         Note n = e.getNote();
         assertNotNull(n);
         assertEquals(note, n.getContent());

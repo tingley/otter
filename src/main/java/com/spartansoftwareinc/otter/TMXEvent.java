@@ -18,14 +18,14 @@ public class TMXEvent {
     }
     
     public Property getProperty() {
-        if (eventType == TMXEventType.PROPERTY) {
+        if (eventType == TMXEventType.HEADER_PROPERTY) {
             return (Property)resource;
         }
         throw new IllegalStateException(eventType.toString() + " event is not a property");
     }
     
     public Note getNote() {
-        if (eventType == TMXEventType.NOTE) {
+        if (eventType == TMXEventType.HEADER_NOTE) {
             return (Note)resource;
         }
         throw new IllegalStateException(eventType.toString() + " event is not a note");

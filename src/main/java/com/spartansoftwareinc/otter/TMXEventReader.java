@@ -69,8 +69,8 @@ public class TMXEventReader {
         return new NodeModelBuilder<TMXEventSink>() {{
             elements("tmx").attach(new TMXHandler());
             elements("tmx", "header").attach(new HeaderHandler());
-            elements("tmx", "header", "prop").attach(new PropertyHandler());
-            elements("tmx", "header", "note").attach(new NoteHandler());
+            elements("tmx", "header", "prop").attach(new HeaderPropertyHandler());
+            elements("tmx", "header", "note").attach(new HeaderNoteHandler());
             elements("tmx", "body").attach(new BodyHandler());
         }}.build();
     }
@@ -127,7 +127,7 @@ public class TMXEventReader {
             addEvent(new TMXEvent(END_HEADER));
         }
     }
-    class PropertyHandler extends DefaultElementHandler<TMXEventSink> {
+    class HeaderPropertyHandler extends DefaultElementHandler<TMXEventSink> {
         private StringBuilder value = new StringBuilder();
         private String type = null;
         @Override
@@ -145,10 +145,10 @@ public class TMXEventReader {
         public void endElement(EndElement element, TMXEventSink data)
                 throws SNAXUserException {
             require(type != null, element.getLocation(), "Property type was not set");
-            addEvent(new TMXEvent(PROPERTY, new Property(type, value.toString())));
+            addEvent(new TMXEvent(HEADER_PROPERTY, new Property(type, value.toString())));
         }
     }
-    class NoteHandler extends DefaultElementHandler<TMXEventSink> {
+    class HeaderNoteHandler extends DefaultElementHandler<TMXEventSink> {
         private StringBuilder value = new StringBuilder();
         @Override
         public void startElement(StartElement element, TMXEventSink data)
@@ -163,7 +163,7 @@ public class TMXEventReader {
         @Override
         public void endElement(EndElement element, TMXEventSink data)
                 throws SNAXUserException {
-            addEvent(new TMXEvent(NOTE, new Note(value.toString())));
+            addEvent(new TMXEvent(HEADER_NOTE, new Note(value.toString())));
         }
     }
     class BodyHandler extends DefaultElementHandler<TMXEventSink> {
