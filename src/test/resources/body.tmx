@@ -22,5 +22,13 @@
 <seg>Bonjour tout le monde!</seg>
 </tuv>
 </tu>
+<tu>
+<tuv xml:lang="EN-US">
+    <seg>Simple <ph x="1">&lt;br/&gt;</ph> tags.</seg>
+</tuv>
+<tuv xml:lang="FR-FR">
+    <seg>Simple <ph x="1">&lt;br/&gt;</ph> tags (French).</seg>
+</tuv>
+</tu>
 </body>
 </tmx>

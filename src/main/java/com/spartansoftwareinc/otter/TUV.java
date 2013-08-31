@@ -1,8 +1,11 @@
 package com.spartansoftwareinc.otter;
 
+import java.util.List;
+import java.util.ArrayList;
+
 public class TUV {
     private String locale;
-    private String content;
+    private List<TUVContent> contents = new ArrayList<TUVContent>();
  
     public TUV(String locale) {
         this.locale = locale;
@@ -16,12 +19,16 @@ public class TUV {
         this.locale = locale;
     }
 
-    public String getContent() {
-        return content;
+    public List<TUVContent> getContents() {
+        return contents;
     }
 
-    public void setContent(String content) {
-        this.content = content;
+    public void setContents(List<TUVContent> contents) {
+        this.contents = contents;
+    }
+    
+    public void addContent(TUVContent content) {
+        contents.add(content);
     }
 
 }

@@ -51,6 +51,7 @@ public class TestOtter {
         checkEvent(events.get(10), END_TMX);
     }
     
+    @SuppressWarnings("serial")
     @Test
     public void testBody() throws Exception {
         InputStream is = getClass().getResourceAsStream("/body.tmx");
@@ -59,18 +60,32 @@ public class TestOtter {
                             new InputStreamReader(is, "UTF-8"));
         List<TU> tus = readTUs(reader);
         assertNotNull(tus);
-        assertEquals(1, tus.size());
+        assertEquals(2, tus.size());
         TU tu = tus.get(0);
         Map<String, TUV> tuvs = tu.getTuvs();
         assertEquals(2, tuvs.size());
         TUV enTuv = tuvs.get("EN-US");
         assertNotNull(enTuv);
-        assertEquals("Hello world!", enTuv.getContent());
+        assertEquals(1, enTuv.getContents().size());
+        assertEquals(new TextContent("Hello world!"), enTuv.getContents().get(0));
         TUV frTuv = tuvs.get("FR-FR");
         assertNotNull(frTuv);
-        assertEquals("Bonjour tout le monde!", frTuv.getContent());
+        assertEquals(1, frTuv.getContents().size());
+        assertEquals(new TextContent("Bonjour tout le monde!"), frTuv.getContents().get(0));
+       
+        /*
+        tu = tus.get(1);
+        enTuv = tuvs.get("EN-US");
+        assertNotNull(enTuv);
+        // TODO: how do I want to interact with this?
+        assertEquals(new ArrayList<TUVContent>(){{
+            add(new TextContent("Simple "));
+            add(new PhContent("<br/>"));
+            add(new TextContent(" tags."));
+        }}, enTuv.getContents());
+        */
     }
-
+    
     private void checkProperty(TMXEvent e, String propertyType, String value) {
         checkEvent(e, HEADER_PROPERTY);
         Property p = e.getProperty();

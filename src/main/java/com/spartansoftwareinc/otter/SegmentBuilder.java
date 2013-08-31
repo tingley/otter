@@ -28,7 +28,7 @@ class SegmentBuilder {
     }
     
     void endTuv() {
-        tuv.setContent(sb.toString());
+        tuv.addContent(new TextContent(sb.toString()));
         sb.setLength(0);
     }
     
