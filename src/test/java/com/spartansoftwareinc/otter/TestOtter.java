@@ -73,17 +73,15 @@ public class TestOtter {
         assertEquals(1, frTuv.getContents().size());
         assertEquals(new TextContent("Bonjour tout le monde!"), frTuv.getContents().get(0));
        
-        /*
         tu = tus.get(1);
+        tuvs = tu.getTuvs();
         enTuv = tuvs.get("EN-US");
         assertNotNull(enTuv);
-        // TODO: how do I want to interact with this?
         assertEquals(new ArrayList<TUVContent>(){{
             add(new TextContent("Simple "));
-            add(new PhContent("<br/>"));
+            add(new PhTag(1, "<br/>"));
             add(new TextContent(" tags."));
         }}, enTuv.getContents());
-        */
     }
     
     private void checkProperty(TMXEvent e, String propertyType, String value) {

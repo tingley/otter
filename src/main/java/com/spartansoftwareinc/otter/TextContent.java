@@ -18,4 +18,14 @@ public class TextContent implements TUVContent {
         if (o == null || !(o instanceof TextContent)) return false;
         return value.equals(((TextContent)o).value);
     }
+    
+    @Override
+    public int hashCode() {
+        return value.hashCode();
+    }
+    
+    @Override
+    public String toString() {
+        return value;
+    }
 }

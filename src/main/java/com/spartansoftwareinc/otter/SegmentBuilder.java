@@ -5,7 +5,6 @@ import javax.xml.stream.events.StartElement;
 import static com.spartansoftwareinc.otter.Util.*;
 
 class SegmentBuilder {
-    private StringBuilder sb = new StringBuilder();
     private TU tu;
     private TUV tuv;
     
@@ -28,11 +27,13 @@ class SegmentBuilder {
     }
     
     void endTuv() {
-        tuv.addContent(new TextContent(sb.toString()));
-        sb.setLength(0);
     }
     
-    void addSegmentContent(String content) {
-        sb.append(content);
+    void addSegmentText(String content) {
+        tuv.addContent(new TextContent(content));
+    }
+    
+    void addTUVContent(TUVContent content) {
+        tuv.addContent(content);
     }
 }

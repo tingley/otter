@@ -71,10 +71,13 @@ public class TMXEventReader {
             elements("tmx", "body", "tu").attach(new TuHandler());
             elements("tmx", "body", "tu", "tuv").attach(new TuvHandler());
             elements("tmx", "body", "tu", "tuv", "seg").attach(new SegHandler());
+            elements("tmx", "body", "tu", "tuv", "seg", "ph").attach(new SegPhHandler());
         }}.build();
     }
-        
+    
+    static final QName X = new QName("x");
     static final QName TYPE = new QName("type");
+    static final QName ASSOC = new QName("assoc");
     static final QName CREATIONTOOL = new QName("creationtool");
     static final QName CREATIONTOOLVERSION = new QName("creationtoolversion");
     static final QName SEGTYPE = new QName("segtype");
@@ -206,9 +209,41 @@ public class TMXEventReader {
         @Override
         public void characters(StartElement parent, Characters characters,
                 SegmentBuilder data) throws SNAXUserException {
-            data.addSegmentContent(characters.getData());
+            data.addSegmentText(characters.getData());
         }
-    }    
-
+    }
+    class SegPhHandler extends DefaultElementHandler<SegmentBuilder> {
+        private StringBuilder sb = new StringBuilder();
+        private Integer x;
+        private String type, assoc;
+        @Override
+        public void startElement(StartElement element, SegmentBuilder data)
+                throws SNAXUserException {
+            sb.setLength(0);
+            x = attrValAsInteger(element, X);
+            type = attrVal(element, TYPE);
+            assoc = attrVal(element, ASSOC);
+        }
+        @Override
+        public void characters(StartElement parent, Characters characters,
+                SegmentBuilder data) throws SNAXUserException {
+            sb.append(characters.getData());
+        }
+        @Override
+        public void endElement(EndElement element, SegmentBuilder data)
+                throws SNAXUserException {
+            PhTag ph = new PhTag(sb.toString());
+            if (x != null) {
+                ph.setX(x);
+            }
+            if (type != null) {
+                ph.setType(type);
+            }
+            if (assoc != null) {
+                ph.setType(assoc);
+            }
+            data.addTUVContent(ph);
+        }
+    }
 
 }
