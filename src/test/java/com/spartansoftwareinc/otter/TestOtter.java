@@ -82,6 +82,13 @@ public class TestOtter {
             add(new PhTag(1, "<br/>"));
             add(new TextContent(" tags."));
         }}, enTuv.getContents());
+        frTuv = tuvs.get("FR-FR");
+        assertNotNull(frTuv);
+        assertEquals(new ArrayList<TUVContent>(){{
+            add(new TextContent("Simple "));
+            add(new PhTag(1, "<br/>"));
+            add(new TextContent(" tags (French)."));
+        }}, frTuv.getContents());
     }
     
     private void checkProperty(TMXEvent e, String propertyType, String value) {
