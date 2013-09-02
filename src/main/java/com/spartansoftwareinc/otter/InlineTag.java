@@ -24,5 +24,12 @@ public abstract class InlineTag implements TUVContent {
         if (o1 != null && o2 != null) return o1.equals(o2);
         return false;
     }
+    
+    @Override
+    public boolean equals(Object o) {
+        if (o == this) return true;
+        if (o == null || !(o instanceof InlineTag)) return false;
+        return eq(data, ((InlineTag)o).getData());
+    }
 
 }

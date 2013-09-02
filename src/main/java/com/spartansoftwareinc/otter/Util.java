@@ -26,5 +26,19 @@ class Util {
                                      el.getLocation());
         }
     }
+    static Integer requireAttrValAsInteger(StartElement el, QName attrName) {
+        Attribute a = el.getAttributeByName(attrName);
+        if (a == null) {
+            throw new OtterException("Required attribute " + attrName + " is missing", 
+                    el.getLocation());
+        }
+        try {
+            return Integer.valueOf(a.getValue());
+        }
+        catch (NumberFormatException e) {
+            throw new OtterException("Not an integer value: " + a.getValue(),
+                                     el.getLocation());
+        }
+    }
 
 }

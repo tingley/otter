@@ -1,6 +1,9 @@
 package com.spartansoftwareinc.otter;
 
-public class StandaloneTag extends InlineTag implements NumberedTag {    
+/**
+ * Base class for standalone inline tags.
+ */
+public abstract class StandaloneTag extends InlineTag implements NumberedTag {    
     private int x = NO_VALUE;
 
     protected StandaloneTag() {
@@ -25,4 +28,10 @@ public class StandaloneTag extends InlineTag implements NumberedTag {
         this.x = x;
     }
     
+    @Override
+    public boolean equals(Object o) {
+        return super.equals(o) && 
+                (o instanceof StandaloneTag) &&
+                x == ((StandaloneTag)o).getX();
+    }
 }

@@ -39,13 +39,10 @@ public class PhTag extends StandaloneTag {
 
     @Override
     public boolean equals(Object o) {
-        if (o == this) return true;
-        if (o == null || !(o instanceof PhTag)) return false;
-        PhTag ph = (PhTag)o;
-        return eq(getX(), ph.getX()) &&
-               eq(getData(), ph.getData()) &&
-               eq(getType(), ph.getType()) &&
-               eq(getAssoc(), ph.getAssoc());
+        return super.equals(o) &&
+                (o instanceof PhTag) && 
+               eq(getType(), ((PhTag)o).getType()) &&
+               eq(getAssoc(), ((PhTag)o).getAssoc());
     }
     
     @Override

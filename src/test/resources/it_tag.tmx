@@ -1,0 +1,26 @@
+<?xml version="1.0" ?>
+<!DOCTYPE tmx SYSTEM "tmx14.dtd">
+<tmx version="1.4">
+<header
+	 creationtool="TRADOS Translator's Workbench for Windows"
+	 creationtoolversion="Edition 8 Build 863"
+	 segtype="sentence"
+	 o-tmf="TW4Win 2.0 Format"
+	 adminlang="EN-US"
+	 srclang="EN-US"
+	 datatype="rtf"
+	 creationdate="20100223T044327Z"
+	 creationid="TESTERSON"
+/>
+<body>
+<tu>
+<tuv xml:lang="EN-US">
+    <seg>Simple <it x="1">&lt;br/&gt;</it>isolated<it x="2">&lt;br/&gt;</it>tag.</seg>
+</tuv>
+<tuv xml:lang="FR-FR">
+    <seg>Simple <it x="1">&lt;br/&gt;</it>isolated<it x="2">&lt;br/&gt;</it>tag (French).</seg>
+</tuv>
+</tu>
+</body>
+</tmx>
+
