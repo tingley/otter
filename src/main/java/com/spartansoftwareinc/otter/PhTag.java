@@ -1,7 +1,7 @@
 package com.spartansoftwareinc.otter;
 
 // TODO: hashcode
-public class PhTag extends InlineTag {
+public class PhTag extends NumberedInlineTag {
     private String type;
     private String assoc;
     
