@@ -72,10 +72,13 @@ public class TMXEventReader {
             elements("tmx", "body", "tu", "tuv").attach(new TuvHandler());
             elements("tmx", "body", "tu", "tuv", "seg").attach(new SegHandler());
             elements("tmx", "body", "tu", "tuv", "seg", "ph").attach(new SegPhHandler());
+            elements("tmx", "body", "tu", "tuv", "seg", "bpt").attach(new SegBptHandler());
+            elements("tmx", "body", "tu", "tuv", "seg", "ept").attach(new SegEptHandler());
         }}.build();
     }
     
     static final QName X = new QName("x");
+    static final QName I = new QName("i");
     static final QName TYPE = new QName("type");
     static final QName ASSOC = new QName("assoc");
     static final QName CREATIONTOOL = new QName("creationtool");
@@ -245,5 +248,63 @@ public class TMXEventReader {
             data.addTUVContent(ph);
         }
     }
-
+    class SegBptHandler extends DefaultElementHandler<SegmentBuilder> {
+        private StringBuilder sb = new StringBuilder();
+        private Integer x, i;
+        private String type;
+        @Override
+        public void startElement(StartElement element, SegmentBuilder data)
+                throws SNAXUserException {
+            sb.setLength(0);
+            i = attrValAsInteger(element, I);
+            if (i == null) {
+                throw new OtterException("Required attribute 'i' is missing", 
+                                         element.getLocation());
+            }
+            x = attrValAsInteger(element, X);
+            type = attrVal(element, TYPE);
+        }
+        @Override
+        public void characters(StartElement parent, Characters characters,
+                SegmentBuilder data) throws SNAXUserException {
+            sb.append(characters.getData());
+        }
+        @Override
+        public void endElement(EndElement element, SegmentBuilder data)
+                throws SNAXUserException {
+            BptTag bpt = new BptTag(i, sb.toString());
+            if (x != null) {
+                bpt.setX(x);
+            }
+            if (type != null) {
+                bpt.setType(type);
+            }
+            data.addTUVContent(bpt);
+        }
+    }
+    class SegEptHandler extends DefaultElementHandler<SegmentBuilder> {
+        private StringBuilder sb = new StringBuilder();
+        private Integer i;
+        @Override
+        public void startElement(StartElement element, SegmentBuilder data)
+                throws SNAXUserException {
+            sb.setLength(0);
+            i = attrValAsInteger(element, I);
+            if (i == null) {
+                throw new OtterException("Required attribute 'i' is missing", 
+                                         element.getLocation());
+            }
+        }
+        @Override
+        public void characters(StartElement parent, Characters characters,
+                SegmentBuilder data) throws SNAXUserException {
+            sb.append(characters.getData());
+        }
+        @Override
+        public void endElement(EndElement element, SegmentBuilder data)
+                throws SNAXUserException {
+            EptTag bpt = new EptTag(i, sb.toString());
+            data.addTUVContent(bpt);
+        }
+    }
 }

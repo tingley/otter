@@ -1,6 +1,7 @@
 package com.spartansoftwareinc.otter;
 
 public abstract class InlineTag implements TUVContent {
+    static final int NO_VALUE = 0;
 
     private String data = "";
     
@@ -17,4 +18,11 @@ public abstract class InlineTag implements TUVContent {
     public String getData() {
         return data;
     }
+    
+    protected boolean eq(Object o1, Object o2) {
+        if (o1 == null && o2 == null) return true;
+        if (o1 != null && o2 != null) return o1.equals(o2);
+        return false;
+    }
+
 }

@@ -55,7 +55,6 @@ public class TestOtter {
     @Test
     public void testBody() throws Exception {
         InputStream is = getClass().getResourceAsStream("/body.tmx");
-        // XXX Who handles BOMs?
         TMXEventReader reader = TMXEventReader.createTMXEventReader(
                             new InputStreamReader(is, "UTF-8"));
         List<TU> tus = readTUs(reader);
@@ -88,7 +87,38 @@ public class TestOtter {
             add(new TextContent("Simple "));
             add(new PhTag(1, "<br/>"));
             add(new TextContent(" tags (French)."));
-        }}, frTuv.getContents());
+        }}, frTuv.getContents());        
+    }
+    
+    @SuppressWarnings("serial")
+    @Test
+    public void testPairedTags() throws Exception {
+        InputStream is = getClass().getResourceAsStream("/paired_tags.tmx");
+        TMXEventReader reader = TMXEventReader.createTMXEventReader(
+                            new InputStreamReader(is, "UTF-8"));
+        List<TU> tus = readTUs(reader);
+        assertNotNull(tus);
+        assertEquals(1, tus.size());
+        TU tu = tus.get(0);
+        Map<String, TUV> tuvs = tu.getTuvs();
+        TUV enTuv = tuvs.get("EN-US");
+        assertNotNull(enTuv);
+        assertEquals(new ArrayList<TUVContent>(){{
+            add(new TextContent("Simple "));
+            add(new BptTag(1, 1, "<b>"));
+            add(new TextContent("paired tags"));
+            add(new EptTag(1, "</b>"));
+            add(new TextContent("."));
+        }}, enTuv.getContents());
+        TUV frTuv = tuvs.get("FR-FR");
+        assertNotNull(frTuv);
+        assertEquals(new ArrayList<TUVContent>(){{
+            add(new TextContent("Simple "));
+            add(new BptTag(1, 1, "<b>"));
+            add(new TextContent("paired tags"));
+            add(new EptTag(1, "</b>"));
+            add(new TextContent(" (French)."));
+        }}, frTuv.getContents());        
     }
     
     private void checkProperty(TMXEvent e, String propertyType, String value) {

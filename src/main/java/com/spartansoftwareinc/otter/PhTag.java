@@ -1,7 +1,7 @@
 package com.spartansoftwareinc.otter;
 
 // TODO: hashcode
-public class PhTag extends NumberedInlineTag {
+public class PhTag extends StandaloneTag {
     private String type;
     private String assoc;
     
@@ -46,12 +46,6 @@ public class PhTag extends NumberedInlineTag {
                eq(getData(), ph.getData()) &&
                eq(getType(), ph.getType()) &&
                eq(getAssoc(), ph.getAssoc());
-    }
-    
-    private boolean eq(Object o1, Object o2) {
-        if (o1 == null && o2 == null) return true;
-        if (o1 != null && o2 != null) return o1.equals(o2);
-        return false;
     }
     
     @Override
