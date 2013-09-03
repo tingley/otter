@@ -82,6 +82,7 @@ public class TMXEventReader {
     static final QName I = new QName("i");
     static final QName TYPE = new QName("type");
     static final QName ASSOC = new QName("assoc");
+    static final QName POS = new QName("pos");
     static final QName CREATIONTOOL = new QName("creationtool");
     static final QName CREATIONTOOLVERSION = new QName("creationtoolversion");
     static final QName SEGTYPE = new QName("segtype");
@@ -304,12 +305,19 @@ public class TMXEventReader {
         private StringBuilder sb = new StringBuilder();
         private Integer x;
         private String type;
+        private ItTag.Pos pos;
         @Override
         public void startElement(StartElement element, SegmentBuilder data)
                 throws SNAXUserException {
             sb.setLength(0);
             x = attrValAsInteger(element, X);
             type = attrVal(element, TYPE);
+            String v = requireAttrVal(element, POS);
+            pos = ItTag.Pos.byAttrValue(v);
+            if (pos == null) {
+                throw new OtterException("Invalid value for 'pos' attribute: " + v, 
+                        element.getLocation());
+            }
         }
         @Override
         public void characters(StartElement parent, Characters characters,
@@ -319,7 +327,7 @@ public class TMXEventReader {
         @Override
         public void endElement(EndElement element, SegmentBuilder data)
                 throws SNAXUserException {
-            ItTag it = new ItTag(sb.toString());
+            ItTag it = new ItTag(sb.toString(), pos);
             if (x != null) {
                 it.setX(x);
             }
