@@ -11,7 +11,7 @@ import static com.spartansoftwareinc.otter.TMXEventType.*;
 import org.junit.*;
 import static org.junit.Assert.*;
 
-public class TestOtter {
+public class TestTMXEventReader {
 
     @Test
     public void testHeader() throws Exception {
