@@ -15,10 +15,10 @@
 <body>
 <tu>
 <tuv xml:lang="EN-US">
-    <seg>Simple <hi x="1">&lt;br/&gt;</hi>highlight<hi x="2">&lt;br/&gt;</hi>tag.</seg>
+    <seg>Content containing <hi x="1">hilighted text including <bpt i="1" x="2">&lt;b&gt;</bpt>tag content<ept i="1">&lt;/b&gt;</ept></hi>.</seg>
 </tuv>
 <tuv xml:lang="FR-FR">
-    <seg>Simple <hi x="1">&lt;br/&gt;</hi>highlight<hi x="2">&lt;br/&gt;</hi>tag (French).</seg>
+    <seg>Content containing <hi x="1">hilighted text including <bpt i="1" x="2">&lt;b&gt;</bpt>tag content<ept i="1">&lt;/b&gt;</ept></hi>.</seg>
 </tuv>
 </tu>
 </body>

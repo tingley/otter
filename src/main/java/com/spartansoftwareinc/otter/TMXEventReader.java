@@ -337,6 +337,7 @@ public class TMXEventReader {
             data.addTUVContent(it);
         }
     }
+    // Aieeee, how am I going to make this work?
     class SegHiHandler extends DefaultElementHandler<SegmentBuilder> {
         private StringBuilder sb = new StringBuilder();
         private Integer x;
