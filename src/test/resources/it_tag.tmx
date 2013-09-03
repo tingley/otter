@@ -15,10 +15,18 @@
 <body>
 <tu>
 <tuv xml:lang="EN-US">
-    <seg>Simple <it x="1">&lt;br/&gt;</it>isolated<it x="2">&lt;br/&gt;</it>tag.</seg>
+    <seg>Simple <it x="1" pos="begin">&lt;b&gt;</it>isolated tags.</seg>
 </tuv>
 <tuv xml:lang="FR-FR">
-    <seg>Simple <it x="1">&lt;br/&gt;</it>isolated<it x="2">&lt;br/&gt;</it>tag (French).</seg>
+    <seg>Simple <it x="1" pos="begin">&lt;b&gt;</it>isolated tags (French).</seg>
+</tuv>
+</tu>
+<tu>
+<tuv xml:lang="EN-US">
+    <seg>Isolated tags are <it x="1" pos="end">&lt;/b&gt;</it>split across segments.</seg>
+</tuv>
+<tuv xml:lang="FR-FR">
+    <seg>Isolated tags are <it x="1" pos="end">&lt;/b&gt;</it>split across segments (French).</seg>
 </tuv>
 </tu>
 </body>

@@ -15,6 +15,14 @@ class Util {
         Attribute a = el.getAttributeByName(attrName);
         return (a == null) ? null : a.getValue();
     }
+    static String requireAttrVal(StartElement el, QName attrName) {
+        Attribute a = el.getAttributeByName(attrName);
+        if (a == null) {
+            throw new OtterException("Required attribute " + attrName + " is missing", 
+                    el.getLocation());
+        }
+        return a.getValue();
+    }
     static Integer attrValAsInteger(StartElement el, QName attrName) {
         Attribute a = el.getAttributeByName(attrName);
         if (a == null) return null;

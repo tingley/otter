@@ -129,27 +129,40 @@ public class TestTMXEventReader {
                             new InputStreamReader(is, "UTF-8"));
         List<TU> tus = readTUs(reader);
         assertNotNull(tus);
-        assertEquals(1, tus.size());
+        assertEquals(2, tus.size());
         TU tu = tus.get(0);
         Map<String, TUV> tuvs = tu.getTuvs();
         TUV enTuv = tuvs.get("EN-US");
         assertNotNull(enTuv);
         assertEquals(new ArrayList<TUVContent>(){{
             add(new TextContent("Simple "));
-            add(new ItTag(1, "<br/>"));
-            add(new TextContent("isolated"));
-            add(new ItTag(2, "<br/>"));
-            add(new TextContent("tag."));
+            add(new ItTag(1, "<b>", ItTag.Pos.BEGIN));
+            add(new TextContent("isolated tags."));
         }}, enTuv.getContents());
         TUV frTuv = tuvs.get("FR-FR");
         assertNotNull(frTuv);
         assertEquals(new ArrayList<TUVContent>(){{
             add(new TextContent("Simple "));
-            add(new ItTag(1, "<br/>"));
-            add(new TextContent("isolated"));
-            add(new ItTag(2, "<br/>"));
-            add(new TextContent("tag (French)."));
-        }}, frTuv.getContents());        
+            add(new ItTag(1, "<b>", ItTag.Pos.BEGIN));
+            add(new TextContent("isolated tags (French)."));
+        }}, frTuv.getContents());
+        
+        tu = tus.get(1);
+        tuvs = tu.getTuvs();
+        enTuv = tuvs.get("EN-US");
+        assertNotNull(enTuv);
+        assertEquals(new ArrayList<TUVContent>(){{
+            add(new TextContent("Isolated tags are "));
+            add(new ItTag(1, "</b>", ItTag.Pos.END));
+            add(new TextContent("split across segments."));
+        }}, enTuv.getContents());
+        frTuv = tuvs.get("FR-FR");
+        assertNotNull(frTuv);
+        assertEquals(new ArrayList<TUVContent>(){{
+            add(new TextContent("Isolated tags are "));
+            add(new ItTag(1, "</b>", ItTag.Pos.END));
+            add(new TextContent("split across segments (French)."));
+        }}, frTuv.getContents());     
     }
     
     @SuppressWarnings("serial")
