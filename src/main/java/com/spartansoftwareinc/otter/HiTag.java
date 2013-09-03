@@ -1,20 +1,20 @@
 package com.spartansoftwareinc.otter;
 
 /**
- * A <code>&lt;it&gt;</code> tag.
+ * A <code>&lt;hi&gt;</code> tag.
  */
-public class ItTag extends TypedTag {
-    public ItTag(int x, String data) {
+public class HiTag extends TypedTag {
+    public HiTag(int x, String data) {
         super(x, data);
     }
 
-    public ItTag(String data) {
+    public HiTag(String data) {
         super(data);
     }
 
     @Override
     public boolean equals(Object o) {
         return super.equals(o) &&
-                (o instanceof ItTag);
+                (o instanceof HiTag);
     }
 }

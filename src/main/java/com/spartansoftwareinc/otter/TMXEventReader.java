@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.namespace.QName;
-import javax.xml.stream.Location;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.events.Characters;
@@ -75,6 +74,7 @@ public class TMXEventReader {
             elements("tmx", "body", "tu", "tuv", "seg", "bpt").attach(new SegBptHandler());
             elements("tmx", "body", "tu", "tuv", "seg", "ept").attach(new SegEptHandler());
             elements("tmx", "body", "tu", "tuv", "seg", "it").attach(new SegItHandler());
+            elements("tmx", "body", "tu", "tuv", "seg", "hi").attach(new SegHiHandler());
         }}.build();
     }
     
@@ -327,6 +327,35 @@ public class TMXEventReader {
                 it.setType(type);
             }
             data.addTUVContent(it);
+        }
+    }
+    class SegHiHandler extends DefaultElementHandler<SegmentBuilder> {
+        private StringBuilder sb = new StringBuilder();
+        private Integer x;
+        private String type;
+        @Override
+        public void startElement(StartElement element, SegmentBuilder data)
+                throws SNAXUserException {
+            sb.setLength(0);
+            x = attrValAsInteger(element, X);
+            type = attrVal(element, TYPE);
+        }
+        @Override
+        public void characters(StartElement parent, Characters characters,
+                SegmentBuilder data) throws SNAXUserException {
+            sb.append(characters.getData());
+        }
+        @Override
+        public void endElement(EndElement element, SegmentBuilder data)
+                throws SNAXUserException {
+            HiTag hi = new HiTag(sb.toString());
+            if (x != null) {
+                hi.setX(x);
+            }
+            if (type != null) {
+                hi.setType(type);
+            }
+            data.addTUVContent(hi);
         }
     }
 }
