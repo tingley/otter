@@ -1,7 +1,9 @@
 package com.spartansoftwareinc.otter;
 
 import java.io.Reader;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Deque;
 import java.util.List;
 
 import javax.xml.namespace.QName;
@@ -36,7 +38,8 @@ public class TMXEventReader {
     
     private SNAXParser<SegmentBuilder> parser;
     private List<TMXEvent> events = new ArrayList<TMXEvent>();
-
+    private Deque<List<TUVContent>> contentStack = new ArrayDeque<List<TUVContent>>();
+    
     public boolean hasNext() throws XMLStreamException {
         if (events.size() > 0) {
             return true;
@@ -61,6 +64,13 @@ public class TMXEventReader {
         events.add(event);
     }
     
+    protected void addTUVContent(TUVContent content) {
+        contentStack.peek().add(content);
+    }
+    protected void addTUVText(String text) {
+        addTUVContent(new TextContent(text));
+    }
+    
     private NodeModel<SegmentBuilder> buildModel() {
         return new NodeModelBuilder<SegmentBuilder>() {{
             elements("tmx").attach(new TMXHandler());
@@ -83,10 +93,10 @@ public class TMXEventReader {
             AttachPoint<SegmentBuilder> hiAnchor = elements("tmx", "body", "tu", "tuv", "seg", "hi").attachPoint();
             elements("tmx", "body", "tu", "tuv", "seg", "hi").attach(new SegHiHandler());
             elements("tmx", "body", "tu", "tuv", "seg", "hi").addTransition("hi", hiAnchor); // Nested case
-            elements("tmx", "body", "tu", "tuv", "seg", "ph", "hi").attach(new SegPhHandler());
-            elements("tmx", "body", "tu", "tuv", "seg", "bpt", "hi").attach(new SegBptHandler());
-            elements("tmx", "body", "tu", "tuv", "seg", "ept", "hi").attach(new SegEptHandler());
-            elements("tmx", "body", "tu", "tuv", "seg", "it", "hi").attach(new SegItHandler());
+            elements("tmx", "body", "tu", "tuv", "seg", "hi", "ph").attach(new SegPhHandler());
+            elements("tmx", "body", "tu", "tuv", "seg", "hi", "bpt").attach(new SegBptHandler());
+            elements("tmx", "body", "tu", "tuv", "seg", "hi", "ept").attach(new SegEptHandler());
+            elements("tmx", "body", "tu", "tuv", "seg", "hi", "it").attach(new SegItHandler());
 
         }}.build();
     }
@@ -215,11 +225,13 @@ public class TMXEventReader {
         public void startElement(StartElement element, SegmentBuilder data)
                 throws SNAXUserException {
             data.startTuv(element);
+            contentStack.push(data.getTuvContents());
         }
         @Override
         public void endElement(EndElement element, SegmentBuilder data)
                 throws SNAXUserException {
             data.endTuv();
+            contentStack.pop();
         }
     }
     class SegHandler extends DefaultElementHandler<SegmentBuilder> {
@@ -227,7 +239,7 @@ public class TMXEventReader {
         @Override
         public void characters(StartElement parent, Characters characters,
                 SegmentBuilder data) throws SNAXUserException {
-            data.addSegmentText(characters.getData());
+            addTUVText(characters.getData());
         }
     }
     class SegPhHandler extends DefaultElementHandler<SegmentBuilder> {
@@ -260,7 +272,7 @@ public class TMXEventReader {
             if (assoc != null) {
                 ph.setType(assoc);
             }
-            data.addTUVContent(ph);
+            addTUVContent(ph);
         }
     }
     class SegBptHandler extends DefaultElementHandler<SegmentBuilder> {
@@ -290,7 +302,7 @@ public class TMXEventReader {
             if (type != null) {
                 bpt.setType(type);
             }
-            data.addTUVContent(bpt);
+            addTUVContent(bpt);
         }
     }
     class SegEptHandler extends DefaultElementHandler<SegmentBuilder> {
@@ -311,7 +323,7 @@ public class TMXEventReader {
         public void endElement(EndElement element, SegmentBuilder data)
                 throws SNAXUserException {
             EptTag bpt = new EptTag(i, sb.toString());
-            data.addTUVContent(bpt);
+            addTUVContent(bpt);
         }
     }
     class SegItHandler extends DefaultElementHandler<SegmentBuilder> {
@@ -347,37 +359,41 @@ public class TMXEventReader {
             if (type != null) {
                 it.setType(type);
             }
-            data.addTUVContent(it);
+            addTUVContent(it);
         }
     }
-    // Aieeee, how am I going to make this work?
     class SegHiHandler extends DefaultElementHandler<SegmentBuilder> {
-        private StringBuilder sb = new StringBuilder();
+        // XXX These will be overwritten if I nest more than one level deep
         private Integer x;
         private String type;
+        
         @Override
         public void startElement(StartElement element, SegmentBuilder data)
                 throws SNAXUserException {
-            sb.setLength(0);
             x = attrValAsInteger(element, X);
             type = attrVal(element, TYPE);
+            
+            List<TUVContent> hiContent = new ArrayList<TUVContent>();
+            contentStack.push(hiContent);
         }
         @Override
         public void characters(StartElement parent, Characters characters,
                 SegmentBuilder data) throws SNAXUserException {
-            sb.append(characters.getData());
+            addTUVText(characters.getData());
         }
         @Override
         public void endElement(EndElement element, SegmentBuilder data)
                 throws SNAXUserException {
-            HiTag hi = new HiTag(sb.toString());
+            HiTag hi = new HiTag("");
             if (x != null) {
                 hi.setX(x);
             }
             if (type != null) {
                 hi.setType(type);
             }
-            data.addTUVContent(hi);
+            List<TUVContent> hiContent = contentStack.pop();
+            hi.getContents().addAll(hiContent);
+            addTUVContent(hi);
         }
     }
 }
