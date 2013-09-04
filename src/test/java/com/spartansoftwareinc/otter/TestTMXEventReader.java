@@ -179,6 +179,7 @@ public class TestTMXEventReader {
         TUV enTuv = tuvs.get("EN-US");
         assertNotNull(enTuv);
         List<TUVContent> enTuvContents = enTuv.getContents();
+        
         assertEquals(3, enTuvContents.size());
         assertEquals(new TextContent("Content containing "), enTuvContents.get(0));
         assertTrue(enTuvContents.get(1) instanceof HiTag);

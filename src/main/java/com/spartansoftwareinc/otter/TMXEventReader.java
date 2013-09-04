@@ -11,6 +11,7 @@ import javax.xml.stream.events.Characters;
 import javax.xml.stream.events.EndElement;
 import javax.xml.stream.events.StartElement;
 
+import net.sundell.snax.AttachPoint;
 import net.sundell.snax.DefaultElementHandler;
 import net.sundell.snax.NodeModel;
 import net.sundell.snax.NodeModelBuilder;
@@ -74,7 +75,19 @@ public class TMXEventReader {
             elements("tmx", "body", "tu", "tuv", "seg", "bpt").attach(new SegBptHandler());
             elements("tmx", "body", "tu", "tuv", "seg", "ept").attach(new SegEptHandler());
             elements("tmx", "body", "tu", "tuv", "seg", "it").attach(new SegItHandler());
+
+            // Snax currently doesn't support anything like conditional handlers based
+            // on which incoming transition to a state was used.  Rather than add them,
+            // I'm going to make the state machine larger, so that the <hi>-descendant
+            // state loop is separate from the overall content state loop.
+            AttachPoint<SegmentBuilder> hiAnchor = elements("tmx", "body", "tu", "tuv", "seg", "hi").attachPoint();
             elements("tmx", "body", "tu", "tuv", "seg", "hi").attach(new SegHiHandler());
+            elements("tmx", "body", "tu", "tuv", "seg", "hi").addTransition("hi", hiAnchor); // Nested case
+            elements("tmx", "body", "tu", "tuv", "seg", "ph", "hi").attach(new SegPhHandler());
+            elements("tmx", "body", "tu", "tuv", "seg", "bpt", "hi").attach(new SegBptHandler());
+            elements("tmx", "body", "tu", "tuv", "seg", "ept", "hi").attach(new SegEptHandler());
+            elements("tmx", "body", "tu", "tuv", "seg", "it", "hi").attach(new SegItHandler());
+
         }}.build();
     }
     
