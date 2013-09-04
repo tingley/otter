@@ -9,4 +9,10 @@ public class EptTag extends PairedTag {
     public boolean equals(Object o) {
         return super.equals(o) && (o instanceof EptTag);
     }
+    
+    @Override
+    public String toString() {
+        return "EPT(i=" + getI() + ", data='" + getData() + "')";
+    }
+
 }

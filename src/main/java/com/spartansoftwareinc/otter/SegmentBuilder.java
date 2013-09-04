@@ -1,5 +1,7 @@
 package com.spartansoftwareinc.otter;
 
+import java.util.List;
+
 import javax.xml.namespace.QName;
 import javax.xml.stream.events.StartElement;
 import static com.spartansoftwareinc.otter.Util.*;
@@ -29,11 +31,8 @@ class SegmentBuilder {
     void endTuv() {
     }
     
-    void addSegmentText(String content) {
-        tuv.addContent(new TextContent(content));
+    List<TUVContent> getTuvContents() {
+        return tuv.getContents();
     }
     
-    void addTUVContent(TUVContent content) {
-        tuv.addContent(content);
-    }
 }

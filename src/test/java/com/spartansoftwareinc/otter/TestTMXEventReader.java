@@ -178,22 +178,39 @@ public class TestTMXEventReader {
         Map<String, TUV> tuvs = tu.getTuvs();
         TUV enTuv = tuvs.get("EN-US");
         assertNotNull(enTuv);
+        List<TUVContent> enTuvContents = enTuv.getContents();
+        
+        assertEquals(3, enTuvContents.size());
+        assertEquals(new TextContent("Content containing "), enTuvContents.get(0));
+        assertTrue(enTuvContents.get(1) instanceof HiTag);
+        HiTag hi = (HiTag)enTuvContents.get(1);
+        assertEquals(1, hi.getX());
+        assertNull(hi.getType());
         assertEquals(new ArrayList<TUVContent>(){{
-            add(new TextContent("Simple "));
-            add(new HiTag(1, "<br/>"));
-            add(new TextContent("highlight"));
-            add(new HiTag(2, "<br/>"));
-            add(new TextContent("tag."));
-        }}, enTuv.getContents());
+            add(new TextContent("highlighted text including "));
+            add(new BptTag(2, 1, "<b>"));
+            add(new TextContent("tag content"));
+            add(new EptTag(1, "</b>"));
+        }}, hi.getContents());
+        assertEquals(new TextContent("."), enTuvContents.get(2));
+        
         TUV frTuv = tuvs.get("FR-FR");
         assertNotNull(frTuv);
+        List<TUVContent> frTuvContents = frTuv.getContents();
+        assertEquals(3, frTuvContents.size());
+        assertEquals(new TextContent("Content containing "), frTuvContents.get(0));
+        assertTrue(frTuvContents.get(1) instanceof HiTag);
+        hi = (HiTag)frTuvContents.get(1);
+        assertEquals(1, hi.getX());
+        assertNull(hi.getType());
         assertEquals(new ArrayList<TUVContent>(){{
-            add(new TextContent("Simple "));
-            add(new HiTag(1, "<br/>"));
-            add(new TextContent("highlight"));
-            add(new HiTag(2, "<br/>"));
-            add(new TextContent("tag (French)."));
-        }}, frTuv.getContents());        
+            add(new TextContent("highlighted text including "));
+            add(new BptTag(2, 1, "<b>"));
+            add(new TextContent("tag content"));
+            add(new EptTag(1, "</b>"));
+        }}, hi.getContents());
+        assertEquals(new TextContent("."), frTuvContents.get(2));
+        
     }
     
     private void checkProperty(TMXEvent e, String propertyType, String value) {

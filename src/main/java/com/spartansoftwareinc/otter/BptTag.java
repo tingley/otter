@@ -31,9 +31,15 @@ public class BptTag extends PairedTag implements NumberedTag {
 
     @Override
     public boolean equals(Object o) {
-        if (!super.equals(o)) return false;
+        if (!super.equals(o)) 
+            return false;
         if (!(o instanceof BptTag)) return false;
         BptTag bpt = (BptTag)o;
         return getX() == bpt.getX() && eq(getType(), bpt.getType());
+    }
+    
+    @Override
+    public String toString() {
+        return "BPT(x=" + x + ", i=" + getI() + ", type=" + type + ", data='" + getData() + "')";
     }
 }
