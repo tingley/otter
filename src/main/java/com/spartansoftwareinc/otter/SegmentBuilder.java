@@ -30,6 +30,10 @@ class SegmentBuilder {
     
     void endTuv() {
     }
+
+    TUV getCurrentTuv() {
+        return tuv;
+    }
     
     List<TUVContent> getTuvContents() {
         return tuv.getContents();

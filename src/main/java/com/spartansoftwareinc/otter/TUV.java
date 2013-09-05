@@ -3,7 +3,7 @@ package com.spartansoftwareinc.otter;
 import java.util.List;
 import java.util.ArrayList;
 
-public class TUV {
+public class TUV implements TUVContentSink {
     private String locale;
     private List<TUVContent> contents = new ArrayList<TUVContent>();
  

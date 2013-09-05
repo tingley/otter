@@ -6,7 +6,7 @@ import java.util.List;
 /**
  * A <code>&lt;hi&gt;</code> tag.
  */
-public class HiTag implements TUVContent, NumberedTag {
+public class HiTag implements TUVContent, NumberedTag, TUVContentSink {
     static final int NO_VALUE = 0;
     private int x = NO_VALUE;
     private String type;

@@ -38,7 +38,7 @@ public class TMXEventReader {
     
     private SNAXParser<SegmentBuilder> parser;
     private List<TMXEvent> events = new ArrayList<TMXEvent>();
-    private Deque<List<TUVContent>> contentStack = new ArrayDeque<List<TUVContent>>();
+    private Deque<TUVContentSink> contentStack = new ArrayDeque<TUVContentSink>();
     
     public boolean hasNext() throws XMLStreamException {
         if (events.size() > 0) {
@@ -65,7 +65,7 @@ public class TMXEventReader {
     }
     
     protected void addTUVContent(TUVContent content) {
-        contentStack.peek().add(content);
+        contentStack.peek().addContent(content);
     }
     protected void addTUVText(String text) {
         addTUVContent(new TextContent(text));
@@ -225,7 +225,7 @@ public class TMXEventReader {
         public void startElement(StartElement element, SegmentBuilder data)
                 throws SNAXUserException {
             data.startTuv(element);
-            contentStack.push(data.getTuvContents());
+            contentStack.push(data.getCurrentTuv());
         }
         @Override
         public void endElement(EndElement element, SegmentBuilder data)
@@ -363,18 +363,22 @@ public class TMXEventReader {
         }
     }
     class SegHiHandler extends DefaultElementHandler<SegmentBuilder> {
-        // XXX These will be overwritten if I nest more than one level deep
-        private Integer x;
-        private String type;
-        
         @Override
         public void startElement(StartElement element, SegmentBuilder data)
                 throws SNAXUserException {
-            x = attrValAsInteger(element, X);
-            type = attrVal(element, TYPE);
-            
-            List<TUVContent> hiContent = new ArrayList<TUVContent>();
-            contentStack.push(hiContent);
+            HiTag hi = new HiTag();
+            Integer x = attrValAsInteger(element, X);
+            if (x != null) {
+                hi.setX(x);
+            }
+            String type = attrVal(element, TYPE);
+            if (type != null) {
+                hi.setType(type);
+            }
+            // Add it to the current container, then push it onto 
+            // the stack to catch content up to </hi>
+            addTUVContent(hi);
+            contentStack.push(hi);
         }
         @Override
         public void characters(StartElement parent, Characters characters,
@@ -384,16 +388,7 @@ public class TMXEventReader {
         @Override
         public void endElement(EndElement element, SegmentBuilder data)
                 throws SNAXUserException {
-            HiTag hi = new HiTag();
-            if (x != null) {
-                hi.setX(x);
-            }
-            if (type != null) {
-                hi.setType(type);
-            }
-            List<TUVContent> hiContent = contentStack.pop();
-            hi.getContents().addAll(hiContent);
-            addTUVContent(hi);
+            contentStack.pop();
         }
     }
 }
