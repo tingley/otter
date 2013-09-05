@@ -2,6 +2,7 @@ package com.spartansoftwareinc.otter;
 
 import java.util.ArrayList;
 import java.util.List;
+import static com.spartansoftwareinc.otter.Util.eq;
 
 /**
  * A <code>&lt;hi&gt;</code> tag.
@@ -51,12 +52,4 @@ public class HiTag implements TUVContent, NumberedTag, TUVContentSink {
             eq(type, hi.type) &&
             contents.equals(((HiTag)o).contents);
     }
-
-    // TODO: factor out to static
-    protected boolean eq(Object o1, Object o2) {
-        if (o1 == null && o2 == null) return true;
-        if (o1 != null && o2 != null) return o1.equals(o2);
-        return false;
-    }
-
 }

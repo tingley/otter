@@ -1,6 +1,7 @@
 package com.spartansoftwareinc.otter;
 
-// TODO: hashcode
+import static com.spartansoftwareinc.otter.Util.eq;
+
 public class PhTag extends TypedTag {
     private String assoc;
     

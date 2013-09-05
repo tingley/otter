@@ -1,5 +1,7 @@
 package com.spartansoftwareinc.otter;
 
+import static com.spartansoftwareinc.otter.Util.eq;
+
 /**
  * A standalone tag that supports the <code>type</code> attribute.
  */

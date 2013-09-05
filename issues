@@ -2,3 +2,4 @@
 - Snax should also arguably support any event being passed to the 
     ElementHandler interface. DefaultElementHandler can expose just the 
     normal ones.
+- support hashcode for tags

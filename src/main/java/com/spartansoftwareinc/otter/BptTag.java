@@ -1,5 +1,7 @@
 package com.spartansoftwareinc.otter;
 
+import static com.spartansoftwareinc.otter.Util.eq;
+
 public class BptTag extends PairedTag implements NumberedTag {
     private int x = NO_VALUE;
     private String type;
