@@ -257,14 +257,18 @@ public class TestTMXEventReader {
                             new InputStreamReader(is, "UTF-8"));
         List<TU> tus = readTUs(reader);
         assertNotNull(tus);
-        assertEquals(1, tus.size());
+        assertEquals(2, tus.size());
         TU tu = tus.get(0);
         Map<String, TUV> tuvs = tu.getTuvs();
-        checkSubflowTuv(tuvs.get("EN-US"));
-        checkSubflowTuv(tuvs.get("FR-FR"));
+        checkBptSubflowTuv(tuvs.get("EN-US"));
+        checkBptSubflowTuv(tuvs.get("FR-FR"));
+        tu = tus.get(1);
+        tuvs = tu.getTuvs();
+        checkEptSubflowTuv(tuvs.get("EN-US"));
+        checkEptSubflowTuv(tuvs.get("FR-FR"));
     }
     
-    private void checkSubflowTuv(TUV tuv) {
+    private void checkBptSubflowTuv(TUV tuv) {
         assertNotNull(tuv);
         List<TUVContent> tuvContents = tuv.getContents();
         
@@ -276,9 +280,6 @@ public class TestTMXEventReader {
         assertEquals(1, bpt.getI());
         List<TUVContent> bptContents = bpt.getContents();
         assertEquals(3, bptContents.size());
-        // XXX How to represent the code data?  It's not text.  
-        // I may need to switch existing getData() to getContentAsString() and
-        // make it serialize things.
         assertEquals(new CodeContent("<a href=\"#\" title=\""), bptContents.get(0));
         assertTrue(bptContents.get(1) instanceof Subflow);
         Subflow subflow = (Subflow)bptContents.get(1);
@@ -294,7 +295,37 @@ public class TestTMXEventReader {
         assertEquals(new CodeContent("</a>"), eptContents.get(0));
         assertEquals(new TextContent("."), tuvContents.get(4));
     }
-    
+
+    private void checkEptSubflowTuv(TUV tuv) {
+        assertNotNull(tuv);
+        List<TUVContent> tuvContents = tuv.getContents();
+        
+        assertEquals(5, tuvContents.size());
+        assertEquals(new TextContent("Tag containing "), tuvContents.get(0));
+        assertTrue(tuvContents.get(1) instanceof BptTag);
+        BptTag bpt = (BptTag)tuvContents.get(1);
+        assertEquals(1, bpt.getX());
+        assertEquals(1, bpt.getI());
+        List<TUVContent> bptContents = bpt.getContents();
+        assertEquals(1, bptContents.size());
+        assertEquals(new CodeContent("<a href=\"#\">"), bptContents.get(0));
+        
+        assertEquals(new TextContent("a subflow"), tuvContents.get(2));
+        assertTrue(tuvContents.get(3) instanceof EptTag);
+        EptTag ept = (EptTag)tuvContents.get(3);
+        assertEquals(1, ept.getI());
+        List<TUVContent> eptContents = ept.getContents();
+        assertEquals(3, eptContents.size());
+        assertEquals(new CodeContent("</a "), eptContents.get(0));
+        assertTrue(eptContents.get(1) instanceof Subflow);
+        Subflow subflow = (Subflow)eptContents.get(1);
+        List<TUVContent> subflowContents = subflow.getContents();
+        assertEquals(1, subflowContents.size());
+        assertEquals(new TextContent("Subflow text"), subflowContents.get(0));
+        
+        assertEquals(new CodeContent(">"), eptContents.get(2));
+        assertEquals(new TextContent(" in the ept."), tuvContents.get(4));
+    }
     
     private void checkProperty(TMXEvent e, String propertyType, String value) {
         checkEvent(e, HEADER_PROPERTY);
