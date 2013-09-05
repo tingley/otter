@@ -6,13 +6,18 @@ public class BptTag extends PairedTag implements NumberedTag {
     private int x = NO_VALUE;
     private String type;
     
-    public BptTag(int x, int i, String data) {
-        super(i, data);
+    public BptTag(int x, int i) {
+        super(i);
         this.x = x;
     }
 
-    public BptTag(int i, String data) {
-        super(i, data);
+    public BptTag(int i) {
+        super(i);
+    }
+    
+    public BptTag(int x, int i, String initialCodes) {
+        super(i, initialCodes);
+        this.x = x;
     }
 
     public int getX() {

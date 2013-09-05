@@ -269,7 +269,7 @@ public class TestTMXEventReader {
         List<TUVContent> tuvContents = tuv.getContents();
         
         assertEquals(5, tuvContents.size());
-        assertEquals(new TextContent("Tag Containing "), tuvContents.get(0));
+        assertEquals(new TextContent("Tag containing "), tuvContents.get(0));
         assertTrue(tuvContents.get(1) instanceof BptTag);
         BptTag bpt = (BptTag)tuvContents.get(1);
         assertEquals(1, bpt.getX());
@@ -285,11 +285,13 @@ public class TestTMXEventReader {
         List<TUVContent> subflowContents = subflow.getContents();
         assertEquals(1, subflowContents.size());
         assertEquals(new TextContent("Subflow text"), subflowContents.get(0));
-        assertEquals(new CodeContent("\">"), bptContents.get(1));
+        assertEquals(new CodeContent("\">"), bptContents.get(2));
         assertEquals(new TextContent("a subflow"), tuvContents.get(2));
         assertTrue(tuvContents.get(3) instanceof EptTag);
         assertEquals(1, ((EptTag)tuvContents.get(3)).getI());
-        assertEquals("</a>", ((EptTag)tuvContents.get(3)).toXML());
+        List<TUVContent> eptContents = ((EptTag)tuvContents.get(3)).getContents();
+        assertEquals(1, eptContents.size());
+        assertEquals(new CodeContent("</a>"), eptContents.get(0));
         assertEquals(new TextContent("."), tuvContents.get(4));
     }
     

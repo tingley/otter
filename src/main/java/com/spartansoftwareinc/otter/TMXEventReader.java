@@ -32,6 +32,7 @@ public class TMXEventReader {
 
     private TMXEventReader(Reader r) throws XMLStreamException {
         XMLInputFactory factory = XMLInputFactory.newFactory();
+        factory.setProperty(XMLInputFactory.IS_COALESCING, true);
         parser = SNAXParser.createParser(factory, buildModel());
         parser.startParsing(r, new SegmentBuilder());
     }
@@ -67,12 +68,17 @@ public class TMXEventReader {
     protected void addTUVContent(TUVContent content) {
         contentStack.peek().addContent(content);
     }
-    protected void addTUVText(String text) {
+    protected void addTextContent(String text) {
         addTUVContent(new TextContent(text));
+    }
+    protected void addCodeContent(String codes) {
+        addTUVContent(new CodeContent(codes));
     }
     
     private NodeModel<SegmentBuilder> buildModel() {
-        return new NodeModelBuilder<SegmentBuilder>() {{
+        return new NodeModelBuilder<SegmentBuilder>() {
+            AttachPoint<SegmentBuilder> phAnchor, bptAnchor, eptAnchor, itAnchor;
+            {
             elements("tmx").attach(new TMXHandler());
             elements("tmx", "header").attach(new HeaderHandler());
             elements("tmx", "header", "prop").attach(new HeaderPropertyHandler());
@@ -81,11 +87,27 @@ public class TMXEventReader {
             elements("tmx", "body", "tu").attach(new TuHandler());
             elements("tmx", "body", "tu", "tuv").attach(new TuvHandler());
             elements("tmx", "body", "tu", "tuv", "seg").attach(new SegHandler());
+            
+            phAnchor = elements("tmx", "body", "tu", "tuv", "seg", "ph").attachPoint();
+            bptAnchor = elements("tmx", "body", "tu", "tuv", "seg", "bpt").attachPoint();
+            eptAnchor = elements("tmx", "body", "tu", "tuv", "seg", "ept").attachPoint();
+            itAnchor = elements("tmx", "body", "tu", "tuv", "seg", "it").attachPoint();
+
             elements("tmx", "body", "tu", "tuv", "seg", "ph").attach(new SegPhHandler());
             elements("tmx", "body", "tu", "tuv", "seg", "bpt").attach(new SegBptHandler());
             elements("tmx", "body", "tu", "tuv", "seg", "ept").attach(new SegEptHandler());
             elements("tmx", "body", "tu", "tuv", "seg", "it").attach(new SegItHandler());
 
+            // Exhaustively link each type of subflow back to the correct anchor
+            elements("tmx", "body", "tu", "tuv", "seg", "ph", "sub").attach(new SegSubHandler());
+            attachSubflowStates("ph");
+            elements("tmx", "body", "tu", "tuv", "seg", "bpt", "sub").attach(new SegSubHandler());
+            attachSubflowStates("bpt");
+            elements("tmx", "body", "tu", "tuv", "seg", "ept", "sub").attach(new SegSubHandler());
+            attachSubflowStates("ept");
+            elements("tmx", "body", "tu", "tuv", "seg", "it", "sub").attach(new SegSubHandler());
+            attachSubflowStates("it");
+            
             // Snax currently doesn't support anything like conditional handlers based
             // on which incoming transition to a state was used.  Rather than add them,
             // I'm going to make the state machine larger, so that the <hi>-descendant
@@ -98,7 +120,14 @@ public class TMXEventReader {
             elements("tmx", "body", "tu", "tuv", "seg", "hi", "ept").attach(new SegEptHandler());
             elements("tmx", "body", "tu", "tuv", "seg", "hi", "it").attach(new SegItHandler());
 
-        }}.build();
+        }
+        private void attachSubflowStates(String tagName) {
+            elements("tmx", "body", "tu", "tuv", "seg", tagName, "sub").addTransition("ph", phAnchor);
+            elements("tmx", "body", "tu", "tuv", "seg", tagName, "sub").addTransition("bpt", bptAnchor);
+            elements("tmx", "body", "tu", "tuv", "seg", tagName, "sub").addTransition("ept", eptAnchor);
+            elements("tmx", "body", "tu", "tuv", "seg", tagName, "sub").addTransition("it", itAnchor);
+        }
+        }.build();
     }
     
     static final QName X = new QName("x");
@@ -238,7 +267,7 @@ public class TMXEventReader {
         @Override
         public void characters(StartElement parent, Characters characters,
                 SegmentBuilder data) throws SNAXUserException {
-            addTUVText(characters.getData());
+            addTextContent(characters.getData());
         }
     }
     class SegPhHandler extends DefaultElementHandler<SegmentBuilder> {
@@ -275,54 +304,49 @@ public class TMXEventReader {
         }
     }
     class SegBptHandler extends DefaultElementHandler<SegmentBuilder> {
-        private StringBuilder sb = new StringBuilder();
-        private Integer x, i;
-        private String type;
         @Override
         public void startElement(StartElement element, SegmentBuilder data)
                 throws SNAXUserException {
-            sb.setLength(0);
-            i = requireAttrValAsInteger(element, I);
-            x = attrValAsInteger(element, X);
-            type = attrVal(element, TYPE);
-        }
-        @Override
-        public void characters(StartElement parent, Characters characters,
-                SegmentBuilder data) throws SNAXUserException {
-            sb.append(characters.getData());
-        }
-        @Override
-        public void endElement(EndElement element, SegmentBuilder data)
-                throws SNAXUserException {
-            BptTag bpt = new BptTag(i, sb.toString());
+            BptTag bpt = new BptTag(requireAttrValAsInteger(element, I));
+            Integer x = attrValAsInteger(element, X);
             if (x != null) {
                 bpt.setX(x);
             }
+            String type = attrVal(element, TYPE);
             if (type != null) {
                 bpt.setType(type);
             }
             addTUVContent(bpt);
-        }
-    }
-    class SegEptHandler extends DefaultElementHandler<SegmentBuilder> {
-        private StringBuilder sb = new StringBuilder();
-        private Integer i;
-        @Override
-        public void startElement(StartElement element, SegmentBuilder data)
-                throws SNAXUserException {
-            sb.setLength(0);
-            i = requireAttrValAsInteger(element, I);
+            contentStack.push(bpt);
         }
         @Override
         public void characters(StartElement parent, Characters characters,
                 SegmentBuilder data) throws SNAXUserException {
-            sb.append(characters.getData());
+            addCodeContent(characters.getData());
         }
         @Override
         public void endElement(EndElement element, SegmentBuilder data)
                 throws SNAXUserException {
-            EptTag bpt = new EptTag(i, sb.toString());
-            addTUVContent(bpt);
+            contentStack.pop();
+        }
+    }
+    class SegEptHandler extends DefaultElementHandler<SegmentBuilder> {
+        @Override
+        public void startElement(StartElement element, SegmentBuilder data)
+                throws SNAXUserException {
+            EptTag ept = new EptTag(requireAttrValAsInteger(element, I));
+            addTUVContent(ept);
+            contentStack.push(ept);
+        }
+        @Override
+        public void characters(StartElement parent, Characters characters,
+                SegmentBuilder data) throws SNAXUserException {
+            addCodeContent(characters.getData());
+        }
+        @Override
+        public void endElement(EndElement element, SegmentBuilder data)
+                throws SNAXUserException {
+            contentStack.pop();
         }
     }
     class SegItHandler extends DefaultElementHandler<SegmentBuilder> {
@@ -382,7 +406,34 @@ public class TMXEventReader {
         @Override
         public void characters(StartElement parent, Characters characters,
                 SegmentBuilder data) throws SNAXUserException {
-            addTUVText(characters.getData());
+            addTextContent(characters.getData());
+        }
+        @Override
+        public void endElement(EndElement element, SegmentBuilder data)
+                throws SNAXUserException {
+            contentStack.pop();
+        }
+    }
+    class SegSubHandler extends DefaultElementHandler<SegmentBuilder> {
+        @Override
+        public void startElement(StartElement element, SegmentBuilder data)
+                throws SNAXUserException {
+            Subflow subflow = new Subflow();
+            String type = attrVal(element, TYPE);
+            if (type != null) {
+                subflow.setType(type);
+            }
+            String dataType = attrVal(element, DATATYPE);
+            if (dataType != null) {
+                subflow.setDatatype(dataType);
+            }
+            addTUVContent(subflow);
+            contentStack.push(subflow);
+        }
+        @Override
+        public void characters(StartElement parent, Characters contents,
+                SegmentBuilder data) throws SNAXUserException {
+            addTextContent(contents.getData());
         }
         @Override
         public void endElement(EndElement element, SegmentBuilder data)
