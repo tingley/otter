@@ -42,6 +42,6 @@ public class BptTag extends PairedTag implements NumberedTag {
     
     @Override
     public String toString() {
-        return "BPT(x=" + x + ", i=" + getI() + ", type=" + type + ", data='" + getData() + "')";
+        return "BPT(x=" + x + ", i=" + getI() + ", type=" + type + ", data='" + toXML() + "')";
     }
 }

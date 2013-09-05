@@ -3,3 +3,5 @@
     ElementHandler interface. DefaultElementHandler can expose just the 
     normal ones.
 - support hashcode for tags
+- throw errors when improper tags appear within other tags (requires
+  registering element handlers)

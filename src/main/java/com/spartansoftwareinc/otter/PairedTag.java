@@ -1,7 +1,6 @@
 package com.spartansoftwareinc.otter;
 
 public abstract class PairedTag extends InlineTag {
-
     private int i = NO_VALUE;
     
     PairedTag(int i) {
@@ -22,7 +21,7 @@ public abstract class PairedTag extends InlineTag {
     public void setI(int i) {
         this.i = i;
     }
-    
+
     @Override
     public boolean equals(Object o) {
         if (o == this) return true;

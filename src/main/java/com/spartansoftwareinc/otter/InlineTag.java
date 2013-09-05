@@ -1,31 +1,47 @@
 package com.spartansoftwareinc.otter;
 
-import static com.spartansoftwareinc.otter.Util.eq;
+import java.util.ArrayList;
+import java.util.List;
 
-public abstract class InlineTag implements TUVContent {
+public abstract class InlineTag implements TUVContent, TUVContentSink {
     static final int NO_VALUE = 0;
-
-    private String data = "";
+    private List<TUVContent> contents = new ArrayList<TUVContent>();
     
     protected InlineTag() {
     }
-    protected InlineTag(String data) {
-        this.data = data;
+    protected InlineTag(String initialCodeContent) {
+        contents.add(new CodeContent(initialCodeContent));
     }
 
-    public void setData(String data) {
-        this.data = (data == null) ? "" : data;
+    public String getData() {
+        return toXML();
     }
     
-    public String getData() {
-        return data;
+    @Override
+    public void addContent(TUVContent content) {
+        if (!(content instanceof CodeContent) && !(content instanceof Subflow)) {
+            throw new IllegalStateException("Illegal paired tag content: " + content);
+        }
+        contents.add(content);
+    }
+    
+    public List<TUVContent> getContents() {
+        return contents;
     }
     
     @Override
     public boolean equals(Object o) {
         if (o == this) return true;
         if (o == null || !(o instanceof InlineTag)) return false;
-        return eq(data, ((InlineTag)o).getData());
+        return contents.equals(((InlineTag)o).contents);
     }
 
+    @Override
+    public String toXML() {
+        StringBuilder sb = new StringBuilder();
+        for (TUVContent c : contents) {
+            sb.append(c.toXML());
+        }
+        return sb.toString();
+    }
 }

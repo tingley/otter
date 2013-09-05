@@ -1,13 +1,13 @@
 package com.spartansoftwareinc.otter;
 
-public class TextContent extends SimpleContent {
-    public TextContent(String value) {
+public class CodeContent extends SimpleContent {
+    public CodeContent(String value) {
         super(value);
     }
     
     @Override
     public boolean equals(Object o) {
         return super.equals(o) &&
-                (o instanceof TextContent);
+                (o instanceof CodeContent);
     }
 }

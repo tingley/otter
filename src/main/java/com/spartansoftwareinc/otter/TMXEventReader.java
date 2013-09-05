@@ -235,7 +235,6 @@ public class TMXEventReader {
         }
     }
     class SegHandler extends DefaultElementHandler<SegmentBuilder> {
-        // Buffer goes in the sink so I can handle inline codes
         @Override
         public void characters(StartElement parent, Characters characters,
                 SegmentBuilder data) throws SNAXUserException {

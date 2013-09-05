@@ -1,0 +1,26 @@
+<?xml version="1.0" ?>
+<!DOCTYPE tmx SYSTEM "tmx14.dtd">
+<tmx version="1.4">
+<header
+	 creationtool="TRADOS Translator's Workbench for Windows"
+	 creationtoolversion="Edition 8 Build 863"
+	 segtype="sentence"
+	 o-tmf="TW4Win 2.0 Format"
+	 adminlang="EN-US"
+	 srclang="EN-US"
+	 datatype="rtf"
+	 creationdate="20100223T044327Z"
+	 creationid="TESTERSON"
+>
+</header>
+<body>
+<tu>
+<tuv xml:lang="EN-US">
+    <seg>Tag containing <bpt x="1" i="1">&lt;a href="#" title="<sub>Subflow text</sub>"&gt;</bpt>a subflow<ept i="1">&lt;/a&gt;</ept>.</seg>
+</tuv>
+<tuv xml:lang="FR-FR">
+    <seg>Tag containing <bpt x="1" i="1">&lt;a href="#" title="<sub>Subflow text</sub>"&gt;</bpt>a subflow<ept i="1">&lt;/a&gt;</ept>.</seg>
+</tuv>
+</tu>
+</body>
+</tmx>

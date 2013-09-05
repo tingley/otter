@@ -6,6 +6,29 @@ import javax.xml.stream.events.Attribute;
 import javax.xml.stream.events.StartElement;
 
 class Util {
+    
+    // Sigh
+    static String toXml(String s) {
+        StringBuilder sb = new StringBuilder();
+        for (char c : s.toCharArray()) {
+            switch (c) {
+            case '<':
+                sb.append("&lt;");
+                break;
+            case '>':
+                sb.append("&gt;");
+                break;
+            case '&':
+                sb.append("&amp;");
+                break;
+            default:
+                sb.append(c);
+                break;
+            }
+        }
+        return sb.toString();
+    }
+    
     static void require(boolean condition, Location location, String message) {
         if (!condition) {
             throw new OtterException(message, location);
