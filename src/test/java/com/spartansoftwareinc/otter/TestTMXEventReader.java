@@ -257,7 +257,7 @@ public class TestTMXEventReader {
                             new InputStreamReader(is, "UTF-8"));
         List<TU> tus = readTUs(reader);
         assertNotNull(tus);
-        assertEquals(2, tus.size());
+        assertEquals(3, tus.size());
         TU tu = tus.get(0);
         Map<String, TUV> tuvs = tu.getTuvs();
         checkBptSubflowTuv(tuvs.get("EN-US"));
@@ -266,6 +266,10 @@ public class TestTMXEventReader {
         tuvs = tu.getTuvs();
         checkEptSubflowTuv(tuvs.get("EN-US"));
         checkEptSubflowTuv(tuvs.get("FR-FR"));
+        tu = tus.get(2);
+        tuvs = tu.getTuvs();
+        checkPhSubflowTuv(tuvs.get("EN-US"));
+        checkPhSubflowTuv(tuvs.get("FR-FR"));
     }
     
     private void checkBptSubflowTuv(TUV tuv) {
@@ -326,6 +330,29 @@ public class TestTMXEventReader {
         assertEquals(new CodeContent(">"), eptContents.get(2));
         assertEquals(new TextContent(" in the ept."), tuvContents.get(4));
     }
+    
+    private void checkPhSubflowTuv(TUV tuv) {
+        assertNotNull(tuv);
+        List<TUVContent> tuvContents = tuv.getContents();
+        
+        assertEquals(3, tuvContents.size());
+        assertEquals(new TextContent("Tag containing "), tuvContents.get(0));
+        assertTrue(tuvContents.get(1) instanceof PhTag);
+        PhTag ph = (PhTag)tuvContents.get(1);
+        assertEquals(1, ph.getX());
+        assertEquals("footnote", ph.getType());
+        List<TUVContent> phContents = ph.getContents();
+        assertEquals(3, phContents.size());
+        assertEquals(new CodeContent("<footnote text=\""), phContents.get(0));
+        assertTrue(phContents.get(1) instanceof Subflow);
+        Subflow subflow = (Subflow)phContents.get(1);
+        List<TUVContent> subflowContents = subflow.getContents();
+        assertEquals(1, subflowContents.size());
+        assertEquals(new TextContent("Subflow text"), subflowContents.get(0));
+        assertEquals(new CodeContent("\"/>"), phContents.get(2));
+        assertEquals(new TextContent(" a subflow in a ph."), tuvContents.get(2));
+    }
+    
     
     private void checkProperty(TMXEvent e, String propertyType, String value) {
         checkEvent(e, HEADER_PROPERTY);

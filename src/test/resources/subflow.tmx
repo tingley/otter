@@ -30,5 +30,13 @@
     <seg>Tag containing <bpt x="1" i="1">&lt;a href="#"&gt;</bpt>a subflow<ept i="1">&lt;/a <sub>Subflow text</sub>&gt;</ept> in the ept.</seg>
 </tuv>
 </tu>
+<tu>
+<tuv xml:lang="EN-US">
+    <seg>Tag containing <ph x="1" type="footnote">&lt;footnote text="<sub>Subflow text</sub>"/&gt;</ph> a subflow in a ph.</seg>
+</tuv>
+<tuv xml:lang="FR-FR">
+    <seg>Tag containing <ph x="1" type="footnote">&lt;footnote text="<sub>Subflow text</sub>"/&gt;</ph> a subflow in a ph.</seg>
+</tuv>
+</tu>
 </body>
 </tmx>

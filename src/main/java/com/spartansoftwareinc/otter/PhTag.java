@@ -5,12 +5,16 @@ import static com.spartansoftwareinc.otter.Util.eq;
 public class PhTag extends TypedTag {
     private String assoc;
     
-    public PhTag(String data) {
-        super(data);
+    public PhTag(String initialCodeData) {
+        super(initialCodeData);
     }
     
-    public PhTag(int x, String data) {
-        super(x, data);
+    public PhTag(int x, String initialCodeData) {
+        super(x, initialCodeData);
+    }
+    
+    public PhTag() {
+        super();
     }
     
     public String getAssoc() {

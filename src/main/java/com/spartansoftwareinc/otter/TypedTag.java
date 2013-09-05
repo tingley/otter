@@ -8,12 +8,16 @@ import static com.spartansoftwareinc.otter.Util.eq;
 public class TypedTag extends StandaloneTag {
     private String type;
     
-    public TypedTag(int x, String data) {
-        super(x, data);
+    public TypedTag(int x, String initialCodeData) {
+        super(x, initialCodeData);
     }
 
-    public TypedTag(String data) {
-        super(data);
+    public TypedTag(String initialCodeData) {
+        super(initialCodeData);
+    }
+    
+    public TypedTag() {
+        super();
     }
     
     public String getType() {

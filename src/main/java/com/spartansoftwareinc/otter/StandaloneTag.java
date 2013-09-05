@@ -9,8 +9,8 @@ public abstract class StandaloneTag extends InlineTag implements NumberedTag {
     protected StandaloneTag() {
         super();
     }
-    protected StandaloneTag(String data) {
-        super(data);
+    protected StandaloneTag(String initalCodeData) {
+        super(initalCodeData);
     }
     protected StandaloneTag(int x) {
         this.x = x;

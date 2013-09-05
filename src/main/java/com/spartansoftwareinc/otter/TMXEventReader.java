@@ -271,36 +271,28 @@ public class TMXEventReader {
         }
     }
     class SegPhHandler extends DefaultElementHandler<SegmentBuilder> {
-        private StringBuilder sb = new StringBuilder();
-        private Integer x;
-        private String type, assoc;
         @Override
         public void startElement(StartElement element, SegmentBuilder data)
                 throws SNAXUserException {
-            sb.setLength(0);
-            x = attrValAsInteger(element, X);
-            type = attrVal(element, TYPE);
-            assoc = attrVal(element, ASSOC);
+            PhTag ph = new PhTag();
+            Integer x = attrValAsInteger(element, X);
+            if (x != null) {
+                ph.setX(x);
+            }
+            ph.setType(attrVal(element, TYPE));
+            ph.setAssoc(attrVal(element, ASSOC));
+            addTUVContent(ph);
+            contentStack.push(ph);
         }
         @Override
         public void characters(StartElement parent, Characters characters,
                 SegmentBuilder data) throws SNAXUserException {
-            sb.append(characters.getData());
+            addCodeContent(characters.getData());
         }
         @Override
         public void endElement(EndElement element, SegmentBuilder data)
                 throws SNAXUserException {
-            PhTag ph = new PhTag(sb.toString());
-            if (x != null) {
-                ph.setX(x);
-            }
-            if (type != null) {
-                ph.setType(type);
-            }
-            if (assoc != null) {
-                ph.setType(assoc);
-            }
-            addTUVContent(ph);
+            contentStack.pop();
         }
     }
     class SegBptHandler extends DefaultElementHandler<SegmentBuilder> {
