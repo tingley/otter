@@ -210,8 +210,46 @@ public class TestTMXEventReader {
             add(new EptTag(1, "</b>"));
         }}, hi.getContents());
         assertEquals(new TextContent("."), frTuvContents.get(2));
-        
     }
+    
+    @Test
+    public void testNestedHighlightTags() throws Exception {
+        InputStream is = getClass().getResourceAsStream("/hi_nested.tmx");
+        TMXEventReader reader = TMXEventReader.createTMXEventReader(
+                            new InputStreamReader(is, "UTF-8"));
+        List<TU> tus = readTUs(reader);
+        assertNotNull(tus);
+        assertEquals(1, tus.size());
+        TU tu = tus.get(0);
+        Map<String, TUV> tuvs = tu.getTuvs();
+        checkNestedHighlightTagsTuv(tuvs.get("EN-US"));
+        checkNestedHighlightTagsTuv(tuvs.get("FR-FR"));
+    }
+    
+    @SuppressWarnings("serial")
+    private void checkNestedHighlightTagsTuv(TUV tuv) {
+        assertNotNull(tuv);
+        List<TUVContent> tuvContents = tuv.getContents();
+        
+        assertEquals(3, tuvContents.size());
+        assertEquals(new TextContent("A"), tuvContents.get(0));
+        assertTrue(tuvContents.get(1) instanceof HiTag);
+        HiTag hi1 = (HiTag)tuvContents.get(1);
+        assertEquals(1, hi1.getX());
+        List<TUVContent> hiContents1 = hi1.getContents();
+        assertEquals(3, hiContents1.size());
+        assertEquals(new TextContent("B"), hiContents1.get(0));
+        assertTrue(hiContents1.get(1) instanceof HiTag);
+        HiTag hi2 = (HiTag)hiContents1.get(1);
+        assertEquals(2, hi2.getX());
+        List<TUVContent> hiContents2 = hi2.getContents();
+        assertEquals(new ArrayList<TUVContent>(){{
+            add(new TextContent("C"));
+        }}, hiContents2);
+        assertEquals(new TextContent("D"), hiContents1.get(2));
+        assertEquals(new TextContent("."), tuvContents.get(2));
+    }
+    
     
     private void checkProperty(TMXEvent e, String propertyType, String value) {
         checkEvent(e, HEADER_PROPERTY);
