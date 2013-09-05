@@ -1,6 +1,3 @@
-- This structure needs to be recursive.
-    - It might be possible if I update snax to handle attaching other models
-      directly.  But even them I think that only goes one level deep.
 - I also need an error handle model.
 - Snax should also arguably support any event being passed to the 
     ElementHandler interface. DefaultElementHandler can expose just the 

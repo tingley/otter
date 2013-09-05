@@ -384,7 +384,7 @@ public class TMXEventReader {
         @Override
         public void endElement(EndElement element, SegmentBuilder data)
                 throws SNAXUserException {
-            HiTag hi = new HiTag("");
+            HiTag hi = new HiTag();
             if (x != null) {
                 hi.setX(x);
             }

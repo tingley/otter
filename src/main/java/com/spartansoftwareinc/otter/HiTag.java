@@ -6,16 +6,32 @@ import java.util.List;
 /**
  * A <code>&lt;hi&gt;</code> tag.
  */
-// TODO: this should not extend the tag hierarchy because it doesn't support data
-public class HiTag extends TypedTag {
+public class HiTag implements TUVContent, NumberedTag {
+    static final int NO_VALUE = 0;
+    private int x = NO_VALUE;
+    private String type;
     private List<TUVContent> contents = new ArrayList<TUVContent>();
     
-    public HiTag(int x, String data) {
-        super(x, data);
+    public HiTag() {
+    }
+    public HiTag(int x) {
+        this.x = x;
     }
 
-    public HiTag(String data) {
-        super(data);
+    public int getX() {
+        return x;
+    }
+    
+    public void setX(int x) {
+        this.x = x;
+    }
+    
+    public String getType() {
+        return type;
+    }
+    
+    public void setType(String type) {
+        this.type = type;
     }
 
     public List<TUVContent> getContents() {
@@ -28,8 +44,19 @@ public class HiTag extends TypedTag {
     
     @Override
     public boolean equals(Object o) {
-        return super.equals(o) &&
-                (o instanceof HiTag) &&
-                contents.equals(((HiTag)o).contents);
+        if (o == this) return true;
+        if (o == null || !(o instanceof HiTag)) return false;
+        HiTag hi = (HiTag)o;
+        return x == hi.x &&
+            eq(type, hi.type) &&
+            contents.equals(((HiTag)o).contents);
     }
+
+    // TODO: factor out to static
+    protected boolean eq(Object o1, Object o2) {
+        if (o1 == null && o2 == null) return true;
+        if (o1 != null && o2 != null) return o1.equals(o2);
+        return false;
+    }
+
 }
