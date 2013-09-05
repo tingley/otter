@@ -26,16 +26,25 @@ public class ItTag extends TypedTag {
     
     private Pos pos;
     
-    public ItTag(int x, String data, Pos pos) {
-        super(x, data);
+    public ItTag(int x, String initialCodeData, Pos pos) {
+        super(x, initialCodeData);
         this.pos = pos;
     }
 
-    public ItTag(String data, Pos pos) {
-        super(data);
+    public ItTag(String initialCodeData, Pos pos) {
+        super(initialCodeData);
         this.pos = pos;
     }
 
+    public ItTag(Pos pos) {
+        super();
+        this.pos = pos;
+    }
+    
+    public ItTag() {
+        super();
+    }
+    
     public Pos getPos() {
         return pos;
     }

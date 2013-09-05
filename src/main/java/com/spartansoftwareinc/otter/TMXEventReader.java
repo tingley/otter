@@ -342,39 +342,34 @@ public class TMXEventReader {
         }
     }
     class SegItHandler extends DefaultElementHandler<SegmentBuilder> {
-        private StringBuilder sb = new StringBuilder();
-        private Integer x;
-        private String type;
-        private ItTag.Pos pos;
         @Override
         public void startElement(StartElement element, SegmentBuilder data)
                 throws SNAXUserException {
-            sb.setLength(0);
-            x = attrValAsInteger(element, X);
-            type = attrVal(element, TYPE);
+            ItTag it = new ItTag();
+            Integer x = attrValAsInteger(element, X);
+            if (x != null) {
+                it.setX(x);
+            }
+            it.setType(attrVal(element, TYPE));
             String v = requireAttrVal(element, POS);
-            pos = ItTag.Pos.byAttrValue(v);
+            ItTag.Pos pos = ItTag.Pos.byAttrValue(v);
             if (pos == null) {
                 throw new OtterException("Invalid value for 'pos' attribute: " + v, 
                         element.getLocation());
             }
+            it.setPos(pos);
+            addTUVContent(it);
+            contentStack.push(it);
         }
         @Override
         public void characters(StartElement parent, Characters characters,
                 SegmentBuilder data) throws SNAXUserException {
-            sb.append(characters.getData());
+            addCodeContent(characters.getData());
         }
         @Override
         public void endElement(EndElement element, SegmentBuilder data)
                 throws SNAXUserException {
-            ItTag it = new ItTag(sb.toString(), pos);
-            if (x != null) {
-                it.setX(x);
-            }
-            if (type != null) {
-                it.setType(type);
-            }
-            addTUVContent(it);
+            contentStack.pop();
         }
     }
     class SegHiHandler extends DefaultElementHandler<SegmentBuilder> {
