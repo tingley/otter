@@ -13,10 +13,6 @@ public abstract class InlineTag implements TUVContent, TUVContentSink {
         contents.add(new CodeContent(initialCodeContent));
     }
 
-    public String getData() {
-        return toXML();
-    }
-    
     @Override
     public void addContent(TUVContent content) {
         if (!(content instanceof CodeContent) && !(content instanceof Subflow)) {
@@ -34,14 +30,5 @@ public abstract class InlineTag implements TUVContent, TUVContentSink {
         if (o == this) return true;
         if (o == null || !(o instanceof InlineTag)) return false;
         return contents.equals(((InlineTag)o).contents);
-    }
-
-    @Override
-    public String toXML() {
-        StringBuilder sb = new StringBuilder();
-        for (TUVContent c : contents) {
-            sb.append(c.toXML());
-        }
-        return sb.toString();
     }
 }

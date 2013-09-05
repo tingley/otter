@@ -34,13 +34,4 @@ public class Subflow implements TUVContent, TUVContentSink {
     public void setDatatype(String datatype) {
         this.datatype = datatype;
     }
-
-    @Override
-    public String toXML() {
-        StringBuilder sb = new StringBuilder();
-        for (TUVContent c : contents) {
-            sb.append(c.toXML());
-        }
-        return sb.toString();
-    }
 }

@@ -16,7 +16,7 @@ public class EptTag extends PairedTag {
     
     @Override
     public String toString() {
-        return "EPT(i=" + getI() + ", data='" + getData() + "')";
+        return "EPT(i=" + getI() + ", data='" + getContents() + "')";
     }
 
 }

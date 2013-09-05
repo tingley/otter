@@ -27,6 +27,6 @@ public abstract class PairedTag extends InlineTag {
         if (o == this) return true;
         if (o == null || !(o instanceof PairedTag)) return false;
         PairedTag pt = (PairedTag)o;
-        return getData().equals(pt.getData()) && getI() == pt.getI();
+        return getContents().equals(pt.getContents()) && getI() == pt.getI();
     }
 }

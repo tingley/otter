@@ -52,13 +52,4 @@ public class HiTag implements TUVContent, NumberedTag, TUVContentSink {
             eq(type, hi.type) &&
             contents.equals(((HiTag)o).contents);
     }
-    
-    @Override
-    public String toXML() {
-        StringBuilder sb = new StringBuilder();
-        for (TUVContent c : contents) {
-            sb.append(c.toXML());
-        }
-        return sb.toString();
-    }
 }

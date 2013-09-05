@@ -34,7 +34,7 @@ public class PhTag extends TypedTag {
     
     @Override
     public String toString() {
-        return "PH('" + getData() + "', x=" + getX() + ", type=" 
+        return "PH('" + getContents() + "', x=" + getX() + ", type=" 
                 + getType() + ", assoc=" + getAssoc() + ")";
     }
 }

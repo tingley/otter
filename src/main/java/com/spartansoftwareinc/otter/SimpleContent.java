@@ -28,10 +28,5 @@ public abstract class SimpleContent implements TUVContent {
     public String toString() {
         return value;
     }
-    
-    @Override
-    public String toXML() {
-        return Util.toXml(value);
-    }
 
 }
