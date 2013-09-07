@@ -1,5 +1,7 @@
 package com.spartansoftwareinc.otter;
 
+import static com.spartansoftwareinc.otter.Util.eq;
+
 public class TMXEvent {
     private TMXEventType eventType;
     private Object resource;
@@ -43,5 +45,18 @@ public class TMXEvent {
             return (TU)resource;
         }
         throw new IllegalStateException(eventType.toString() + " event is not a TU");
+    }
+    
+    @Override
+    public String toString() {
+        return eventType.toString();
+    }
+    
+    @Override
+    public boolean equals(Object o) {
+        if (o == this) return true;
+        if (o == null || !(o instanceof TMXEvent)) return false;
+        TMXEvent e = (TMXEvent)o;
+        return eventType.equals(e.eventType) && eq(resource, e.resource);
     }
 }

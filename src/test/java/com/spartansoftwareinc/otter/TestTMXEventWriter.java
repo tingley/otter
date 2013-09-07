@@ -3,6 +3,7 @@ package com.spartansoftwareinc.otter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.Reader;
@@ -39,7 +40,6 @@ public class TestTMXEventWriter {
         writer.endBody();
         writer.endTMX();
         w.close();
-        System.out.println("" + tmp);
         Reader r = new InputStreamReader(new FileInputStream(tmp), "UTF-8");
         TMXEventReader reader = TMXEventReader.createTMXEventReader(r);
         List<TMXEvent> events = readEvents(reader);
@@ -54,6 +54,28 @@ public class TestTMXEventWriter {
         checkEvent(events.get(5), START_BODY);
         checkEvent(events.get(6), END_BODY);
         checkEvent(events.get(7), END_TMX);
+        tmp.delete();
+    }
+    
+    @Test
+    public void testRoundtrip() throws Exception {
+        InputStream is = getClass().getResourceAsStream("/header.tmx");
+        TMXEventReader reader = TMXEventReader.createTMXEventReader(
+                            new InputStreamReader(is, "UTF-8"));
+        File tmp = File.createTempFile("otter", ".tmx");
+        List<TMXEvent> events = readEvents(reader);
+        Writer w = new OutputStreamWriter(new FileOutputStream(tmp), "UTF-8");
+        TMXEventWriter writer = TMXEventWriter.createTMXEventWriter(w);
+        for (TMXEvent e : events) {
+            writer.writeEvent(e);
+        }
+        w.close();
+        
+        // Now verify!
+        TMXEventReader roundtripReader = TMXEventReader.createTMXEventReader(
+                        new InputStreamReader(new FileInputStream(tmp), "UTF-8"));
+        List<TMXEvent> roundtripEvents = readEvents(roundtripReader);
+        assertEquals(events, roundtripEvents);
     }
     
     // TODO: unittest that verifies that we write the required attributes

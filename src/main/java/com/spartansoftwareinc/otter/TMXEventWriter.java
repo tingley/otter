@@ -26,12 +26,49 @@ public class TMXEventWriter {
     private TMXEventWriter(Writer w) throws XMLStreamException {
         XMLOutputFactory factory = XMLOutputFactory.newFactory();
         xmlWriter = factory.createXMLEventWriter(w);
-        eventFactory = eventFactory.newInstance();
+        eventFactory = XMLEventFactory.newInstance();
     }
     
     @Deprecated
     private void TODO() {
         throw new UnsupportedOperationException();
+    }
+    
+    public void writeEvent(TMXEvent event) throws XMLStreamException {
+        switch (event.getEventType()) {
+        case START_TMX:
+            startTMX();
+            break;
+        case END_TMX:
+            endTMX();
+            break;
+        case START_HEADER:
+            startHeader(event.getHeader());
+            break;
+        case END_HEADER:
+            endHeader();
+            break;
+        case START_BODY:
+            startBody();
+            break;
+        case END_BODY:
+            endBody();
+            break;
+        case HEADER_PROPERTY:
+            Property p = event.getProperty();
+            writeProperty(p.type, p.value);
+            break;
+        case HEADER_NOTE:
+            Note n = event.getNote();
+            writeNote(n.getContent());
+            break;
+        case TU:
+            TODO();
+            break;
+        default:
+            TODO();
+            break;
+        }
     }
     
     public void startTMX() throws XMLStreamException {

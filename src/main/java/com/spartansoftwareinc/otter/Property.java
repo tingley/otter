@@ -1,5 +1,7 @@
 package com.spartansoftwareinc.otter;
 
+import static com.spartansoftwareinc.otter.Util.eq;
+
 public class Property {
 
     public String type, value;
@@ -24,5 +26,12 @@ public class Property {
         this.type = type;
         this.value = value;
     }
-    
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == this) return true;
+        if (o == null || !(o instanceof Property)) return false;
+        Property p = (Property)o;
+        return eq(type, p.type) && eq(value, p.value);
+    }
 }
