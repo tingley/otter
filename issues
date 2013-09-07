@@ -5,3 +5,5 @@
 - support hashcode for tags
 - throw errors when improper tags appear within other tags (requires
   registering element handlers)
+- add a factory class that takes a XMLInputFactory?
+    - means I would need to handle non-consolidated characters?

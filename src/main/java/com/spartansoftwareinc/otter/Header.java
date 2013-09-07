@@ -116,4 +116,24 @@ public class Header {
         this.changeId = changeId;
     }
 
+    // TODO: hashcode
+    @Override
+    public boolean equals(Object o) {
+        if (o == this) return true;
+        if (o == null || !(o instanceof Header)) return false;
+        Header h = (Header)o;
+        return creationTool.equals(h.creationTool) &&
+               creationVersion.equals(h.creationVersion) &&
+               segType.equals(h.segType) &&
+               tmf.equals(h.tmf) &&
+               adminLang.equals(h.adminLang) &&
+               srcLang.equals(h.srcLang) &&
+               dataType.equals(h.dataType) &&
+               encoding.equals(h.encoding) &&
+               creationDate.equals(h.creationDate) &&
+               creationId.equals(h.creationId) &&
+               changeDate.equals(h.changeDate) &&
+               changeId.equals(h.changeId);
+    }
+    
 }
