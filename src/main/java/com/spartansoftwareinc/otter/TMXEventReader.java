@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.Deque;
 import java.util.List;
 
-import javax.xml.namespace.QName;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.events.Characters;
@@ -20,6 +19,7 @@ import net.sundell.snax.NodeModelBuilder;
 import net.sundell.snax.SNAXParser;
 import net.sundell.snax.SNAXUserException;
 
+import static com.spartansoftwareinc.otter.TMXConstants.*;
 import static com.spartansoftwareinc.otter.TMXEventType.*;
 import static com.spartansoftwareinc.otter.Util.*;
 
@@ -130,24 +130,6 @@ public class TMXEventReader {
         }.build();
     }
     
-    static final QName X = new QName("x");
-    static final QName I = new QName("i");
-    static final QName TYPE = new QName("type");
-    static final QName ASSOC = new QName("assoc");
-    static final QName POS = new QName("pos");
-    static final QName CREATIONTOOL = new QName("creationtool");
-    static final QName CREATIONTOOLVERSION = new QName("creationtoolversion");
-    static final QName SEGTYPE = new QName("segtype");
-    static final QName TMF = new QName("o-tmf");
-    static final QName ADMINLANG = new QName("adminlang");
-    static final QName SRCLANG = new QName("srclang");
-    static final QName DATATYPE = new QName("datatype");
-    static final QName ENCODING = new QName("o-encoding");
-    static final QName CREATIONDATE = new QName("creationdate");
-    static final QName CREATIONID = new QName("creationid");
-    static final QName CHANGEDATE = new QName("changedate");
-    static final QName CHANGEID = new QName("changeid");
-
     class TMXHandler extends DefaultElementHandler<SegmentBuilder> {
         @Override
         public void startElement(StartElement element, SegmentBuilder data)

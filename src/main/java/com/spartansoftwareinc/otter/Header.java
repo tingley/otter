@@ -1,5 +1,7 @@
 package com.spartansoftwareinc.otter;
 
+import static com.spartansoftwareinc.otter.Util.eq;
+
 public class Header {
 
     // Required
@@ -122,18 +124,18 @@ public class Header {
         if (o == this) return true;
         if (o == null || !(o instanceof Header)) return false;
         Header h = (Header)o;
-        return creationTool.equals(h.creationTool) &&
-               creationVersion.equals(h.creationVersion) &&
-               segType.equals(h.segType) &&
-               tmf.equals(h.tmf) &&
-               adminLang.equals(h.adminLang) &&
-               srcLang.equals(h.srcLang) &&
-               dataType.equals(h.dataType) &&
-               encoding.equals(h.encoding) &&
-               creationDate.equals(h.creationDate) &&
-               creationId.equals(h.creationId) &&
-               changeDate.equals(h.changeDate) &&
-               changeId.equals(h.changeId);
+        return eq(creationTool, h.creationTool) &&
+               eq(creationVersion, h.creationVersion) &&
+               eq(segType, h.segType) &&
+               eq(tmf, h.tmf) &&
+               eq(adminLang, h.adminLang) &&
+               eq(srcLang, h.srcLang) &&
+               eq(dataType, h.dataType) &&
+               eq(encoding, h.encoding) &&
+               eq(creationDate, h.creationDate) &&
+               eq(creationId, h.creationId) &&
+               eq(changeDate, h.changeDate) &&
+               eq(changeId, h.changeId);
     }
     
 }

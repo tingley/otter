@@ -39,12 +39,14 @@ public class TestTMXEventWriter {
         writer.endBody();
         writer.endTMX();
         w.close();
+        System.out.println("" + tmp);
         Reader r = new InputStreamReader(new FileInputStream(tmp), "UTF-8");
         TMXEventReader reader = TMXEventReader.createTMXEventReader(r);
         List<TMXEvent> events = readEvents(reader);
         checkEvent(events.get(0), TMXEventType.START_TMX);
         checkEvent(events.get(1), TMXEventType.START_HEADER);
         Header rHeader = events.get(1).getHeader();
+        assertNotNull(rHeader);
         assertEquals(header, rHeader);
         checkProperty(events.get(2), "type1", "Property");
         checkNote(events.get(3), "This is a note");
