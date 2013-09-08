@@ -87,6 +87,11 @@ public class TestTMXEventWriter {
         testRoundtrip("/hi_nested.tmx");
     }
     
+    @Test
+    public void testSubflow() throws Exception {
+        testRoundtrip("/subflow.tmx");
+    }
+    
     public void testRoundtrip(String resourceName) throws Exception {
         InputStream is = getClass().getResourceAsStream(resourceName);
         TMXEventReader reader = TMXEventReader.createTMXEventReader(

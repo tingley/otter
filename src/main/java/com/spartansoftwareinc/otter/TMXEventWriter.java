@@ -2,6 +2,7 @@ package com.spartansoftwareinc.otter;
 
 import java.io.Writer;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -163,6 +164,7 @@ public class TMXEventWriter {
         xmlWriter.add(eventFactory.createEndElement(qname, null));
     }
     
+    @SuppressWarnings("unchecked")
     private void writeContent(TUVContent content) throws XMLStreamException {
         if (content instanceof SimpleContent) {
             xmlWriter.add(eventFactory.createCharacters(((SimpleContent)content).getValue()));
@@ -183,7 +185,7 @@ public class TMXEventWriter {
             writeHi((HiTag)content);
         }
         else if (content instanceof Subflow) {
-            
+            writeSubflow((Subflow)content);
         }
     }
     
@@ -240,5 +242,16 @@ public class TMXEventWriter {
             attrs.add(eventFactory.createAttribute(TYPE, hi.getType()));
         }
         writeTag(HI, attrs, hi.getContents());
+    }
+    
+    private void writeSubflow(Subflow sub) throws XMLStreamException {
+        ArrayList<Attribute> attrs = new ArrayList<Attribute>();
+        if (sub.getType() != null) {
+            attrs.add(eventFactory.createAttribute(TYPE, sub.getType()));
+        }
+        if (sub.getDatatype() != null) {
+            attrs.add(eventFactory.createAttribute(DATATYPE, sub.getDatatype()));
+        }
+        writeTag(SUB, attrs, sub.getContents());
     }
 }

@@ -2,6 +2,7 @@ package com.spartansoftwareinc.otter;
 
 import java.util.ArrayList;
 import java.util.List;
+import static com.spartansoftwareinc.otter.Util.eq;
 
 public class Subflow implements TUVContent, TUVContentSink {
     private String type, datatype;
@@ -33,5 +34,15 @@ public class Subflow implements TUVContent, TUVContentSink {
 
     public void setDatatype(String datatype) {
         this.datatype = datatype;
+    }
+    
+    @Override
+    public boolean equals(Object o) {
+        if (o == this) return true;
+        if (o == null || !(o instanceof Subflow)) return false;
+        Subflow sub = (Subflow)o;
+        return eq(type, sub.type) &&
+               eq(datatype, sub.datatype) &&
+               contents.equals(sub.contents);
     }
 }
