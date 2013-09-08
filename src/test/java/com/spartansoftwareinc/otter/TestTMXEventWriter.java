@@ -76,7 +76,17 @@ public class TestTMXEventWriter {
     public void testRoundtripIsolatedTags() throws Exception {
         testRoundtrip("/it_tag.tmx");
     }
+    
+    @Test
+    public void testHiTags() throws Exception {
+        testRoundtrip("/hi_tag.tmx");
+    }
 
+    @Test
+    public void testNestedHiTags() throws Exception {
+        testRoundtrip("/hi_nested.tmx");
+    }
+    
     public void testRoundtrip(String resourceName) throws Exception {
         InputStream is = getClass().getResourceAsStream(resourceName);
         TMXEventReader reader = TMXEventReader.createTMXEventReader(

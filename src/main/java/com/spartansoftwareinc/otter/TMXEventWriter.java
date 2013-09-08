@@ -167,8 +167,8 @@ public class TMXEventWriter {
         if (content instanceof SimpleContent) {
             xmlWriter.add(eventFactory.createCharacters(((SimpleContent)content).getValue()));
         }
-        else if (content instanceof HiTag) {
-            
+        else if (content instanceof PhTag) {
+            writePh((PhTag)content);
         }
         else if (content instanceof BptTag) {
             writeBpt((BptTag)content);
@@ -176,11 +176,11 @@ public class TMXEventWriter {
         else if (content instanceof EptTag) {
             writeEpt((EptTag)content);
         }
-        else if (content instanceof PhTag) {
-            writePh((PhTag)content);
-        }
         else if (content instanceof ItTag) {
             writeIt((ItTag)content);
+        }
+        else if (content instanceof HiTag) {
+            writeHi((HiTag)content);
         }
         else if (content instanceof Subflow) {
             
@@ -231,4 +231,14 @@ public class TMXEventWriter {
         writeTag(IT, attrs, it.getContents());
     }
 
+    private void writeHi(HiTag hi) throws XMLStreamException {
+        ArrayList<Attribute> attrs = new ArrayList<Attribute>();
+        if (hi.getX() != ItTag.NO_VALUE) {
+            attrs.add(eventFactory.createAttribute(X, Integer.toString(hi.getX())));
+        }
+        if (hi.getType() != null) {
+            attrs.add(eventFactory.createAttribute(TYPE, hi.getType()));
+        }
+        writeTag(HI, attrs, hi.getContents());
+    }
 }
