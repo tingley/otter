@@ -228,7 +228,7 @@ public class TMXEventReader {
         @Override
         public void endElement(EndElement element, SegmentBuilder data)
                 throws SNAXUserException {
-            addEvent(new TMXEvent(TU, data.getTu()));
+            addEvent(new TMXEvent(TMXEventType.TU, data.getTu()));
         }
     }
     class TuvHandler extends DefaultElementHandler<SegmentBuilder> {

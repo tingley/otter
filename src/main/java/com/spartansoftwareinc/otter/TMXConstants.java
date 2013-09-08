@@ -8,8 +8,18 @@ class TMXConstants {
     static final QName BODY = new QName("body");
     static final QName PROPERTY = new QName("prop");
     static final QName NOTE = new QName("note");
-    
+    static final QName TU = new QName("tu");
+    static final QName TUV = new QName("tuv");
+    static final QName SEG = new QName("seg");
+    static final QName PH = new QName("ph");
+    static final QName BPT = new QName("bpt");
+    static final QName EPT = new QName("ept");
+    static final QName SUB = new QName("sub");
+    static final QName IT = new QName("it");
+    static final QName HI = new QName("hi");
+   
     static final QName VERSION = new QName("version");
+    static final QName XMLLANG = new QName("http://www.w3.org/XML/1998/namespace", "lang", "xml");
     static final QName X = new QName("x");
     static final QName I = new QName("i");
     static final QName TYPE = new QName("type");

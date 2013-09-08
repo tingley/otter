@@ -58,8 +58,17 @@ public class TestTMXEventWriter {
     }
     
     @Test
-    public void testRoundtrip() throws Exception {
-        InputStream is = getClass().getResourceAsStream("/header.tmx");
+    public void testRoundtripHeader() throws Exception {
+        testRoundtrip("/header.tmx");
+    }
+    
+    @Test
+    public void testRoundtripBody() throws Exception {
+        testRoundtrip("/body.tmx");
+    }
+
+    public void testRoundtrip(String resourceName) throws Exception {
+        InputStream is = getClass().getResourceAsStream(resourceName);
         TMXEventReader reader = TMXEventReader.createTMXEventReader(
                             new InputStreamReader(is, "UTF-8"));
         File tmp = File.createTempFile("otter", ".tmx");
@@ -76,6 +85,7 @@ public class TestTMXEventWriter {
                         new InputStreamReader(new FileInputStream(tmp), "UTF-8"));
         List<TMXEvent> roundtripEvents = readEvents(roundtripReader);
         assertEquals(events, roundtripEvents);
+        tmp.delete();
     }
     
     // TODO: unittest that verifies that we write the required attributes

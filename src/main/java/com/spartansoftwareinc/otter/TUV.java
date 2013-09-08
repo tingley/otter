@@ -31,4 +31,13 @@ public class TUV implements TUVContentSink {
         contents.add(content);
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (o == this) return true;
+        if (o == null || !(o instanceof TUV)) return false;
+        TUV tuv = (TUV)o;
+        return locale.equals(tuv.locale) && 
+               contents.equals(tuv.contents);
+    }
+
 }

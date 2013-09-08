@@ -3,6 +3,7 @@ package com.spartansoftwareinc.otter;
 import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.xml.namespace.QName;
 import javax.xml.stream.XMLEventFactory;
@@ -63,7 +64,7 @@ public class TMXEventWriter {
             writeNote(n.getContent());
             break;
         case TU:
-            TODO();
+            writeTu(event.getTU());
             break;
         default:
             TODO();
@@ -121,8 +122,7 @@ public class TMXEventWriter {
     }
     
     public void writeNote(String value) throws XMLStreamException {
-        ArrayList<Attribute> attrs = new ArrayList<Attribute>();
-        xmlWriter.add(eventFactory.createStartElement(NOTE, attrs.iterator(), null));
+        xmlWriter.add(eventFactory.createStartElement(NOTE, null, null));
         xmlWriter.add(eventFactory.createCharacters(value));
         xmlWriter.add(eventFactory.createEndElement(NOTE, null));
     }
@@ -133,5 +133,70 @@ public class TMXEventWriter {
     
     public void endBody() throws XMLStreamException {
         xmlWriter.add(eventFactory.createEndElement(BODY, null));
+    }
+    
+    public void writeTu(TU tu) throws XMLStreamException {
+        // TODO: TU attributes
+        xmlWriter.add(eventFactory.createStartElement(TU, null, null));
+        // TODO: Always print the source first
+        Map<String, TUV> tuvs = tu.getTuvs();
+        for (Map.Entry<String, TUV> e : tuvs.entrySet()) {
+            ArrayList<Attribute> attrs = new ArrayList<Attribute>();
+            attrs.add(eventFactory.createAttribute(XMLLANG, e.getKey()));
+            xmlWriter.add(eventFactory.createStartElement(TUV, attrs.iterator(), null));
+            xmlWriter.add(eventFactory.createStartElement(SEG, null, null));
+            for (TUVContent content : e.getValue().getContents()) {
+                writeContent(content);
+            }
+            xmlWriter.add(eventFactory.createEndElement(SEG, null));
+            xmlWriter.add(eventFactory.createEndElement(TUV, null));
+        }
+        xmlWriter.add(eventFactory.createEndElement(TU, null));
+    }
+    
+    private void writeContents(List<TUVContent> contents) throws XMLStreamException { 
+        for (TUVContent content : contents) {
+            writeContent(content);
+        }
+    }
+    
+    private void writeContent(TUVContent content) throws XMLStreamException {
+        if (content instanceof SimpleContent) {
+            xmlWriter.add(eventFactory.createCharacters(((SimpleContent)content).getValue()));
+        }
+        else if (content instanceof HiTag) {
+            
+        }
+        else if (content instanceof BptTag) {
+            
+        }
+        else if (content instanceof EptTag) {
+            
+        }
+        else if (content instanceof PhTag) {
+            writePh((PhTag)content);
+        }
+        else if (content instanceof ItTag) {
+            
+        }
+        else if (content instanceof Subflow) {
+            
+        }
+    }
+    
+    private void writePh(PhTag ph) throws XMLStreamException {
+        ArrayList<Attribute> attrs = new ArrayList<Attribute>();
+        if (ph.getX() != ph.NO_VALUE) {
+            attrs.add(eventFactory.createAttribute(X, Integer.toString(ph.getX())));
+        }
+        if (ph.getType() != null) {
+            attrs.add(eventFactory.createAttribute(TYPE, ph.getType()));
+        }
+        if (ph.getAssoc() != null) {
+            attrs.add(eventFactory.createAttribute(ASSOC, ph.getAssoc()));
+        }
+        xmlWriter.add(eventFactory.createStartElement(PH, attrs.iterator(), null));
+        writeContents(ph.getContents());
+        xmlWriter.add(eventFactory.createEndElement(PH, null));
     }
 }

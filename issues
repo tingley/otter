@@ -7,3 +7,5 @@
   registering element handlers)
 - add a factory class that takes a XMLInputFactory?
     - means I would need to handle non-consolidated characters?
+- i'm not supporting TU attributes at all
+- TypedTag is redundant with StandaloneTag
