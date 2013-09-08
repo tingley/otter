@@ -1,9 +1,12 @@
 package com.spartansoftwareinc.otter;
 
+import static com.spartansoftwareinc.otter.Util.eq;
+
 /**
  * Base class for standalone inline tags.
  */
-public abstract class StandaloneTag extends InlineTag implements NumberedTag {    
+public abstract class StandaloneTag extends InlineTag implements NumberedTag {
+    private String type;
     private int x = NO_VALUE;
 
     protected StandaloneTag() {
@@ -28,10 +31,19 @@ public abstract class StandaloneTag extends InlineTag implements NumberedTag {
         this.x = x;
     }
     
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+    
     @Override
     public boolean equals(Object o) {
         return super.equals(o) && 
                 (o instanceof StandaloneTag) &&
-                x == ((StandaloneTag)o).getX();
+                x == ((StandaloneTag)o).getX() &&
+                eq(type, ((StandaloneTag)o).getType());
     }
 }

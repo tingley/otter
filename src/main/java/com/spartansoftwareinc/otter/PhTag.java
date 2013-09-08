@@ -2,7 +2,7 @@ package com.spartansoftwareinc.otter;
 
 import static com.spartansoftwareinc.otter.Util.eq;
 
-public class PhTag extends TypedTag {
+public class PhTag extends StandaloneTag {
     private String assoc;
     
     public PhTag(String initialCodeData) {

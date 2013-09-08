@@ -3,7 +3,7 @@ package com.spartansoftwareinc.otter;
 /**
  * A <code>&lt;it&gt;</code> tag.
  */
-public class ItTag extends TypedTag {
+public class ItTag extends StandaloneTag {
     public enum Pos {
         BEGIN("begin"),
         END("end");
