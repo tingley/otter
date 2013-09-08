@@ -154,10 +154,13 @@ public class TMXEventWriter {
         xmlWriter.add(eventFactory.createEndElement(TU, null));
     }
     
-    private void writeContents(List<TUVContent> contents) throws XMLStreamException { 
+    private void writeTag(QName qname, List<Attribute> attrs, List<TUVContent> contents) 
+                          throws XMLStreamException {
+        xmlWriter.add(eventFactory.createStartElement(qname, attrs.iterator(), null));
         for (TUVContent content : contents) {
             writeContent(content);
         }
+        xmlWriter.add(eventFactory.createEndElement(qname, null));
     }
     
     private void writeContent(TUVContent content) throws XMLStreamException {
@@ -177,7 +180,7 @@ public class TMXEventWriter {
             writePh((PhTag)content);
         }
         else if (content instanceof ItTag) {
-            
+            writeIt((ItTag)content);
         }
         else if (content instanceof Subflow) {
             
@@ -195,9 +198,7 @@ public class TMXEventWriter {
         if (ph.getAssoc() != null) {
             attrs.add(eventFactory.createAttribute(ASSOC, ph.getAssoc()));
         }
-        xmlWriter.add(eventFactory.createStartElement(PH, attrs.iterator(), null));
-        writeContents(ph.getContents());
-        xmlWriter.add(eventFactory.createEndElement(PH, null));
+        writeTag(PH, attrs, ph.getContents());
     }
     
     private void writeBpt(BptTag bpt) throws XMLStreamException {
@@ -209,16 +210,25 @@ public class TMXEventWriter {
         if (bpt.getType() != null) {
             attrs.add(eventFactory.createAttribute(TYPE, bpt.getType()));
         }
-        xmlWriter.add(eventFactory.createStartElement(BPT, attrs.iterator(), null));
-        writeContents(bpt.getContents());
-        xmlWriter.add(eventFactory.createEndElement(BPT, null));
+        writeTag(BPT, attrs, bpt.getContents());
     }
     
     private void writeEpt(EptTag ept) throws XMLStreamException {
         ArrayList<Attribute> attrs = new ArrayList<Attribute>();
         attrs.add(eventFactory.createAttribute(I, Integer.toString(ept.getI())));
-        xmlWriter.add(eventFactory.createStartElement(EPT, attrs.iterator(), null));
-        writeContents(ept.getContents());
-        xmlWriter.add(eventFactory.createEndElement(EPT, null));
+        writeTag(EPT, attrs, ept.getContents());
     }
+    
+    private void writeIt(ItTag it) throws XMLStreamException {
+        ArrayList<Attribute> attrs = new ArrayList<Attribute>();
+        attrs.add(eventFactory.createAttribute(POS, it.getPos().getAttrValue()));
+        if (it.getX() != ItTag.NO_VALUE) {
+            attrs.add(eventFactory.createAttribute(X, Integer.toString(it.getX())));
+        }
+        if (it.getType() != null) {
+            attrs.add(eventFactory.createAttribute(TYPE, it.getType()));
+        }
+        writeTag(IT, attrs, it.getContents());
+    }
+
 }
