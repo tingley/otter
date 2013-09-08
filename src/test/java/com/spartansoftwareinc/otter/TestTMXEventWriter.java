@@ -66,6 +66,11 @@ public class TestTMXEventWriter {
     public void testRoundtripBody() throws Exception {
         testRoundtrip("/body.tmx");
     }
+    
+    @Test
+    public void testRoundtripPairedTags() throws Exception {
+        testRoundtrip("/paired_tags.tmx");
+    }
 
     public void testRoundtrip(String resourceName) throws Exception {
         InputStream is = getClass().getResourceAsStream(resourceName);

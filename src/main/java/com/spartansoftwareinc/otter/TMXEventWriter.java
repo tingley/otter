@@ -168,10 +168,10 @@ public class TMXEventWriter {
             
         }
         else if (content instanceof BptTag) {
-            
+            writeBpt((BptTag)content);
         }
         else if (content instanceof EptTag) {
-            
+            writeEpt((EptTag)content);
         }
         else if (content instanceof PhTag) {
             writePh((PhTag)content);
@@ -186,7 +186,7 @@ public class TMXEventWriter {
     
     private void writePh(PhTag ph) throws XMLStreamException {
         ArrayList<Attribute> attrs = new ArrayList<Attribute>();
-        if (ph.getX() != ph.NO_VALUE) {
+        if (ph.getX() != PhTag.NO_VALUE) {
             attrs.add(eventFactory.createAttribute(X, Integer.toString(ph.getX())));
         }
         if (ph.getType() != null) {
@@ -198,5 +198,27 @@ public class TMXEventWriter {
         xmlWriter.add(eventFactory.createStartElement(PH, attrs.iterator(), null));
         writeContents(ph.getContents());
         xmlWriter.add(eventFactory.createEndElement(PH, null));
+    }
+    
+    private void writeBpt(BptTag bpt) throws XMLStreamException {
+        ArrayList<Attribute> attrs = new ArrayList<Attribute>();
+        attrs.add(eventFactory.createAttribute(I, Integer.toString(bpt.getI())));
+        if (bpt.getX() != BptTag.NO_VALUE) {
+            attrs.add(eventFactory.createAttribute(X, Integer.toString(bpt.getX())));
+        }
+        if (bpt.getType() != null) {
+            attrs.add(eventFactory.createAttribute(TYPE, bpt.getType()));
+        }
+        xmlWriter.add(eventFactory.createStartElement(BPT, attrs.iterator(), null));
+        writeContents(bpt.getContents());
+        xmlWriter.add(eventFactory.createEndElement(BPT, null));
+    }
+    
+    private void writeEpt(EptTag ept) throws XMLStreamException {
+        ArrayList<Attribute> attrs = new ArrayList<Attribute>();
+        attrs.add(eventFactory.createAttribute(I, Integer.toString(ept.getI())));
+        xmlWriter.add(eventFactory.createStartElement(EPT, attrs.iterator(), null));
+        writeContents(ept.getContents());
+        xmlWriter.add(eventFactory.createEndElement(EPT, null));
     }
 }
