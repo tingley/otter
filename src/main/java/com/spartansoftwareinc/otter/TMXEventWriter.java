@@ -2,7 +2,7 @@ package com.spartansoftwareinc.otter;
 
 import java.io.Writer;
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -137,13 +137,29 @@ public class TMXEventWriter {
     }
     
     public void writeTu(TU tu) throws XMLStreamException {
-        // TODO: TU attributes
-        xmlWriter.add(eventFactory.createStartElement(TU, null, null));
+        ArrayList<Attribute> tuAttrs = new ArrayList<Attribute>();
+        attr(tuAttrs, TUID, tu.getId());
+        attr(tuAttrs, ENCODING, tu.getEncoding());
+        attr(tuAttrs, DATATYPE, tu.getDatatype());
+        if (tu.getUsageCount() != null) {
+            attr(tuAttrs, USAGECOUNT, tu.getUsageCount().toString());
+        }
+        dateAttr(tuAttrs, LASTUSAGEDATE, tu.getLastUsageDate());
+        attr(tuAttrs, CREATIONTOOL, tu.getCreationTool());
+        attr(tuAttrs, CREATIONTOOLVERSION, tu.getCreationToolVersion());
+        dateAttr(tuAttrs, CREATIONDATE, tu.getCreationDate());
+        attr(tuAttrs, CREATIONID, tu.getCreationId());
+        dateAttr(tuAttrs, CHANGEDATE, tu.getChangeDate());
+        attr(tuAttrs, SEGTYPE, tu.getSegType());
+        attr(tuAttrs, CHANGEID, tu.getChangeId());
+        attr(tuAttrs, TMF, tu.getTmf());
+        attr(tuAttrs, SRCLANG, tu.getSrcLang());
+        xmlWriter.add(eventFactory.createStartElement(TU, tuAttrs.iterator(), null));
         // TODO: Always print the source first
         Map<String, TUV> tuvs = tu.getTuvs();
         for (Map.Entry<String, TUV> e : tuvs.entrySet()) {
             ArrayList<Attribute> attrs = new ArrayList<Attribute>();
-            attrs.add(eventFactory.createAttribute(XMLLANG, e.getKey()));
+            attr(attrs, XMLLANG, e.getKey());
             xmlWriter.add(eventFactory.createStartElement(TUV, attrs.iterator(), null));
             xmlWriter.add(eventFactory.createStartElement(SEG, null, null));
             for (TUVContent content : e.getValue().getContents()) {
@@ -163,8 +179,7 @@ public class TMXEventWriter {
         }
         xmlWriter.add(eventFactory.createEndElement(qname, null));
     }
-    
-    @SuppressWarnings("unchecked")
+
     private void writeContent(TUVContent content) throws XMLStreamException {
         if (content instanceof SimpleContent) {
             xmlWriter.add(eventFactory.createCharacters(((SimpleContent)content).getValue()));
@@ -194,12 +209,8 @@ public class TMXEventWriter {
         if (ph.getX() != PhTag.NO_VALUE) {
             attrs.add(eventFactory.createAttribute(X, Integer.toString(ph.getX())));
         }
-        if (ph.getType() != null) {
-            attrs.add(eventFactory.createAttribute(TYPE, ph.getType()));
-        }
-        if (ph.getAssoc() != null) {
-            attrs.add(eventFactory.createAttribute(ASSOC, ph.getAssoc()));
-        }
+        attr(attrs, TYPE, ph.getType());
+        attr(attrs, ASSOC, ph.getAssoc());
         writeTag(PH, attrs, ph.getContents());
     }
     
@@ -209,9 +220,7 @@ public class TMXEventWriter {
         if (bpt.getX() != BptTag.NO_VALUE) {
             attrs.add(eventFactory.createAttribute(X, Integer.toString(bpt.getX())));
         }
-        if (bpt.getType() != null) {
-            attrs.add(eventFactory.createAttribute(TYPE, bpt.getType()));
-        }
+        attr(attrs, TYPE, bpt.getType());
         writeTag(BPT, attrs, bpt.getContents());
     }
     
@@ -227,9 +236,7 @@ public class TMXEventWriter {
         if (it.getX() != ItTag.NO_VALUE) {
             attrs.add(eventFactory.createAttribute(X, Integer.toString(it.getX())));
         }
-        if (it.getType() != null) {
-            attrs.add(eventFactory.createAttribute(TYPE, it.getType()));
-        }
+        attr(attrs, TYPE, it.getType());
         writeTag(IT, attrs, it.getContents());
     }
 
@@ -238,20 +245,25 @@ public class TMXEventWriter {
         if (hi.getX() != ItTag.NO_VALUE) {
             attrs.add(eventFactory.createAttribute(X, Integer.toString(hi.getX())));
         }
-        if (hi.getType() != null) {
-            attrs.add(eventFactory.createAttribute(TYPE, hi.getType()));
-        }
+        attr(attrs, TYPE, hi.getType());
         writeTag(HI, attrs, hi.getContents());
     }
     
     private void writeSubflow(Subflow sub) throws XMLStreamException {
         ArrayList<Attribute> attrs = new ArrayList<Attribute>();
-        if (sub.getType() != null) {
-            attrs.add(eventFactory.createAttribute(TYPE, sub.getType()));
-        }
-        if (sub.getDatatype() != null) {
-            attrs.add(eventFactory.createAttribute(DATATYPE, sub.getDatatype()));
-        }
+        attr(attrs, TYPE, sub.getType());
+        attr(attrs, DATATYPE, sub.getDatatype());
         writeTag(SUB, attrs, sub.getContents());
+    }
+    
+    private void attr(List<Attribute> attrs, QName name, String value) {
+        if (value != null) {
+            attrs.add(eventFactory.createAttribute(name, value));
+        }
+    }
+    private void dateAttr(List<Attribute> attrs, QName name, Date value) {
+        if (value != null) {
+            attrs.add(eventFactory.createAttribute(name, Util.writeTMXDate(value)));
+        }
     }
 }

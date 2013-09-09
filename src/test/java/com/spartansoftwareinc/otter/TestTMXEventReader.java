@@ -62,6 +62,10 @@ public class TestTMXEventReader {
         assertNotNull(tus);
         assertEquals(2, tus.size());
         TU tu = tus.get(0);
+        assertEquals(Util.parseTMXDate("20130314T060143Z"), tu.getCreationDate());
+        assertEquals("TESTA", tu.getCreationId());
+        assertEquals(Util.parseTMXDate("20130314T060951Z"), tu.getChangeDate());
+        assertEquals("TESTB", tu.getChangeId());
         Map<String, TUV> tuvs = tu.getTuvs();
         assertEquals(2, tuvs.size());
         TUV enTuv = tuvs.get("EN-US");

@@ -1,5 +1,9 @@
 package com.spartansoftwareinc.otter;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import javax.xml.namespace.QName;
 import javax.xml.stream.Location;
 import javax.xml.stream.events.Attribute;
@@ -56,6 +60,24 @@ class Util {
             throw new OtterException("Not an integer value: " + a.getValue(),
                                      el.getLocation());
         }
+    }
+    static final String TMX_DATE_FORMAT = "yyyyMMdd'T'hhmmssZ";
+    static final Date parseTMXDate(String s) {
+        try {
+            SimpleDateFormat df = new SimpleDateFormat(TMX_DATE_FORMAT);
+            return df.parse(s);
+        }
+        catch (ParseException e) {
+            return null;
+        }
+    }
+    static final String writeTMXDate(Date d) {
+        return new SimpleDateFormat(TMX_DATE_FORMAT).format(d);
+    }
+    static Date attrValAsDate(StartElement el, QName attrName) {
+        Attribute a = el.getAttributeByName(attrName);
+        if (a == null) return null;
+        return parseTMXDate(a.getValue());
     }
     static Integer requireAttrValAsInteger(StartElement el, QName attrName) {
         Attribute a = el.getAttributeByName(attrName);

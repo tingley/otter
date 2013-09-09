@@ -1,10 +1,17 @@
 package com.spartansoftwareinc.otter;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.spartansoftwareinc.otter.Util.eq;
+
 public class TU {
     private Map<String, TUV> tuvs = new HashMap<String, TUV>();
+    private String id, encoding, datatype, creationTool, creationToolVersion, 
+        creationId, segType, changeId, tmf, srcLang;
+    private Integer usageCount; // optional, so can be null
+    private Date lastUsageDate, creationDate, changeDate;
     
     public TU() {
     }
@@ -17,11 +24,114 @@ public class TU {
         return tuvs;
     }
     
+    public void setTuvs(Map<String, TUV> tuvs) {
+        this.tuvs = tuvs;
+    }
+    
     @Override
     public boolean equals(Object o) {
         if (o == this) return true;
         if (o == null || !(o instanceof TU)) return false;
         TU tu = (TU)o;
-        return tuvs.equals(tu.tuvs);
+        return eq(id, tu.id) &&
+               eq(encoding, tu.encoding) &&
+               eq(datatype, tu.datatype) &&
+               eq(creationTool, tu.creationTool) &&
+               eq(creationToolVersion, tu.creationToolVersion) &&
+               eq(creationId, tu.creationId) && 
+               eq(segType, tu.segType) &&
+               eq(changeId, tu.changeId) &&
+               eq(tmf, tu.tmf) &&
+               eq(srcLang, tu.srcLang) &&
+               eq(usageCount, tu.usageCount) &&
+               eq(lastUsageDate, tu.lastUsageDate) &&
+               eq(creationDate, tu.creationDate) &&
+               eq(changeDate, tu.changeDate) &&
+               tuvs.equals(tu.tuvs);
+    }
+
+    public String getId() {
+        return id;
+    }
+    public void setId(String id) {
+        this.id = id;
+    }
+    public String getEncoding() {
+        return encoding;
+    }
+    public void setEncoding(String encoding) {
+        this.encoding = encoding;
+    }
+    public String getDatatype() {
+        return datatype;
+    }
+    public void setDatatype(String datatype) {
+        this.datatype = datatype;
+    }
+    public String getCreationTool() {
+        return creationTool;
+    }
+    public void setCreationTool(String creationTool) {
+        this.creationTool = creationTool;
+    }
+    public String getCreationToolVersion() {
+        return creationToolVersion;
+    }
+    public void setCreationToolVersion(String creationToolVersion) {
+        this.creationToolVersion = creationToolVersion;
+    }
+    public String getCreationId() {
+        return creationId;
+    }
+    public void setCreationId(String creationId) {
+        this.creationId = creationId;
+    }
+    public String getSegType() {
+        return segType;
+    }
+    public void setSegType(String segType) {
+        this.segType = segType;
+    }
+    public String getChangeId() {
+        return changeId;
+    }
+    public void setChangeId(String changeId) {
+        this.changeId = changeId;
+    }
+    public String getTmf() {
+        return tmf;
+    }
+    public void setTmf(String tmf) {
+        this.tmf = tmf;
+    }
+    public String getSrcLang() {
+        return srcLang;
+    }
+    public void setSrcLang(String srcLang) {
+        this.srcLang = srcLang;
+    }
+    public Integer getUsageCount() {
+        return usageCount;
+    }
+    public void setUsageCount(Integer usageCount) {
+        this.usageCount = usageCount;
+    }
+    public Date getLastUsageDate() {
+        return lastUsageDate;
+    }
+    public void setLastUsageDate(Date lastUsageDate) {
+        this.lastUsageDate = lastUsageDate;
+    }
+    public Date getCreationDate() {
+        return creationDate;
+    }
+    public void setCreationDate(Date creationDate) {
+        this.creationDate = creationDate;
+    }
+    public Date getChangeDate() {
+        return changeDate;
+    }
+    public void setChangeDate(Date changeDate) {
+        this.changeDate = changeDate;
     }
 }

@@ -20,6 +20,9 @@ class TMXConstants {
    
     static final QName VERSION = new QName("version");
     static final QName XMLLANG = new QName("http://www.w3.org/XML/1998/namespace", "lang", "xml");
+    static final QName TUID = new QName("tuid");
+    static final QName USAGECOUNT = new QName("usagecount");
+    static final QName LASTUSAGEDATE = new QName("lastusagedate");
     static final QName X = new QName("x");
     static final QName I = new QName("i");
     static final QName TYPE = new QName("type");
