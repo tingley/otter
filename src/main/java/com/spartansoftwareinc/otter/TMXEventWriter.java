@@ -89,7 +89,9 @@ public class TMXEventWriter {
         ArrayList<Attribute> attrs = new ArrayList<Attribute>();
         // TODO: enforce attr requirements
         addAttr(attrs, CREATIONID, h.getCreationId());
-        addAttr(attrs, CREATIONDATE, h.getCreationDate());
+        if (h.getCreationDate() != null) {
+            addAttr(attrs, CREATIONDATE, Util.writeTMXDate(h.getCreationDate()));
+        }
         addAttr(attrs, CREATIONTOOL, h.getCreationTool());
         addAttr(attrs, CREATIONTOOLVERSION, h.getCreationToolVersion());
         addAttr(attrs, SEGTYPE, h.getSegType());
@@ -97,7 +99,9 @@ public class TMXEventWriter {
         addAttr(attrs, ADMINLANG, h.getAdminLang());
         addAttr(attrs, SRCLANG, h.getSrcLang());
         addAttr(attrs, SEGTYPE, h.getSegType());
-        addAttr(attrs, CHANGEDATE, h.getChangeDate());
+        if (h.getChangeDate() != null) {
+            addAttr(attrs, CHANGEDATE, Util.writeTMXDate(h.getChangeDate()));
+        }
         addAttr(attrs, CHANGEID, h.getChangeId());
         addAttr(attrs, ENCODING, h.getEncoding());
         addAttr(attrs, DATATYPE, h.getDataType());

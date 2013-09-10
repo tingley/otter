@@ -8,7 +8,6 @@
 - add a factory class that takes a XMLInputFactory?
     - means I would need to handle non-consolidated characters?
 - segmentbuilder may not be needed
-- tu notes/properties
 - flag warnings if tu/@srclang does not match global decl
 - parse dates from header correctly
 - expand snax anchors to allow attaching handlers to them.  basically

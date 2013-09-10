@@ -35,7 +35,7 @@ public class TestTMXEventReader {
         assertEquals("EN-US", header.getSrcLang());
         assertEquals("rtf", header.getDataType());
         // Optional ones
-        assertEquals("20100223T044327Z", header.getCreationDate());
+        assertEquals(Util.parseTMXDate("20100223T044327Z"), header.getCreationDate());
         assertEquals("TESTERSON", header.getCreationId());
         assertNull(header.getEncoding());
         assertNull(header.getChangeDate());

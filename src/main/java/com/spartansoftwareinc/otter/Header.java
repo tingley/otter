@@ -2,6 +2,8 @@ package com.spartansoftwareinc.otter;
 
 import static com.spartansoftwareinc.otter.Util.eq;
 
+import java.util.Date;
+
 public class Header {
 
     // Required
@@ -14,9 +16,9 @@ public class Header {
     private String dataType;
     // Optional
     private String encoding;
-    private String creationDate;
+    private Date creationDate;
     private String creationId;
-    private String changeDate;
+    private Date changeDate;
     private String changeId;
     
     public Header() {
@@ -86,11 +88,11 @@ public class Header {
         this.encoding = encoding;
     }
 
-    public String getCreationDate() {
+    public Date getCreationDate() {
         return creationDate;
     }
 
-    public void setCreationDate(String creationDate) {
+    public void setCreationDate(Date creationDate) {
         this.creationDate = creationDate;
     }
 
@@ -102,11 +104,11 @@ public class Header {
         this.creationId = creationId;
     }
 
-    public String getChangeDate() {
+    public Date getChangeDate() {
         return changeDate;
     }
 
-    public void setChangeDate(String changeDate) {
+    public void setChangeDate(Date changeDate) {
         this.changeDate = changeDate;
     }
 

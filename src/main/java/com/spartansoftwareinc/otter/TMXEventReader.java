@@ -153,9 +153,9 @@ public class TMXEventReader {
                 throws SNAXUserException {
             Header header = new Header();
             header.setAdminLang(attrVal(element, ADMINLANG));
-            header.setChangeDate(attrVal(element, CHANGEDATE));
+            header.setChangeDate(attrValAsDate(element, CHANGEDATE));
             header.setChangeId(attrVal(element, CHANGEID));
-            header.setCreationDate(attrVal(element, CREATIONDATE));
+            header.setCreationDate(attrValAsDate(element, CREATIONDATE));
             header.setCreationId(attrVal(element, CREATIONID));
             header.setCreationTool(attrVal(element, CREATIONTOOL));
             header.setCreationToolVersion(attrVal(element, CREATIONTOOLVERSION));
