@@ -95,6 +95,30 @@ public class TestTMXEventReader {
         }}, frTuv.getContents());        
     }
     
+    @Test
+    public void testTuvPropertiesAndNotes() throws Exception {
+        InputStream is = getClass().getResourceAsStream("/tuv_properties.tmx");
+        TMXEventReader reader = TMXEventReader.createTMXEventReader(
+                            new InputStreamReader(is, "UTF-8"));
+        List<TU> tus = readTUs(reader);
+        assertNotNull(tus);
+        assertEquals(1, tus.size());
+        Map<String, TUV> tuvs = tus.get(0).getTuvs();
+        TUV enTuv = tuvs.get("EN-US");
+        assertNotNull(enTuv);
+        assertEquals(0, enTuv.getProperties().size());
+        List<Note> tuvNotes = enTuv.getNotes();
+        assertEquals(1, tuvNotes.size());
+        assertEquals("Note content", tuvNotes.get(0).getContent());
+        TUV frTuv = tuvs.get("FR-FR");
+        assertNotNull(frTuv);
+        List<Property> tuvProperties = frTuv.getProperties();
+        assertEquals(1, tuvProperties.size());
+        assertEquals("x-type", tuvProperties.get(0).type);
+        assertEquals("TEXT", tuvProperties.get(0).value);
+        assertEquals(0, frTuv.getNotes().size());
+    }
+    
     @SuppressWarnings("serial")
     @Test
     public void testPairedTags() throws Exception {

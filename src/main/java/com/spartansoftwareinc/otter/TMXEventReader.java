@@ -87,6 +87,8 @@ public class TMXEventReader {
             elements("tmx", "body", "tu").attach(new TuHandler());
             elements("tmx", "body", "tu", "tuv").attach(new TuvHandler());
             elements("tmx", "body", "tu", "tuv", "seg").attach(new SegHandler());
+            elements("tmx", "body", "tu", "tuv", "prop").attach(new TuvPropertyHandler());
+            elements("tmx", "body", "tu", "tuv", "note").attach(new TuvNoteHandler());
             
             phAnchor = elements("tmx", "body", "tu", "tuv", "seg", "ph").attachPoint();
             bptAnchor = elements("tmx", "body", "tu", "tuv", "seg", "bpt").attachPoint();
@@ -168,7 +170,7 @@ public class TMXEventReader {
             addEvent(new TMXEvent(END_HEADER));
         }
     }
-    class HeaderPropertyHandler extends DefaultElementHandler<SegmentBuilder> {
+    abstract class PropertyHandler extends DefaultElementHandler<SegmentBuilder> {
         private StringBuilder value = new StringBuilder();
         private String type = null;
         @Override
@@ -186,10 +188,17 @@ public class TMXEventReader {
         public void endElement(EndElement element, SegmentBuilder data)
                 throws SNAXUserException {
             require(type != null, element.getLocation(), "Property type was not set");
-            addEvent(new TMXEvent(HEADER_PROPERTY, new Property(type, value.toString())));
+            handleProperty(data, new Property(type, value.toString()));
+        }
+        abstract void handleProperty(SegmentBuilder data, Property property);
+    }
+    class HeaderPropertyHandler extends PropertyHandler {
+        @Override
+        void handleProperty(SegmentBuilder data, Property property) {
+            addEvent(new TMXEvent(HEADER_PROPERTY, property));
         }
     }
-    class HeaderNoteHandler extends DefaultElementHandler<SegmentBuilder> {
+    abstract class NoteHandler extends DefaultElementHandler<SegmentBuilder> {
         private StringBuilder value = new StringBuilder();
         @Override
         public void startElement(StartElement element, SegmentBuilder data)
@@ -204,7 +213,14 @@ public class TMXEventReader {
         @Override
         public void endElement(EndElement element, SegmentBuilder data)
                 throws SNAXUserException {
-            addEvent(new TMXEvent(HEADER_NOTE, new Note(value.toString())));
+            handleNote(data, new Note(value.toString()));
+        }
+        abstract void handleNote(SegmentBuilder data, Note note);
+    }
+    class HeaderNoteHandler extends NoteHandler {
+        @Override
+        void handleNote(SegmentBuilder data, Note note) {
+            addEvent(new TMXEvent(HEADER_NOTE, note));
         }
     }
     class BodyHandler extends DefaultElementHandler<SegmentBuilder> {
@@ -243,6 +259,18 @@ public class TMXEventReader {
                 throws SNAXUserException {
             data.endTuv();
             contentStack.pop();
+        }
+    }
+    class TuvPropertyHandler extends PropertyHandler {
+        @Override
+        void handleProperty(SegmentBuilder data, Property property) {
+            data.getCurrentTuv().addProperty(property);
+        }
+    }
+    class TuvNoteHandler extends NoteHandler {
+        @Override
+        void handleNote(SegmentBuilder data, Note note) {
+            data.getCurrentTuv().addNote(note);
         }
     }
     class SegHandler extends DefaultElementHandler<SegmentBuilder> {

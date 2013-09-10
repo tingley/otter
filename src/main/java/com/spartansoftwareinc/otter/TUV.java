@@ -6,7 +6,9 @@ import java.util.ArrayList;
 public class TUV implements TUVContentSink {
     private String locale;
     private List<TUVContent> contents = new ArrayList<TUVContent>();
- 
+    private List<Property> properties = new ArrayList<Property>();
+    private List<Note> notes = new ArrayList<Note>();
+    
     public TUV(String locale) {
         this.locale = locale;
     }
@@ -29,6 +31,30 @@ public class TUV implements TUVContentSink {
     
     public void addContent(TUVContent content) {
         contents.add(content);
+    }
+
+    public List<Property> getProperties() {
+        return properties;
+    }
+
+    public void setProperties(List<Property> properties) {
+        this.properties = properties;
+    }
+
+    public void addProperty(Property property) {
+        properties.add(property);
+    }
+
+    public List<Note> getNotes() {
+        return notes;
+    }
+
+    public void setNotes(List<Note> notes) {
+        this.notes = notes;
+    }
+    
+    public void addNote(Note note) {
+        notes.add(note);
     }
 
     @Override
