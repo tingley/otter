@@ -63,7 +63,9 @@ public class TUV implements TUVContentSink {
         if (o == null || !(o instanceof TUV)) return false;
         TUV tuv = (TUV)o;
         return locale.equals(tuv.locale) && 
-               contents.equals(tuv.contents);
+               contents.equals(tuv.contents) &&
+               notes.equals(tuv.notes) &&
+               properties.equals(tuv.properties);
     }
 
 }

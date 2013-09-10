@@ -86,6 +86,8 @@ public class TMXEventReader {
             elements("tmx", "body").attach(new BodyHandler());
             elements("tmx", "body", "tu").attach(new TuHandler());
             elements("tmx", "body", "tu", "tuv").attach(new TuvHandler());
+            elements("tmx", "body", "tu", "prop").attach(new TuPropertyHandler());
+            elements("tmx", "body", "tu", "note").attach(new TuNoteHandler());
             elements("tmx", "body", "tu", "tuv", "seg").attach(new SegHandler());
             elements("tmx", "body", "tu", "tuv", "prop").attach(new TuvPropertyHandler());
             elements("tmx", "body", "tu", "tuv", "note").attach(new TuvNoteHandler());
@@ -247,6 +249,19 @@ public class TMXEventReader {
             addEvent(new TMXEvent(TMXEventType.TU, data.getTu()));
         }
     }
+    class TuPropertyHandler extends PropertyHandler {
+        @Override
+        void handleProperty(SegmentBuilder data, Property property) {
+            data.getTu().addProperty(property);
+        }
+    }
+    class TuNoteHandler extends NoteHandler {
+        @Override
+        void handleNote(SegmentBuilder data, Note note) {
+            data.getTu().addNote(note);
+        }
+    }
+
     class TuvHandler extends DefaultElementHandler<SegmentBuilder> {
         @Override
         public void startElement(StartElement element, SegmentBuilder data)

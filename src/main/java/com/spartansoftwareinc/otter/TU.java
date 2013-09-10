@@ -1,7 +1,9 @@
 package com.spartansoftwareinc.otter;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static com.spartansoftwareinc.otter.Util.eq;
@@ -12,6 +14,8 @@ public class TU {
         creationId, segType, changeId, tmf, srcLang;
     private Integer usageCount; // optional, so can be null
     private Date lastUsageDate, creationDate, changeDate;
+    private List<Property> properties = new ArrayList<Property>();
+    private List<Note> notes = new ArrayList<Note>();
     
     public TU() {
     }
@@ -26,6 +30,30 @@ public class TU {
     
     public void setTuvs(Map<String, TUV> tuvs) {
         this.tuvs = tuvs;
+    }
+    
+    public List<Property> getProperties() {
+        return properties;
+    }
+
+    public void setProperties(List<Property> properties) {
+        this.properties = properties;
+    }
+
+    public void addProperty(Property property) {
+        properties.add(property);
+    }
+
+    public List<Note> getNotes() {
+        return notes;
+    }
+
+    public void setNotes(List<Note> notes) {
+        this.notes = notes;
+    }
+    
+    public void addNote(Note note) {
+        notes.add(note);
     }
     
     @Override
@@ -47,7 +75,9 @@ public class TU {
                eq(lastUsageDate, tu.lastUsageDate) &&
                eq(creationDate, tu.creationDate) &&
                eq(changeDate, tu.changeDate) &&
-               tuvs.equals(tu.tuvs);
+               tuvs.equals(tu.tuvs) &&
+               notes.equals(tu.notes) &&
+               properties.equals(tu.properties);
     }
 
     public String getId() {
