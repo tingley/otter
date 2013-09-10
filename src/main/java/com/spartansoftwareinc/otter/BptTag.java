@@ -37,6 +37,14 @@ public class BptTag extends PairedTag implements NumberedTag {
     }
 
     @Override
+    public int hashCode() {
+        return new Hasher(super.hashCode())
+            .add(x)
+            .add(type)
+            .value();
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (!super.equals(o)) 
             return false;

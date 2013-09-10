@@ -57,6 +57,29 @@ public class TU {
     }
     
     @Override
+    public int hashCode() {
+        return new Hasher()
+            .add(id)
+            .add(encoding)
+            .add(datatype)
+            .add(creationTool)
+            .add(creationToolVersion)
+            .add(creationId)
+            .add(segType)
+            .add(changeId)
+            .add(tmf)
+            .add(srcLang)
+            .add(usageCount)
+            .add(lastUsageDate)
+            .add(creationDate)
+            .add(changeDate)
+            .add(tuvs)
+            .add(notes)
+            .add(properties)
+            .value();
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (o == this) return true;
         if (o == null || !(o instanceof TU)) return false;

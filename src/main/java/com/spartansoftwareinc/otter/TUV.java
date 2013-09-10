@@ -56,6 +56,16 @@ public class TUV implements TUVContentSink {
     public void addNote(Note note) {
         notes.add(note);
     }
+    
+    @Override
+    public int hashCode() {
+        return new Hasher()
+            .add(locale)
+            .add(contents)
+            .add(notes)
+            .add(properties)
+            .value();
+    }
 
     @Override
     public boolean equals(Object o) {

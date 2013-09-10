@@ -28,6 +28,14 @@ public class Property {
     }
 
     @Override
+    public int hashCode() {
+        return new Hasher()
+            .add(type)
+            .add(value)
+            .value();
+    }
+    
+    @Override
     public boolean equals(Object o) {
         if (o == this) return true;
         if (o == null || !(o instanceof Property)) return false;

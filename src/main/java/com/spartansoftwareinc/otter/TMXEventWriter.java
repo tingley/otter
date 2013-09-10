@@ -30,12 +30,7 @@ public class TMXEventWriter {
         xmlWriter = factory.createXMLEventWriter(w);
         eventFactory = XMLEventFactory.newInstance();
     }
-    
-    @Deprecated
-    private void TODO() {
-        throw new UnsupportedOperationException();
-    }
-    
+        
     public void writeEvent(TMXEvent event) throws XMLStreamException {
         switch (event.getEventType()) {
         case START_TMX:

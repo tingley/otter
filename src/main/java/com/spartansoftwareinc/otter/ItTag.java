@@ -54,6 +54,13 @@ public class ItTag extends StandaloneTag {
     }
     
     @Override
+    public int hashCode() {
+        return new Hasher(super.hashCode())
+            .add(pos)
+            .value();
+    }
+    
+    @Override
     public boolean equals(Object o) {
         return super.equals(o) &&
                 (o instanceof ItTag) &&

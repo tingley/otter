@@ -21,6 +21,13 @@ public abstract class PairedTag extends InlineTag {
     public void setI(int i) {
         this.i = i;
     }
+    
+    @Override
+    public int hashCode() {
+        return new Hasher(super.hashCode())
+            .add(i)
+            .value();
+    }
 
     @Override
     public boolean equals(Object o) {

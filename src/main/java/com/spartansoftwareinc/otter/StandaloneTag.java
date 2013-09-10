@@ -38,7 +38,15 @@ public abstract class StandaloneTag extends InlineTag implements NumberedTag {
     public void setType(String type) {
         this.type = type;
     }
-    
+
+    @Override
+    public int hashCode() {
+        return new Hasher(super.hashCode())
+            .add(x)
+            .add(type)
+            .value();
+    }
+
     @Override
     public boolean equals(Object o) {
         return super.equals(o) && 

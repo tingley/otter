@@ -44,6 +44,15 @@ public class HiTag implements TUVContent, NumberedTag, TUVContentSink {
     }
     
     @Override
+    public int hashCode() {
+        return new Hasher()
+            .add(x)
+            .add(type)
+            .add(contents)
+            .value();
+    }
+    
+    @Override
     public boolean equals(Object o) {
         if (o == this) return true;
         if (o == null || !(o instanceof HiTag)) return false;

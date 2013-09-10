@@ -37,6 +37,15 @@ public class Subflow implements TUVContent, TUVContentSink {
     }
     
     @Override
+    public int hashCode() {
+        return new Hasher()
+            .add(type)
+            .add(datatype)
+            .add(contents)
+            .value();
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (o == this) return true;
         if (o == null || !(o instanceof Subflow)) return false;
