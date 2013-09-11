@@ -12,8 +12,8 @@ import javax.xml.stream.events.Characters;
 import javax.xml.stream.events.EndElement;
 import javax.xml.stream.events.StartElement;
 
-import net.sundell.snax.AttachPoint;
 import net.sundell.snax.DefaultElementHandler;
+import net.sundell.snax.ElementSelector;
 import net.sundell.snax.NodeModel;
 import net.sundell.snax.NodeModelBuilder;
 import net.sundell.snax.SNAXParser;
@@ -77,60 +77,59 @@ public class TMXEventReader {
     
     private NodeModel<SegmentBuilder> buildModel() {
         return new NodeModelBuilder<SegmentBuilder>() {
-            AttachPoint<SegmentBuilder> phAnchor, bptAnchor, eptAnchor, itAnchor;
+            ElementSelector<SegmentBuilder> phAnchor, bptAnchor, eptAnchor, itAnchor;
             {
-            elements("tmx").attach(new TMXHandler());
-            elements("tmx", "header").attach(new HeaderHandler());
-            elements("tmx", "header", "prop").attach(new HeaderPropertyHandler());
-            elements("tmx", "header", "note").attach(new HeaderNoteHandler());
-            elements("tmx", "body").attach(new BodyHandler());
-            elements("tmx", "body", "tu").attach(new TuHandler());
-            elements("tmx", "body", "tu", "tuv").attach(new TuvHandler());
-            elements("tmx", "body", "tu", "prop").attach(new TuPropertyHandler());
-            elements("tmx", "body", "tu", "note").attach(new TuNoteHandler());
-            elements("tmx", "body", "tu", "tuv", "seg").attach(new SegHandler());
-            elements("tmx", "body", "tu", "tuv", "prop").attach(new TuvPropertyHandler());
-            elements("tmx", "body", "tu", "tuv", "note").attach(new TuvNoteHandler());
-            
-            phAnchor = elements("tmx", "body", "tu", "tuv", "seg", "ph").attachPoint();
-            bptAnchor = elements("tmx", "body", "tu", "tuv", "seg", "bpt").attachPoint();
-            eptAnchor = elements("tmx", "body", "tu", "tuv", "seg", "ept").attachPoint();
-            itAnchor = elements("tmx", "body", "tu", "tuv", "seg", "it").attachPoint();
-
-            elements("tmx", "body", "tu", "tuv", "seg", "ph").attach(new SegPhHandler());
-            elements("tmx", "body", "tu", "tuv", "seg", "bpt").attach(new SegBptHandler());
-            elements("tmx", "body", "tu", "tuv", "seg", "ept").attach(new SegEptHandler());
-            elements("tmx", "body", "tu", "tuv", "seg", "it").attach(new SegItHandler());
-
-            // Exhaustively link each type of subflow back to the correct anchor
-            elements("tmx", "body", "tu", "tuv", "seg", "ph", "sub").attach(new SegSubHandler());
-            attachSubflowStates("ph");
-            elements("tmx", "body", "tu", "tuv", "seg", "bpt", "sub").attach(new SegSubHandler());
-            attachSubflowStates("bpt");
-            elements("tmx", "body", "tu", "tuv", "seg", "ept", "sub").attach(new SegSubHandler());
-            attachSubflowStates("ept");
-            elements("tmx", "body", "tu", "tuv", "seg", "it", "sub").attach(new SegSubHandler());
-            attachSubflowStates("it");
-            
-            // Snax currently doesn't support anything like conditional handlers based
-            // on which incoming transition to a state was used.  Rather than add them,
-            // I'm going to make the state machine larger, so that the <hi>-descendant
-            // state loop is separate from the overall content state loop.
-            AttachPoint<SegmentBuilder> hiAnchor = elements("tmx", "body", "tu", "tuv", "seg", "hi").attachPoint();
-            elements("tmx", "body", "tu", "tuv", "seg", "hi").attach(new SegHiHandler());
-            elements("tmx", "body", "tu", "tuv", "seg", "hi").addTransition("hi", hiAnchor); // Nested case
-            elements("tmx", "body", "tu", "tuv", "seg", "hi", "ph").attach(new SegPhHandler());
-            elements("tmx", "body", "tu", "tuv", "seg", "hi", "bpt").attach(new SegBptHandler());
-            elements("tmx", "body", "tu", "tuv", "seg", "hi", "ept").attach(new SegEptHandler());
-            elements("tmx", "body", "tu", "tuv", "seg", "hi", "it").attach(new SegItHandler());
-
-        }
-        private void attachSubflowStates(String tagName) {
-            elements("tmx", "body", "tu", "tuv", "seg", tagName, "sub").addTransition("ph", phAnchor);
-            elements("tmx", "body", "tu", "tuv", "seg", tagName, "sub").addTransition("bpt", bptAnchor);
-            elements("tmx", "body", "tu", "tuv", "seg", tagName, "sub").addTransition("ept", eptAnchor);
-            elements("tmx", "body", "tu", "tuv", "seg", tagName, "sub").addTransition("it", itAnchor);
-        }
+                elements("tmx").attach(new TMXHandler());
+                elements("tmx", "header").attach(new HeaderHandler());
+                elements("tmx", "header", "prop").attach(new HeaderPropertyHandler());
+                elements("tmx", "header", "note").attach(new HeaderNoteHandler());
+                elements("tmx", "body").attach(new BodyHandler());
+                elements("tmx", "body", "tu").attach(new TuHandler());
+                elements("tmx", "body", "tu", "prop").attach(new TuPropertyHandler());
+                elements("tmx", "body", "tu", "note").attach(new TuNoteHandler());
+                ElementSelector<SegmentBuilder> tuvAnchor = elements("tmx", "body", "tu", "tuv");
+                ElementSelector<SegmentBuilder> segAnchor = tuvAnchor.element("seg");
+                tuvAnchor.attach(new TuvHandler());
+                segAnchor.attach(new SegHandler());
+                tuvAnchor.element("prop").attach(new TuvPropertyHandler());
+                tuvAnchor.element("note").attach(new TuvNoteHandler());
+                
+                phAnchor = segAnchor.element("ph");
+                bptAnchor = segAnchor.element("bpt");
+                eptAnchor = segAnchor.element("ept");
+                itAnchor = segAnchor.element("it");
+    
+                phAnchor.attach(new SegPhHandler());
+                bptAnchor.attach(new SegBptHandler());
+                eptAnchor.attach(new SegEptHandler());
+                itAnchor.attach(new SegItHandler());
+    
+                // Link each type of subflow back to the correct anchor
+                attachSubflowStates(phAnchor);
+                attachSubflowStates(bptAnchor);
+                attachSubflowStates(eptAnchor);
+                attachSubflowStates(itAnchor);
+                
+                // Snax currently doesn't support anything like conditional handlers based
+                // on which incoming transition to a state was used.  Rather than add them,
+                // I'm going to make the state machine larger, so that the <hi>-descendant
+                // state loop is separate from the overall content state loop.
+                ElementSelector<SegmentBuilder> hiAnchor = segAnchor.element("hi");
+                hiAnchor.attach(new SegHiHandler());
+                hiAnchor.addTransition("hi", hiAnchor); // Nested case
+                hiAnchor.element("ph").attach(new SegPhHandler());
+                hiAnchor.element("bpt").attach(new SegBptHandler());
+                hiAnchor.element("ept").attach(new SegEptHandler());
+                hiAnchor.element("it").attach(new SegItHandler());
+            }
+            private void attachSubflowStates(ElementSelector<SegmentBuilder> e) {
+                ElementSelector<SegmentBuilder> sub = e.element("sub");
+                sub.attach(new SegSubHandler());
+                sub.addTransition("ph", phAnchor);
+                sub.addTransition("bpt", bptAnchor);
+                sub.addTransition("ept", eptAnchor);
+                sub.addTransition("it", itAnchor);
+            }
         }.build();
     }
     
