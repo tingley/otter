@@ -63,8 +63,7 @@ public class TMXEventWriter {
             writeTu(event.getTU());
             break;
         default:
-            TODO();
-            break;
+            throw new UnsupportedOperationException();
         }
     }
     
