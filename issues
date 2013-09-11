@@ -8,5 +8,3 @@
     - means I would need to handle non-consolidated characters?
 - segmentbuilder may not be needed
 - flag warnings if tu/@srclang does not match global decl
-- expand snax anchors to allow attaching handlers to them.  basically
-  merge with selectors?
