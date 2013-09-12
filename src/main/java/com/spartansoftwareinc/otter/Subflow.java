@@ -4,6 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 import static com.spartansoftwareinc.otter.Util.eq;
 
+/**
+ * A representation of a TUV subflow.  The contents of the subflow
+ * correspond to the portion of the TUV delimited by &lt;sub&gt; tags.
+ * Subflows can contain a mix of text content and inline tags.
+ */
 public class Subflow implements TUVContent, TUVContentSink {
     private String type, datatype;
     private List<TUVContent> contents = new ArrayList<TUVContent>();
@@ -11,8 +16,22 @@ public class Subflow implements TUVContent, TUVContentSink {
     public Subflow() {
     }
     
+    /**
+     * Add an item to the contents of this tag.  Subflow objects
+     * are restricted to {@link TextContent}, {@link InlineTag}, and
+     * {@link HighlightTag} content items.
+     * 
+     * @param content content item to add to this tag
+     * @throws IllegalArgumentException if an invalid content item is added 
+     */
     @Override
     public void addContent(TUVContent content) {
+        if (content instanceof Subflow) {
+            throw new IllegalArgumentException("Subflow element not allowed in this location");
+        }
+        if (content instanceof CodeContent) {
+            throw new IllegalArgumentException("CodeContent element not allowed in this location");
+        }
         contents.add(content);
     }
 

@@ -29,7 +29,21 @@ public class TUV implements TUVContentSink {
         this.contents = contents;
     }
     
+    /**
+     * Add an item to the contents of this tag.  TUV objects
+     * are restricted to {@link TextContent}, {@link InlineTag}, and
+     * {@link HighlightTag} content items.
+     * 
+     * @param content content item to add to this tag
+     * @throws IllegalArgumentException if an invalid content item is added 
+     */
     public void addContent(TUVContent content) {
+        if (content instanceof Subflow) {
+            throw new IllegalArgumentException("Subflow element not allowed in this location");
+        }
+        if (content instanceof CodeContent) {
+            throw new IllegalArgumentException("CodeContent element not allowed in this location");
+        }
         contents.add(content);
     }
 

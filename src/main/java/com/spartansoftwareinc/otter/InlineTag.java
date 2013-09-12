@@ -3,6 +3,14 @@ package com.spartansoftwareinc.otter;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Base class for all inline tags in TUV content that can contain 
+ * native code data. 
+ * <br>
+ * The {@link #addContent(TUVContent)} method for InlineTags will throw
+ * an exception if it is passed anything other than {@link CodeContent} 
+ * or {@link Subflow} objects.
+ */
 public abstract class InlineTag implements TUVContent, TUVContentSink {
     static final int NO_VALUE = 0;
     private List<TUVContent> contents = new ArrayList<TUVContent>();
@@ -13,10 +21,18 @@ public abstract class InlineTag implements TUVContent, TUVContentSink {
         contents.add(new CodeContent(initialCodeContent));
     }
 
+    /**
+     * Add an item to the contents of this tag.  InlineTag objects
+     * are restricted to {@link CodeContent} and {@link Subflow} content
+     * items.
+     * 
+     * @param content content item to add to this tag
+     * @throws IllegalArgumentException if an invalid content item is added 
+     */
     @Override
     public void addContent(TUVContent content) {
         if (!(content instanceof CodeContent) && !(content instanceof Subflow)) {
-            throw new IllegalStateException("Illegal paired tag content: " + content);
+            throw new IllegalArgumentException("Illegal paired tag content: " + content);
         }
         contents.add(content);
     }

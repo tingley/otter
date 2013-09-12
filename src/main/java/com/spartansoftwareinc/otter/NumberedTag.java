@@ -1,7 +1,7 @@
 package com.spartansoftwareinc.otter;
 
 /**
- * Any tag that supports the <code>x</code> attribute.
+ * Any inline tag that supports the <code>x</code> attribute.
  */
 public interface NumberedTag {
 

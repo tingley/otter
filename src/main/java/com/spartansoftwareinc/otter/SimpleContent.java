@@ -1,5 +1,8 @@
 package com.spartansoftwareinc.otter;
 
+/**
+ * Base class for all non-tag data in a TUV.
+ */
 public abstract class SimpleContent implements TUVContent {
     private String value;
     SimpleContent(String value) {

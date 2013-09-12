@@ -1,5 +1,8 @@
 package com.spartansoftwareinc.otter;
 
+/**
+ * A representation of translatable text content in a TUV.
+ */
 public class TextContent extends SimpleContent {
     public TextContent(String value) {
         super(value);
