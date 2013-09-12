@@ -8,3 +8,9 @@
             '.             |  `\-'    
               '._        -'    /
         jgs      ``""--`------`
+
+Otter TMX
+=========
+
+Otter is a Java library to read and write [Translation Memory Exchange](http://www.gala-global.org/oscarStandards/tmx/) (TMX) documents.
+
