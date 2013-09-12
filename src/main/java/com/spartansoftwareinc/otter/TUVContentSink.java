@@ -1,5 +1,5 @@
 package com.spartansoftwareinc.otter;
 
-public interface TUVContentSink {
+interface TUVContentSink {
     void addContent(TUVContent content);
 }
