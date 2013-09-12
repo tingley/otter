@@ -15,17 +15,17 @@ import javax.xml.stream.events.Attribute;
 
 import static com.spartansoftwareinc.otter.TMXConstants.*;
 
-public class TMXEventWriter {
+public class TMXWriter {
 
-    public static TMXEventWriter createTMXEventWriter(Writer w) 
+    public static TMXWriter createTMXEventWriter(Writer w) 
                 throws XMLStreamException {
-        return new TMXEventWriter(w);
+        return new TMXWriter(w);
     }
 
     private XMLEventWriter xmlWriter;
     private XMLEventFactory eventFactory;
     
-    private TMXEventWriter(Writer w) throws XMLStreamException {
+    private TMXWriter(Writer w) throws XMLStreamException {
         XMLOutputFactory factory = XMLOutputFactory.newFactory();
         xmlWriter = factory.createXMLEventWriter(w);
         eventFactory = XMLEventFactory.newInstance();

@@ -22,7 +22,7 @@ public class TestTMXEventWriter {
     public void testSimple() throws Exception {
         File tmp = File.createTempFile("otter", ".tmx");
         Writer w = new OutputStreamWriter(new FileOutputStream(tmp), "UTF-8");
-        TMXEventWriter writer = TMXEventWriter.createTMXEventWriter(w);
+        TMXWriter writer = TMXWriter.createTMXEventWriter(w);
         writer.startTMX();
         Header header = new Header();
         header.setCreationTool("Otter TMX");
@@ -40,7 +40,7 @@ public class TestTMXEventWriter {
         writer.endTMX();
         w.close();
         Reader r = new InputStreamReader(new FileInputStream(tmp), "UTF-8");
-        TMXEventReader reader = TMXEventReader.createTMXEventReader(r);
+        TMXReader reader = TMXReader.createTMXEventReader(r);
         List<TMXEvent> events = readEvents(reader);
         checkEvent(events.get(0), TMXEventType.START_TMX);
         checkEvent(events.get(1), TMXEventType.HEADER);
@@ -92,19 +92,19 @@ public class TestTMXEventWriter {
     
     public void testRoundtrip(String resourceName) throws Exception {
         InputStream is = getClass().getResourceAsStream(resourceName);
-        TMXEventReader reader = TMXEventReader.createTMXEventReader(
+        TMXReader reader = TMXReader.createTMXEventReader(
                             new InputStreamReader(is, "UTF-8"));
         File tmp = File.createTempFile("otter", ".tmx");
         List<TMXEvent> events = readEvents(reader);
         Writer w = new OutputStreamWriter(new FileOutputStream(tmp), "UTF-8");
-        TMXEventWriter writer = TMXEventWriter.createTMXEventWriter(w);
+        TMXWriter writer = TMXWriter.createTMXEventWriter(w);
         for (TMXEvent e : events) {
             writer.writeEvent(e);
         }
         w.close();
         
         // Now verify!
-        TMXEventReader roundtripReader = TMXEventReader.createTMXEventReader(
+        TMXReader roundtripReader = TMXReader.createTMXEventReader(
                         new InputStreamReader(new FileInputStream(tmp), "UTF-8"));
         List<TMXEvent> roundtripEvents = readEvents(roundtripReader);
         assertEquals(events, roundtripEvents);

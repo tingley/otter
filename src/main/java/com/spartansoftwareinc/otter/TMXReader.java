@@ -23,14 +23,14 @@ import static com.spartansoftwareinc.otter.TMXConstants.*;
 import static com.spartansoftwareinc.otter.TMXEventType.*;
 import static com.spartansoftwareinc.otter.Util.*;
 
-public class TMXEventReader {
+public class TMXReader {
     
-    public static TMXEventReader createTMXEventReader(Reader r) 
+    public static TMXReader createTMXEventReader(Reader r) 
                 throws XMLStreamException {
-        return new TMXEventReader(r);
+        return new TMXReader(r);
     }
 
-    private TMXEventReader(Reader r) throws XMLStreamException {
+    private TMXReader(Reader r) throws XMLStreamException {
         XMLInputFactory factory = XMLInputFactory.newFactory();
         factory.setProperty(XMLInputFactory.IS_COALESCING, true);
         parser = SNAXParser.createParser(factory, buildModel());

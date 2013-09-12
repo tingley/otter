@@ -18,7 +18,7 @@ public class TestTMXEventReader {
     public void testHeader() throws Exception {
         InputStream is = getClass().getResourceAsStream("/header.tmx");
         // XXX Who handles BOMs?
-        TMXEventReader reader = TMXEventReader.createTMXEventReader(
+        TMXReader reader = TMXReader.createTMXEventReader(
                             new InputStreamReader(is, "UTF-8"));
         List<TMXEvent> events = readEvents(reader);
         assertNotNull(events);
@@ -59,7 +59,7 @@ public class TestTMXEventReader {
     @Test
     public void testBody() throws Exception {
         InputStream is = getClass().getResourceAsStream("/body.tmx");
-        TMXEventReader reader = TMXEventReader.createTMXEventReader(
+        TMXReader reader = TMXReader.createTMXEventReader(
                             new InputStreamReader(is, "UTF-8"));
         List<TU> tus = readTUs(reader);
         assertNotNull(tus);
@@ -101,7 +101,7 @@ public class TestTMXEventReader {
     @Test
     public void testTuvPropertiesAndNotes() throws Exception {
         InputStream is = getClass().getResourceAsStream("/tuv_properties.tmx");
-        TMXEventReader reader = TMXEventReader.createTMXEventReader(
+        TMXReader reader = TMXReader.createTMXEventReader(
                             new InputStreamReader(is, "UTF-8"));
         List<TU> tus = readTUs(reader);
         assertNotNull(tus);
@@ -125,7 +125,7 @@ public class TestTMXEventReader {
     @Test
     public void testTuPropertiesAndNotes() throws Exception {
         InputStream is = getClass().getResourceAsStream("/tu_properties.tmx");
-        TMXEventReader reader = TMXEventReader.createTMXEventReader(
+        TMXReader reader = TMXReader.createTMXEventReader(
                             new InputStreamReader(is, "UTF-8"));
         List<TU> tus = readTUs(reader);
         assertNotNull(tus);
@@ -145,7 +145,7 @@ public class TestTMXEventReader {
     @Test
     public void testPairedTags() throws Exception {
         InputStream is = getClass().getResourceAsStream("/paired_tags.tmx");
-        TMXEventReader reader = TMXEventReader.createTMXEventReader(
+        TMXReader reader = TMXReader.createTMXEventReader(
                             new InputStreamReader(is, "UTF-8"));
         List<TU> tus = readTUs(reader);
         assertNotNull(tus);
@@ -176,7 +176,7 @@ public class TestTMXEventReader {
     @Test
     public void testIsolatedTags() throws Exception {
         InputStream is = getClass().getResourceAsStream("/it_tag.tmx");
-        TMXEventReader reader = TMXEventReader.createTMXEventReader(
+        TMXReader reader = TMXReader.createTMXEventReader(
                             new InputStreamReader(is, "UTF-8"));
         List<TU> tus = readTUs(reader);
         assertNotNull(tus);
@@ -220,7 +220,7 @@ public class TestTMXEventReader {
     @Test
     public void testHighlightTags() throws Exception {
         InputStream is = getClass().getResourceAsStream("/hi_tag.tmx");
-        TMXEventReader reader = TMXEventReader.createTMXEventReader(
+        TMXReader reader = TMXReader.createTMXEventReader(
                             new InputStreamReader(is, "UTF-8"));
         List<TU> tus = readTUs(reader);
         assertNotNull(tus);
@@ -266,7 +266,7 @@ public class TestTMXEventReader {
     @Test
     public void testNestedHighlightTags() throws Exception {
         InputStream is = getClass().getResourceAsStream("/hi_nested.tmx");
-        TMXEventReader reader = TMXEventReader.createTMXEventReader(
+        TMXReader reader = TMXReader.createTMXEventReader(
                             new InputStreamReader(is, "UTF-8"));
         List<TU> tus = readTUs(reader);
         assertNotNull(tus);
@@ -304,7 +304,7 @@ public class TestTMXEventReader {
     @Test
     public void testSubflows() throws Exception {
         InputStream is = getClass().getResourceAsStream("/subflow.tmx");
-        TMXEventReader reader = TMXEventReader.createTMXEventReader(
+        TMXReader reader = TMXReader.createTMXEventReader(
                             new InputStreamReader(is, "UTF-8"));
         List<TU> tus = readTUs(reader);
         assertNotNull(tus);

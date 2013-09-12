@@ -21,7 +21,7 @@ public class TestUtil {
         assertEquals(type, e.getEventType());
     }
     
-    public static List<TU> readTUs(TMXEventReader r) throws Exception {
+    public static List<TU> readTUs(TMXReader r) throws Exception {
         List<TMXEvent> events = readEvents(r);
         List<TU> tus = new ArrayList<TU>();
         for (TMXEvent e : events) {
@@ -33,7 +33,7 @@ public class TestUtil {
         return tus;
     }
     
-    public static List<TMXEvent> readEvents(TMXEventReader r) throws Exception {
+    public static List<TMXEvent> readEvents(TMXReader r) throws Exception {
         List<TMXEvent> events = new ArrayList<TMXEvent>();
         while (r.hasNext()) {
             events.add(r.nextEvent());
