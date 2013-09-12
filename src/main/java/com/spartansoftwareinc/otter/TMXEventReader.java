@@ -40,6 +40,7 @@ public class TMXEventReader {
     private SNAXParser<SegmentBuilder> parser;
     private List<TMXEvent> events = new ArrayList<TMXEvent>();
     private Deque<TUVContentSink> contentStack = new ArrayDeque<TUVContentSink>();
+    private Header header = null;
     
     public boolean hasNext() throws XMLStreamException {
         if (events.size() > 0) {
@@ -150,7 +151,7 @@ public class TMXEventReader {
         @Override
         public void startElement(StartElement element, SegmentBuilder data)
                 throws SNAXUserException {
-            Header header = new Header();
+            header = new Header();
             header.setAdminLang(attrVal(element, ADMINLANG));
             header.setChangeDate(attrValAsDate(element, CHANGEDATE));
             header.setChangeId(attrVal(element, CHANGEID));
@@ -163,12 +164,12 @@ public class TMXEventReader {
             header.setSegType(attrVal(element, SEGTYPE));
             header.setSrcLang(attrVal(element, SRCLANG));
             header.setTmf(attrVal(element, TMF));
-            addEvent(new TMXEvent(START_HEADER, header));
         }
         @Override
         public void endElement(EndElement element, SegmentBuilder data)
                 throws SNAXUserException {
-            addEvent(new TMXEvent(END_HEADER));
+            addEvent(new TMXEvent(TMXEventType.HEADER, header));
+            header = null;
         }
     }
     abstract class PropertyHandler extends DefaultElementHandler<SegmentBuilder> {
@@ -196,7 +197,7 @@ public class TMXEventReader {
     class HeaderPropertyHandler extends PropertyHandler {
         @Override
         void handleProperty(SegmentBuilder data, Property property) {
-            addEvent(new TMXEvent(HEADER_PROPERTY, property));
+            header.addProperty(property);
         }
     }
     abstract class NoteHandler extends DefaultElementHandler<SegmentBuilder> {
@@ -221,7 +222,7 @@ public class TMXEventReader {
     class HeaderNoteHandler extends NoteHandler {
         @Override
         void handleNote(SegmentBuilder data, Note note) {
-            addEvent(new TMXEvent(HEADER_NOTE, note));
+            header.addNote(note);
         }
     }
     class BodyHandler extends DefaultElementHandler<SegmentBuilder> {

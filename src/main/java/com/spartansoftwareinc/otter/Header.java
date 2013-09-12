@@ -2,7 +2,9 @@ package com.spartansoftwareinc.otter;
 
 import static com.spartansoftwareinc.otter.Util.eq;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class Header {
 
@@ -21,7 +23,26 @@ public class Header {
     private Date changeDate;
     private String changeId;
     
+    private List<Property> properties = new ArrayList<Property>();
+    private List<Note> notes = new ArrayList<Note>();
+
     public Header() {
+    }
+    
+    public List<Property> getProperties() {
+        return properties;
+    }
+    
+    public void addProperty(Property prop) {
+        properties.add(prop);
+    }
+    
+    public List<Note> getNotes() {
+        return notes;
+    }
+    
+    public void addNote(Note note) {
+        notes.add(note);
     }
     
     public String getCreationTool() {

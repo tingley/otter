@@ -32,10 +32,9 @@ public class TestTMXEventWriter {
         header.setAdminLang("en-US");
         header.setSrcLang("en-US");
         header.setDataType("text");
-        writer.startHeader(header);
-        writer.writeProperty("type1", "Property");
-        writer.writeNote("This is a note");
-        writer.endHeader();
+        header.addProperty(new Property("type1", "Property"));
+        header.addNote(new Note("This is a note"));
+        writer.writeHeader(header);
         writer.startBody();
         writer.endBody();
         writer.endTMX();
@@ -44,16 +43,15 @@ public class TestTMXEventWriter {
         TMXEventReader reader = TMXEventReader.createTMXEventReader(r);
         List<TMXEvent> events = readEvents(reader);
         checkEvent(events.get(0), TMXEventType.START_TMX);
-        checkEvent(events.get(1), TMXEventType.START_HEADER);
+        checkEvent(events.get(1), TMXEventType.HEADER);
         Header rHeader = events.get(1).getHeader();
         assertNotNull(rHeader);
         assertEquals(header, rHeader);
-        checkProperty(events.get(2), "type1", "Property");
-        checkNote(events.get(3), "This is a note");
-        checkEvent(events.get(4), END_HEADER);
-        checkEvent(events.get(5), START_BODY);
-        checkEvent(events.get(6), END_BODY);
-        checkEvent(events.get(7), END_TMX);
+        checkProperty(header.getProperties().get(0), "type1", "Property");
+        checkNote(header.getNotes().get(0), "This is a note");
+        checkEvent(events.get(2), START_BODY);
+        checkEvent(events.get(3), END_BODY);
+        checkEvent(events.get(4), END_TMX);
         tmp.delete();
     }
     

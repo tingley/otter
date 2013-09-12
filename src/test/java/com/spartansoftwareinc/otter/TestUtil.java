@@ -1,7 +1,5 @@
 package com.spartansoftwareinc.otter;
 
-import static com.spartansoftwareinc.otter.TMXEventType.HEADER_NOTE;
-import static com.spartansoftwareinc.otter.TMXEventType.HEADER_PROPERTY;
 import static com.spartansoftwareinc.otter.TMXEventType.TU;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -10,16 +8,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TestUtil {
-    public static void checkProperty(TMXEvent e, String propertyType, String value) {
-        checkEvent(e, HEADER_PROPERTY);
-        Property p = e.getProperty();
+    public static void checkProperty(Property p, String propertyType, String value) {
         assertNotNull(p);
         assertEquals(propertyType, p.getType());
         assertEquals(value, p.getValue());
     }
-    public static void checkNote(TMXEvent e, String note) {
-        checkEvent(e, HEADER_NOTE);
-        Note n = e.getNote();
+    public static void checkNote(Note n, String note) {
         assertNotNull(n);
         assertEquals(note, n.getContent());
     }

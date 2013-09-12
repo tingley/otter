@@ -39,25 +39,14 @@ public class TMXEventWriter {
         case END_TMX:
             endTMX();
             break;
-        case START_HEADER:
-            startHeader(event.getHeader());
-            break;
-        case END_HEADER:
-            endHeader();
+        case HEADER:
+            writeHeader(event.getHeader());
             break;
         case START_BODY:
             startBody();
             break;
         case END_BODY:
             endBody();
-            break;
-        case HEADER_PROPERTY:
-            Property p = event.getProperty();
-            writeProperty(p.type, p.value);
-            break;
-        case HEADER_NOTE:
-            Note n = event.getNote();
-            writeNote(n.getContent());
             break;
         case TU:
             writeTu(event.getTU());
@@ -79,7 +68,7 @@ public class TMXEventWriter {
         xmlWriter.add(eventFactory.createEndDocument());
     }
     
-    public void startHeader(Header h) throws XMLStreamException {
+    public void writeHeader(Header h) throws XMLStreamException {
         ArrayList<Attribute> attrs = new ArrayList<Attribute>();
         // TODO: enforce attr requirements
         addAttr(attrs, CREATIONID, h.getCreationId());
@@ -100,16 +89,19 @@ public class TMXEventWriter {
         addAttr(attrs, ENCODING, h.getEncoding());
         addAttr(attrs, DATATYPE, h.getDataType());
         xmlWriter.add(eventFactory.createStartElement(HEADER, attrs.iterator(), null));
+        for (Property property : h.getProperties()) {
+            writeProperty(property.getType(), property.getValue());
+        }
+        for (Note note : h.getNotes()) {
+            writeNote(note.getContent());
+        }
+        xmlWriter.add(eventFactory.createEndElement(HEADER, null));
     }
     
     private void addAttr(List<Attribute> attrs, QName qname, String value) {
         if (value != null) {
             attrs.add(eventFactory.createAttribute(qname, value));
         }
-    }
-    
-    public void endHeader() throws XMLStreamException {
-        xmlWriter.add(eventFactory.createEndElement(HEADER, null));
     }
     
     public void writeProperty(String type, String value) throws XMLStreamException {

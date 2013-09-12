@@ -24,7 +24,7 @@ public class TestTMXEventReader {
         assertNotNull(events);
         checkEvent(events.get(0), START_TMX);
         // Check the header
-        checkEvent(events.get(1), START_HEADER);
+        checkEvent(events.get(1), HEADER);
         Header header = events.get(1).getHeader();
         assertNotNull(header);
         assertEquals("TRADOS Translator's Workbench for Windows", header.getCreationTool());
@@ -41,15 +41,18 @@ public class TestTMXEventReader {
         assertNull(header.getChangeDate());
         assertNull(header.getChangeId());
 
-        checkProperty(events.get(2), "type1", "Property");
-        checkProperty(events.get(3), "type2", "Property with o-encoding");
-        checkProperty(events.get(4), "type3", "Property with lang \"fr\"");
-        checkNote(events.get(5), "This is a note with an encoding.");
-        checkNote(events.get(6), "This is a note with lang \"en\".");
-        checkEvent(events.get(7), END_HEADER);
-        checkEvent(events.get(8), START_BODY);
-        checkEvent(events.get(9), END_BODY);
-        checkEvent(events.get(10), END_TMX);
+        List<Property> properties = header.getProperties();
+        assertEquals(3, properties.size());
+        checkProperty(properties.get(0), "type1", "Property");
+        checkProperty(properties.get(1), "type2", "Property with o-encoding");
+        checkProperty(properties.get(2), "type3", "Property with lang \"fr\"");
+        List<Note> notes = header.getNotes();
+        assertEquals(2, notes.size());
+        checkNote(notes.get(0), "This is a note with an encoding.");
+        checkNote(notes.get(1), "This is a note with lang \"en\".");
+        checkEvent(events.get(2), START_BODY);
+        checkEvent(events.get(3), END_BODY);
+        checkEvent(events.get(4), END_TMX);
     }
     
     @SuppressWarnings("serial")

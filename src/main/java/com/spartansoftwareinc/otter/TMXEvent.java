@@ -18,23 +18,9 @@ public class TMXEvent {
     public TMXEventType getEventType() {
         return eventType;
     }
-    
-    public Property getProperty() {
-        if (eventType == TMXEventType.HEADER_PROPERTY) {
-            return (Property)resource;
-        }
-        throw new IllegalStateException(eventType.toString() + " event is not a property");
-    }
-    
-    public Note getNote() {
-        if (eventType == TMXEventType.HEADER_NOTE) {
-            return (Note)resource;
-        }
-        throw new IllegalStateException(eventType.toString() + " event is not a note");
-    }
-    
+        
     public Header getHeader() {
-        if (eventType == TMXEventType.START_HEADER) {
+        if (eventType == TMXEventType.HEADER) {
             return (Header)resource;
         }
         throw new IllegalStateException(eventType.toString() + " event is not a header");
