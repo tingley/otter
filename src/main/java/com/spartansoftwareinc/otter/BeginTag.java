@@ -2,20 +2,20 @@ package com.spartansoftwareinc.otter;
 
 import static com.spartansoftwareinc.otter.Util.eq;
 
-public class BptTag extends PairedTag implements NumberedTag {
+public class BeginTag extends PairedTag implements NumberedTag {
     private int x = NO_VALUE;
     private String type;
     
-    public BptTag(int x, int i) {
+    public BeginTag(int x, int i) {
         super(i);
         this.x = x;
     }
 
-    public BptTag(int i) {
+    public BeginTag(int i) {
         super(i);
     }
     
-    public BptTag(int x, int i, String initialCodes) {
+    public BeginTag(int x, int i, String initialCodes) {
         super(i, initialCodes);
         this.x = x;
     }
@@ -48,8 +48,8 @@ public class BptTag extends PairedTag implements NumberedTag {
     public boolean equals(Object o) {
         if (!super.equals(o)) 
             return false;
-        if (!(o instanceof BptTag)) return false;
-        BptTag bpt = (BptTag)o;
+        if (!(o instanceof BeginTag)) return false;
+        BeginTag bpt = (BeginTag)o;
         return getX() == bpt.getX() && eq(getType(), bpt.getType());
     }
     

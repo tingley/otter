@@ -7,15 +7,15 @@ import static com.spartansoftwareinc.otter.Util.eq;
 /**
  * A <code>&lt;hi&gt;</code> tag.
  */
-public class HiTag implements TUVContent, NumberedTag, TUVContentSink {
+public class HighlightTag implements TUVContent, NumberedTag, TUVContentSink {
     static final int NO_VALUE = 0;
     private int x = NO_VALUE;
     private String type;
     private List<TUVContent> contents = new ArrayList<TUVContent>();
     
-    public HiTag() {
+    public HighlightTag() {
     }
-    public HiTag(int x) {
+    public HighlightTag(int x) {
         this.x = x;
     }
 
@@ -55,10 +55,10 @@ public class HiTag implements TUVContent, NumberedTag, TUVContentSink {
     @Override
     public boolean equals(Object o) {
         if (o == this) return true;
-        if (o == null || !(o instanceof HiTag)) return false;
-        HiTag hi = (HiTag)o;
+        if (o == null || !(o instanceof HighlightTag)) return false;
+        HighlightTag hi = (HighlightTag)o;
         return x == hi.x &&
             eq(type, hi.type) &&
-            contents.equals(((HiTag)o).contents);
+            contents.equals(((HighlightTag)o).contents);
     }
 }

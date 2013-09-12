@@ -5,6 +5,5 @@
     - means I would need to handle non-consolidated characters?
 - segmentbuilder may not be needed
 - flag warnings if tu/@srclang does not match global decl
-- switch TMXEvent* to TMXReader/TMXWriter
 - document everything
 - allow for some filter to ignore certain properties

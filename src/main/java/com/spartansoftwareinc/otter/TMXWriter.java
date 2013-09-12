@@ -174,29 +174,29 @@ public class TMXWriter {
         if (content instanceof SimpleContent) {
             xmlWriter.add(eventFactory.createCharacters(((SimpleContent)content).getValue()));
         }
-        else if (content instanceof PhTag) {
-            writePh((PhTag)content);
+        else if (content instanceof PlaceholderTag) {
+            writePh((PlaceholderTag)content);
         }
-        else if (content instanceof BptTag) {
-            writeBpt((BptTag)content);
+        else if (content instanceof BeginTag) {
+            writeBpt((BeginTag)content);
         }
-        else if (content instanceof EptTag) {
-            writeEpt((EptTag)content);
+        else if (content instanceof EndTag) {
+            writeEpt((EndTag)content);
         }
-        else if (content instanceof ItTag) {
-            writeIt((ItTag)content);
+        else if (content instanceof IsolatedTag) {
+            writeIt((IsolatedTag)content);
         }
-        else if (content instanceof HiTag) {
-            writeHi((HiTag)content);
+        else if (content instanceof HighlightTag) {
+            writeHi((HighlightTag)content);
         }
         else if (content instanceof Subflow) {
             writeSubflow((Subflow)content);
         }
     }
     
-    private void writePh(PhTag ph) throws XMLStreamException {
+    private void writePh(PlaceholderTag ph) throws XMLStreamException {
         ArrayList<Attribute> attrs = new ArrayList<Attribute>();
-        if (ph.getX() != PhTag.NO_VALUE) {
+        if (ph.getX() != PlaceholderTag.NO_VALUE) {
             attrs.add(eventFactory.createAttribute(X, Integer.toString(ph.getX())));
         }
         attr(attrs, TYPE, ph.getType());
@@ -204,35 +204,35 @@ public class TMXWriter {
         writeTag(PH, attrs, ph.getContents());
     }
     
-    private void writeBpt(BptTag bpt) throws XMLStreamException {
+    private void writeBpt(BeginTag bpt) throws XMLStreamException {
         ArrayList<Attribute> attrs = new ArrayList<Attribute>();
         attrs.add(eventFactory.createAttribute(I, Integer.toString(bpt.getI())));
-        if (bpt.getX() != BptTag.NO_VALUE) {
+        if (bpt.getX() != BeginTag.NO_VALUE) {
             attrs.add(eventFactory.createAttribute(X, Integer.toString(bpt.getX())));
         }
         attr(attrs, TYPE, bpt.getType());
         writeTag(BPT, attrs, bpt.getContents());
     }
     
-    private void writeEpt(EptTag ept) throws XMLStreamException {
+    private void writeEpt(EndTag ept) throws XMLStreamException {
         ArrayList<Attribute> attrs = new ArrayList<Attribute>();
         attrs.add(eventFactory.createAttribute(I, Integer.toString(ept.getI())));
         writeTag(EPT, attrs, ept.getContents());
     }
     
-    private void writeIt(ItTag it) throws XMLStreamException {
+    private void writeIt(IsolatedTag it) throws XMLStreamException {
         ArrayList<Attribute> attrs = new ArrayList<Attribute>();
         attrs.add(eventFactory.createAttribute(POS, it.getPos().getAttrValue()));
-        if (it.getX() != ItTag.NO_VALUE) {
+        if (it.getX() != IsolatedTag.NO_VALUE) {
             attrs.add(eventFactory.createAttribute(X, Integer.toString(it.getX())));
         }
         attr(attrs, TYPE, it.getType());
         writeTag(IT, attrs, it.getContents());
     }
 
-    private void writeHi(HiTag hi) throws XMLStreamException {
+    private void writeHi(HighlightTag hi) throws XMLStreamException {
         ArrayList<Attribute> attrs = new ArrayList<Attribute>();
-        if (hi.getX() != ItTag.NO_VALUE) {
+        if (hi.getX() != IsolatedTag.NO_VALUE) {
             attrs.add(eventFactory.createAttribute(X, Integer.toString(hi.getX())));
         }
         attr(attrs, TYPE, hi.getType());

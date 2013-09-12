@@ -299,7 +299,7 @@ public class TMXReader {
         @Override
         public void startElement(StartElement element, SegmentBuilder data)
                 throws SNAXUserException {
-            PhTag ph = new PhTag();
+            PlaceholderTag ph = new PlaceholderTag();
             Integer x = attrValAsInteger(element, X);
             if (x != null) {
                 ph.setX(x);
@@ -324,7 +324,7 @@ public class TMXReader {
         @Override
         public void startElement(StartElement element, SegmentBuilder data)
                 throws SNAXUserException {
-            BptTag bpt = new BptTag(requireAttrValAsInteger(element, I));
+            BeginTag bpt = new BeginTag(requireAttrValAsInteger(element, I));
             Integer x = attrValAsInteger(element, X);
             if (x != null) {
                 bpt.setX(x);
@@ -351,7 +351,7 @@ public class TMXReader {
         @Override
         public void startElement(StartElement element, SegmentBuilder data)
                 throws SNAXUserException {
-            EptTag ept = new EptTag(requireAttrValAsInteger(element, I));
+            EndTag ept = new EndTag(requireAttrValAsInteger(element, I));
             addTUVContent(ept);
             contentStack.push(ept);
         }
@@ -370,14 +370,14 @@ public class TMXReader {
         @Override
         public void startElement(StartElement element, SegmentBuilder data)
                 throws SNAXUserException {
-            ItTag it = new ItTag();
+            IsolatedTag it = new IsolatedTag();
             Integer x = attrValAsInteger(element, X);
             if (x != null) {
                 it.setX(x);
             }
             it.setType(attrVal(element, TYPE));
             String v = requireAttrVal(element, POS);
-            ItTag.Pos pos = ItTag.Pos.byAttrValue(v);
+            IsolatedTag.Pos pos = IsolatedTag.Pos.byAttrValue(v);
             if (pos == null) {
                 throw new OtterException("Invalid value for 'pos' attribute: " + v, 
                         element.getLocation());
@@ -401,7 +401,7 @@ public class TMXReader {
         @Override
         public void startElement(StartElement element, SegmentBuilder data)
                 throws SNAXUserException {
-            HiTag hi = new HiTag();
+            HighlightTag hi = new HighlightTag();
             Integer x = attrValAsInteger(element, X);
             if (x != null) {
                 hi.setX(x);

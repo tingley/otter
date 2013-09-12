@@ -2,18 +2,18 @@ package com.spartansoftwareinc.otter;
 
 import static com.spartansoftwareinc.otter.Util.eq;
 
-public class PhTag extends StandaloneTag {
+public class PlaceholderTag extends StandaloneTag {
     private String assoc;
     
-    public PhTag(String initialCodeData) {
+    public PlaceholderTag(String initialCodeData) {
         super(initialCodeData);
     }
     
-    public PhTag(int x, String initialCodeData) {
+    public PlaceholderTag(int x, String initialCodeData) {
         super(x, initialCodeData);
     }
     
-    public PhTag() {
+    public PlaceholderTag() {
         super();
     }
     
@@ -26,10 +26,17 @@ public class PhTag extends StandaloneTag {
     }
 
     @Override
+    public int hashCode() {
+        return new Hasher(super.hashCode())
+            .add(assoc)
+            .hashCode();
+    }
+    
+    @Override
     public boolean equals(Object o) {
         return super.equals(o) &&
-               (o instanceof PhTag) && 
-               eq(getAssoc(), ((PhTag)o).getAssoc());
+               (o instanceof PlaceholderTag) && 
+               eq(getAssoc(), ((PlaceholderTag)o).getAssoc());
     }
     
     @Override

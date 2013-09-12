@@ -86,14 +86,14 @@ public class TestTMXEventReader {
         assertNotNull(enTuv);
         assertEquals(new ArrayList<TUVContent>(){{
             add(new TextContent("Simple "));
-            add(new PhTag(1, "<br/>"));
+            add(new PlaceholderTag(1, "<br/>"));
             add(new TextContent(" tags."));
         }}, enTuv.getContents());
         frTuv = tuvs.get("FR-FR");
         assertNotNull(frTuv);
         assertEquals(new ArrayList<TUVContent>(){{
             add(new TextContent("Simple "));
-            add(new PhTag(1, "<br/>"));
+            add(new PlaceholderTag(1, "<br/>"));
             add(new TextContent(" tags (French)."));
         }}, frTuv.getContents());        
     }
@@ -156,18 +156,18 @@ public class TestTMXEventReader {
         assertNotNull(enTuv);
         assertEquals(new ArrayList<TUVContent>(){{
             add(new TextContent("Simple "));
-            add(new BptTag(1, 1, "<b>"));
+            add(new BeginTag(1, 1, "<b>"));
             add(new TextContent("paired tags"));
-            add(new EptTag(1, "</b>"));
+            add(new EndTag(1, "</b>"));
             add(new TextContent("."));
         }}, enTuv.getContents());
         TUV frTuv = tuvs.get("FR-FR");
         assertNotNull(frTuv);
         assertEquals(new ArrayList<TUVContent>(){{
             add(new TextContent("Simple "));
-            add(new BptTag(1, 1, "<b>"));
+            add(new BeginTag(1, 1, "<b>"));
             add(new TextContent("paired tags"));
-            add(new EptTag(1, "</b>"));
+            add(new EndTag(1, "</b>"));
             add(new TextContent(" (French)."));
         }}, frTuv.getContents());        
     }
@@ -187,14 +187,14 @@ public class TestTMXEventReader {
         assertNotNull(enTuv);
         assertEquals(new ArrayList<TUVContent>(){{
             add(new TextContent("Simple "));
-            add(new ItTag(1, "<b>", ItTag.Pos.BEGIN));
+            add(new IsolatedTag(1, "<b>", IsolatedTag.Pos.BEGIN));
             add(new TextContent("isolated tags."));
         }}, enTuv.getContents());
         TUV frTuv = tuvs.get("FR-FR");
         assertNotNull(frTuv);
         assertEquals(new ArrayList<TUVContent>(){{
             add(new TextContent("Simple "));
-            add(new ItTag(1, "<b>", ItTag.Pos.BEGIN));
+            add(new IsolatedTag(1, "<b>", IsolatedTag.Pos.BEGIN));
             add(new TextContent("isolated tags (French)."));
         }}, frTuv.getContents());
         
@@ -204,14 +204,14 @@ public class TestTMXEventReader {
         assertNotNull(enTuv);
         assertEquals(new ArrayList<TUVContent>(){{
             add(new TextContent("Isolated tags are "));
-            add(new ItTag(1, "</b>", ItTag.Pos.END));
+            add(new IsolatedTag(1, "</b>", IsolatedTag.Pos.END));
             add(new TextContent("split across segments."));
         }}, enTuv.getContents());
         frTuv = tuvs.get("FR-FR");
         assertNotNull(frTuv);
         assertEquals(new ArrayList<TUVContent>(){{
             add(new TextContent("Isolated tags are "));
-            add(new ItTag(1, "</b>", ItTag.Pos.END));
+            add(new IsolatedTag(1, "</b>", IsolatedTag.Pos.END));
             add(new TextContent("split across segments (French)."));
         }}, frTuv.getContents());     
     }
@@ -233,15 +233,15 @@ public class TestTMXEventReader {
         
         assertEquals(3, enTuvContents.size());
         assertEquals(new TextContent("Content containing "), enTuvContents.get(0));
-        assertTrue(enTuvContents.get(1) instanceof HiTag);
-        HiTag hi = (HiTag)enTuvContents.get(1);
+        assertTrue(enTuvContents.get(1) instanceof HighlightTag);
+        HighlightTag hi = (HighlightTag)enTuvContents.get(1);
         assertEquals(1, hi.getX());
         assertNull(hi.getType());
         assertEquals(new ArrayList<TUVContent>(){{
             add(new TextContent("highlighted text including "));
-            add(new BptTag(2, 1, "<b>"));
+            add(new BeginTag(2, 1, "<b>"));
             add(new TextContent("tag content"));
-            add(new EptTag(1, "</b>"));
+            add(new EndTag(1, "</b>"));
         }}, hi.getContents());
         assertEquals(new TextContent("."), enTuvContents.get(2));
         
@@ -250,15 +250,15 @@ public class TestTMXEventReader {
         List<TUVContent> frTuvContents = frTuv.getContents();
         assertEquals(3, frTuvContents.size());
         assertEquals(new TextContent("Content containing "), frTuvContents.get(0));
-        assertTrue(frTuvContents.get(1) instanceof HiTag);
-        hi = (HiTag)frTuvContents.get(1);
+        assertTrue(frTuvContents.get(1) instanceof HighlightTag);
+        hi = (HighlightTag)frTuvContents.get(1);
         assertEquals(1, hi.getX());
         assertNull(hi.getType());
         assertEquals(new ArrayList<TUVContent>(){{
             add(new TextContent("highlighted text including "));
-            add(new BptTag(2, 1, "<b>"));
+            add(new BeginTag(2, 1, "<b>"));
             add(new TextContent("tag content"));
-            add(new EptTag(1, "</b>"));
+            add(new EndTag(1, "</b>"));
         }}, hi.getContents());
         assertEquals(new TextContent("."), frTuvContents.get(2));
     }
@@ -284,14 +284,14 @@ public class TestTMXEventReader {
         
         assertEquals(3, tuvContents.size());
         assertEquals(new TextContent("A"), tuvContents.get(0));
-        assertTrue(tuvContents.get(1) instanceof HiTag);
-        HiTag hi1 = (HiTag)tuvContents.get(1);
+        assertTrue(tuvContents.get(1) instanceof HighlightTag);
+        HighlightTag hi1 = (HighlightTag)tuvContents.get(1);
         assertEquals(1, hi1.getX());
         List<TUVContent> hiContents1 = hi1.getContents();
         assertEquals(3, hiContents1.size());
         assertEquals(new TextContent("B"), hiContents1.get(0));
-        assertTrue(hiContents1.get(1) instanceof HiTag);
-        HiTag hi2 = (HiTag)hiContents1.get(1);
+        assertTrue(hiContents1.get(1) instanceof HighlightTag);
+        HighlightTag hi2 = (HighlightTag)hiContents1.get(1);
         assertEquals(2, hi2.getX());
         List<TUVContent> hiContents2 = hi2.getContents();
         assertEquals(new ArrayList<TUVContent>(){{
@@ -333,8 +333,8 @@ public class TestTMXEventReader {
         
         assertEquals(5, tuvContents.size());
         assertEquals(new TextContent("Tag containing "), tuvContents.get(0));
-        assertTrue(tuvContents.get(1) instanceof BptTag);
-        BptTag bpt = (BptTag)tuvContents.get(1);
+        assertTrue(tuvContents.get(1) instanceof BeginTag);
+        BeginTag bpt = (BeginTag)tuvContents.get(1);
         assertEquals(1, bpt.getX());
         assertEquals(1, bpt.getI());
         List<TUVContent> bptContents = bpt.getContents();
@@ -343,9 +343,9 @@ public class TestTMXEventReader {
         checkSubflow(bptContents.get(1));
         assertEquals(new CodeContent("\">"), bptContents.get(2));
         assertEquals(new TextContent("a subflow"), tuvContents.get(2));
-        assertTrue(tuvContents.get(3) instanceof EptTag);
-        assertEquals(1, ((EptTag)tuvContents.get(3)).getI());
-        List<TUVContent> eptContents = ((EptTag)tuvContents.get(3)).getContents();
+        assertTrue(tuvContents.get(3) instanceof EndTag);
+        assertEquals(1, ((EndTag)tuvContents.get(3)).getI());
+        List<TUVContent> eptContents = ((EndTag)tuvContents.get(3)).getContents();
         assertEquals(1, eptContents.size());
         assertEquals(new CodeContent("</a>"), eptContents.get(0));
         assertEquals(new TextContent("."), tuvContents.get(4));
@@ -357,8 +357,8 @@ public class TestTMXEventReader {
         
         assertEquals(5, tuvContents.size());
         assertEquals(new TextContent("Tag containing "), tuvContents.get(0));
-        assertTrue(tuvContents.get(1) instanceof BptTag);
-        BptTag bpt = (BptTag)tuvContents.get(1);
+        assertTrue(tuvContents.get(1) instanceof BeginTag);
+        BeginTag bpt = (BeginTag)tuvContents.get(1);
         assertEquals(1, bpt.getX());
         assertEquals(1, bpt.getI());
         List<TUVContent> bptContents = bpt.getContents();
@@ -366,8 +366,8 @@ public class TestTMXEventReader {
         assertEquals(new CodeContent("<a href=\"#\">"), bptContents.get(0));
         
         assertEquals(new TextContent("a subflow"), tuvContents.get(2));
-        assertTrue(tuvContents.get(3) instanceof EptTag);
-        EptTag ept = (EptTag)tuvContents.get(3);
+        assertTrue(tuvContents.get(3) instanceof EndTag);
+        EndTag ept = (EndTag)tuvContents.get(3);
         assertEquals(1, ept.getI());
         List<TUVContent> eptContents = ept.getContents();
         assertEquals(3, eptContents.size());
@@ -383,8 +383,8 @@ public class TestTMXEventReader {
         
         assertEquals(3, tuvContents.size());
         assertEquals(new TextContent("Tag containing "), tuvContents.get(0));
-        assertTrue(tuvContents.get(1) instanceof PhTag);
-        PhTag ph = (PhTag)tuvContents.get(1);
+        assertTrue(tuvContents.get(1) instanceof PlaceholderTag);
+        PlaceholderTag ph = (PlaceholderTag)tuvContents.get(1);
         assertEquals(1, ph.getX());
         assertEquals("footnote", ph.getType());
         List<TUVContent> phContents = ph.getContents();
@@ -401,10 +401,10 @@ public class TestTMXEventReader {
         
         assertEquals(3, tuvContents.size());
         assertEquals(new TextContent("Tag containing "), tuvContents.get(0));
-        assertTrue(tuvContents.get(1) instanceof ItTag);
-        ItTag it = (ItTag)tuvContents.get(1);
+        assertTrue(tuvContents.get(1) instanceof IsolatedTag);
+        IsolatedTag it = (IsolatedTag)tuvContents.get(1);
         assertEquals(1, it.getX());
-        assertEquals(ItTag.Pos.BEGIN, it.getPos());
+        assertEquals(IsolatedTag.Pos.BEGIN, it.getPos());
         List<TUVContent> itContents = it.getContents();
         assertEquals(3, itContents.size());
         assertEquals(new CodeContent("<a href=\"#\" title=\""), itContents.get(0));

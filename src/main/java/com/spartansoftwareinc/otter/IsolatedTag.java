@@ -3,7 +3,7 @@ package com.spartansoftwareinc.otter;
 /**
  * A <code>&lt;it&gt;</code> tag.
  */
-public class ItTag extends StandaloneTag {
+public class IsolatedTag extends StandaloneTag {
     public enum Pos {
         BEGIN("begin"),
         END("end");
@@ -26,22 +26,22 @@ public class ItTag extends StandaloneTag {
     
     private Pos pos;
     
-    public ItTag(int x, String initialCodeData, Pos pos) {
+    public IsolatedTag(int x, String initialCodeData, Pos pos) {
         super(x, initialCodeData);
         this.pos = pos;
     }
 
-    public ItTag(String initialCodeData, Pos pos) {
+    public IsolatedTag(String initialCodeData, Pos pos) {
         super(initialCodeData);
         this.pos = pos;
     }
 
-    public ItTag(Pos pos) {
+    public IsolatedTag(Pos pos) {
         super();
         this.pos = pos;
     }
     
-    public ItTag() {
+    public IsolatedTag() {
         super();
     }
     
@@ -63,7 +63,7 @@ public class ItTag extends StandaloneTag {
     @Override
     public boolean equals(Object o) {
         return super.equals(o) &&
-                (o instanceof ItTag) &&
-                (pos == ((ItTag)o).pos);
+                (o instanceof IsolatedTag) &&
+                (pos == ((IsolatedTag)o).pos);
     }
 }
