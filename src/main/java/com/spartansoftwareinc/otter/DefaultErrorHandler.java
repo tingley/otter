@@ -6,7 +6,7 @@ import javax.xml.stream.XMLStreamException;
  * Default ErrorHandler implementation: throws 
  * exceptions on fatal errors, ignores everything else.
  */
-class DefaultErrorHandler implements ErrorHandler {
+public class DefaultErrorHandler implements ErrorHandler {
     @Override
     public void error(OtterException e) {
         // Do nothing   
