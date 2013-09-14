@@ -25,41 +25,84 @@ import static com.spartansoftwareinc.otter.Util.*;
 
 public class TMXReader {
     
-    public static TMXReader createTMXEventReader(Reader r) 
-                throws XMLStreamException {
+    public static TMXReader createTMXEventReader(Reader r) {
         return new TMXReader(r);
     }
 
-    private TMXReader(Reader r) throws XMLStreamException {
+    private TMXReader(Reader r) {
         XMLInputFactory factory = XMLInputFactory.newFactory();
         factory.setProperty(XMLInputFactory.IS_COALESCING, true);
-        parser = SNAXParser.createParser(factory, buildModel());
-        parser.startParsing(r, new SegmentBuilder());
+        try {
+            parser = SNAXParser.createParser(factory, buildModel());
+            parser.startParsing(r, new SegmentBuilder());
+        }
+        catch (XMLStreamException e) {
+            errorHandler.xmlError(e);
+        }
     }
     
+    private ErrorHandler errorHandler = new DefaultErrorHandler();
     private SNAXParser<SegmentBuilder> parser;
     private List<TMXEvent> events = new ArrayList<TMXEvent>();
     private Deque<TUVContentSink> contentStack = new ArrayDeque<TUVContentSink>();
     private Header header = null;
     
-    public boolean hasNext() throws XMLStreamException {
-        if (events.size() > 0) {
-            return true;
-        }
-        while (parser.hasMoreEvents()) {
-            parser.processEvent();
+    /**
+     * Get the current {@link ErrorHandler} for this reader.
+     * @return current ErrorHandler
+     */
+    public ErrorHandler getErrorHandler() {
+        return errorHandler;
+    }
+    
+    /**
+     * Set the current {@link ErrorHandler}.
+     * @param handler ErrorHandler to install
+     */
+    public void setErrorHandler(ErrorHandler handler) {
+        this.errorHandler = handler;
+    }
+    
+    /**
+     * Check to see if a {@link TMXEvent} is available.  This may 
+     * involve the parser consuming some portion of the source XML.
+     * Errors encountered during parsing are reported via the 
+     * {@link ErrorHandler} interface.  The default ErrorHandler will
+     * throw {@link OtterException} for any XML errors encountered
+     * during parsing.
+     * 
+     * @return true if any events are available, false if the end of 
+     *         document has been reached.
+     */
+    public boolean hasNext() {
+        try {
             if (events.size() > 0) {
                 return true;
             }
+            while (parser.hasMoreEvents()) {
+                parser.processEvent();
+                if (events.size() > 0) {
+                    return true;
+                }
+            }
+            return false;
         }
-        return false;
+        catch (XMLStreamException e) {
+            errorHandler.xmlError(e);
+            return false;
+        }
     }
     
+    /**
+     * Return the next available event.  
+     * @return the next available {@link TMXEvent}, or null if the end
+     *         of the document has been reached.
+     */
     public TMXEvent nextEvent() {
-        if (events.size() > 0) {
+        if (hasNext()) {
             return events.remove(0);
         }
-        throw new IllegalStateException("No event available");
+        return null;
     }
     
     protected void addEvent(TMXEvent event) {

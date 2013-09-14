@@ -5,13 +5,6 @@ import javax.xml.stream.Location;
 public class OtterException extends RuntimeException {
 
     private static final long serialVersionUID = 1L;
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
-    }
 
     public Location getLocation() {
         return location;
@@ -21,11 +14,16 @@ public class OtterException extends RuntimeException {
         this.location = location;
     }
 
-    private String message;
     private Location location;
     
     OtterException(String message, Location location) {
-        this.message = message;
+        super(message);
         this.location = location;
     }
+    
+    OtterException(Throwable cause, Location location) {
+        super(cause);
+        this.location = location;
+    }
+    
 }
