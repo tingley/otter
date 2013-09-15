@@ -3,9 +3,8 @@ package com.spartansoftwareinc.otter;
 import java.util.List;
 import java.util.ArrayList;
 
-public class TUV implements TUVContentSink {
+public class TUV extends BaseTUVContentSink {
     private String locale;
-    private List<TUVContent> contents = new ArrayList<TUVContent>();
     private List<Property> properties = new ArrayList<Property>();
     private List<Note> notes = new ArrayList<Note>();
     
@@ -19,32 +18,6 @@ public class TUV implements TUVContentSink {
     
     public void setLocale(String locale) {
         this.locale = locale;
-    }
-
-    public List<TUVContent> getContents() {
-        return contents;
-    }
-
-    public void setContents(List<TUVContent> contents) {
-        this.contents = contents;
-    }
-    
-    /**
-     * Add an item to the contents of this tag.  TUV objects
-     * are restricted to {@link TextContent}, {@link InlineTag}, and
-     * {@link HighlightTag} content items.
-     * 
-     * @param content content item to add to this tag
-     * @throws IllegalArgumentException if an invalid content item is added 
-     */
-    public void addContent(TUVContent content) {
-        if (content instanceof Subflow) {
-            throw new IllegalArgumentException("Subflow element not allowed in this location");
-        }
-        if (content instanceof CodeContent) {
-            throw new IllegalArgumentException("CodeContent element not allowed in this location");
-        }
-        contents.add(content);
     }
 
     public List<Property> getProperties() {
@@ -73,9 +46,8 @@ public class TUV implements TUVContentSink {
     
     @Override
     public int hashCode() {
-        return new Hasher()
+        return new Hasher(super.hashCode())
             .add(locale)
-            .add(contents)
             .add(notes)
             .add(properties)
             .value();
@@ -83,13 +55,11 @@ public class TUV implements TUVContentSink {
 
     @Override
     public boolean equals(Object o) {
-        if (o == this) return true;
-        if (o == null || !(o instanceof TUV)) return false;
-        TUV tuv = (TUV)o;
-        return locale.equals(tuv.locale) && 
-               contents.equals(tuv.contents) &&
-               notes.equals(tuv.notes) &&
-               properties.equals(tuv.properties);
+        return super.equals(o) &&
+               (o instanceof TUV) &&
+               locale.equals(((TUV)o).locale) && 
+               notes.equals(((TUV)o).notes) &&
+               properties.equals(((TUV)o).properties);
     }
 
 }

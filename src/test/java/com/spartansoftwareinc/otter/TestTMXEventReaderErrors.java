@@ -28,6 +28,7 @@ public class TestTMXEventReaderErrors {
     }
     
     // XXX It would be nice to have checkable error typing
+    // and an easier way to verify locations
     
     @Test
     public void testDateFormatError() throws Exception {
@@ -49,8 +50,17 @@ public class TestTMXEventReaderErrors {
         expectFatalError("/error_missing_bpt_i.tmx");
     }
     
-    // TODO: 
-    // - <it> without @pos
+    @Test
+    public void testMissingItAttrError() throws Exception {
+        expectFatalError("/error_it_tag_missing_pos.tmx");
+    }
+    
+    // Trick here is that I might be adding to a <seg> or a <sub>
+    // or a <hi> I need to keep things simple
+    @Test
+    public void testOutOfOrderPairedTagsError() throws Exception {
+        expectFatalError("/error_out_of_order_pair.tmx");
+    }
     
     void expectNonfatalError(String resource, int errorCount) throws Exception {
         InputStream is = getClass().getResourceAsStream(resource);
