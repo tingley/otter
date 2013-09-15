@@ -19,11 +19,12 @@ class Util {
         Attribute a = el.getAttributeByName(attrName);
         return (a == null) ? null : a.getValue();
     }
-    static String requireAttrVal(StartElement el, QName attrName) {
+    static String requireAttrVal(StartElement el, QName attrName, ErrorHandler handler) {
         Attribute a = el.getAttributeByName(attrName);
         if (a == null) {
-            throw new OtterException("Required attribute " + attrName + " is missing", 
-                    el.getLocation());
+            handler.fatalError(
+                    new OtterException("Required attribute " + attrName + " is missing", 
+                            el.getLocation()));
         }
         return a.getValue();
     }
@@ -38,7 +39,8 @@ class Util {
                                      el.getLocation());
         }
     }
-    static final String TMX_DATE_FORMAT = "yyyyMMdd'T'hhmmssZ";
+    // 20100223T044327Z
+    static final String TMX_DATE_FORMAT = "yyyyMMdd'T'HHmmss'Z'";
     static final Date parseTMXDate(String s) {
         try {
             SimpleDateFormat df = new SimpleDateFormat(TMX_DATE_FORMAT);
@@ -62,18 +64,21 @@ class Util {
         }
         return d;
     }
-    static Integer requireAttrValAsInteger(StartElement el, QName attrName) {
+    static Integer requireAttrValAsInteger(StartElement el, QName attrName, ErrorHandler handler) {
         Attribute a = el.getAttributeByName(attrName);
         if (a == null) {
-            throw new OtterException("Required attribute " + attrName + " is missing", 
-                    el.getLocation());
+            handler.fatalError(
+                    new OtterException("Required attribute " + attrName + " is missing", 
+                            el.getLocation()));
         }
         try {
             return Integer.valueOf(a.getValue());
         }
         catch (NumberFormatException e) {
-            throw new OtterException("Not an integer value: " + a.getValue(),
-                                     el.getLocation());
+            handler.fatalError(
+                new OtterException("Not an integer value: " + a.getValue(),
+                                   el.getLocation()));
+            return 0;
         }
     }
     static boolean eq(Object o1, Object o2) {

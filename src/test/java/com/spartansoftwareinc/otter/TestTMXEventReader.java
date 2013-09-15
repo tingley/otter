@@ -15,6 +15,11 @@ import static org.junit.Assert.*;
 public class TestTMXEventReader {
 
     @Test
+    public void testDateFormat() {
+        assertNotNull(Util.parseTMXDate("20100223T044327Z"));
+    }
+    
+    @Test
     public void testHeader() throws Exception {
         InputStream is = getClass().getResourceAsStream("/header.tmx");
         // XXX Who handles BOMs?

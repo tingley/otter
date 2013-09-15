@@ -1,6 +1,6 @@
 <?xml version="1.0" ?>
 <!DOCTYPE tmx SYSTEM "tmx14.dtd">
-<tmx version="1.3">
+<tmx> <!-- Error!  No @version here -->
 <header
 	 creationtool="TRADOS Translator's Workbench for Windows"
 	 creationtoolversion="Edition 8 Build 863"

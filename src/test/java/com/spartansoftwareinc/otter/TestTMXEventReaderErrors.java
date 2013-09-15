@@ -10,6 +10,8 @@ import java.util.List;
 
 import javax.xml.stream.XMLStreamException;
 
+import net.sundell.snax.SNAXUserException;
+
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -37,6 +39,19 @@ public class TestTMXEventReaderErrors {
         expectNonfatalError("/error_tmx_version.tmx", 1);
     }
 
+    @Test
+    public void testMissingVersionError() throws Exception {
+        expectFatalError("/error_missing_tmx_version.tmx");
+    }
+    
+    @Test
+    public void testMissingBptIAttrError() throws Exception {
+        expectFatalError("/error_missing_bpt_i.tmx");
+    }
+    
+    // TODO: 
+    // - <it> without @pos
+    
     void expectNonfatalError(String resource, int errorCount) throws Exception {
         InputStream is = getClass().getResourceAsStream(resource);
         TMXReader reader = TMXReader.createTMXEventReader(
@@ -49,6 +64,18 @@ public class TestTMXEventReaderErrors {
         assertNull(handler.xmlError);
     }
     
+    void expectFatalError(String resource) throws Exception {
+        InputStream is = getClass().getResourceAsStream(resource);
+        TMXReader reader = TMXReader.createTMXEventReader(
+                            new InputStreamReader(is, "UTF-8"));
+        TestErrorHandler handler = new TestErrorHandler();
+        reader.setErrorHandler(handler);
+        readWithErrors(reader);
+        assertEquals(0, handler.errors.size());
+        assertNotNull(handler.fatalError);
+        assertNull(handler.xmlError);
+    }
+    
     void readWithErrors(TMXReader reader) {
         try {
             readEvents(reader);
@@ -57,6 +84,11 @@ public class TestTMXEventReaderErrors {
             // Make sure all thrown exceptions originated from 
             // our error framework
             assertEquals("Halting on error", e.getMessage());
+        }
+        catch (SNAXUserException e) {
+            // XXX I don't like how my exceptions are getting masked.
+            assertTrue(e.getCause() instanceof OtterException);
+            assertEquals("Halting on error", e.getCause().getMessage());
         }
     }
     

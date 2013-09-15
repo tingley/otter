@@ -1,6 +1,6 @@
 <?xml version="1.0" ?>
 <!DOCTYPE tmx SYSTEM "tmx14.dtd">
-<tmx version="1.3">
+<tmx version="1.4">
 <header
 	 creationtool="TRADOS Translator's Workbench for Windows"
 	 creationtoolversion="Edition 8 Build 863"
@@ -11,13 +11,16 @@
 	 datatype="rtf"
 	 creationdate="20100223T044327Z"
 	 creationid="TESTERSON"
->
-<prop type="type1">Property</prop>
-<prop type="type2" o-encoding="ASCII">Property with o-encoding</prop>
-<prop type="type3" xml:lang="fr">Property with lang "fr"</prop>
-<note o-encoding="ASCII">This is a note with an encoding.</note>
-<note xml:lang="en">This is a note with lang "en".</note>
-</header>
+/>
 <body>
+<tu>
+<tuv xml:lang="EN-US">
+    <seg>Simple <bpt x="1">&lt;b&gt;</bpt>paired tags<ept i="1" x="2">&lt;/b&gt;</ept>.</seg>
+</tuv>
+<tuv xml:lang="FR-FR">
+    <seg>Simple <bpt i="1" x="1">&lt;b&gt;</bpt>paired tags<ept i="1" x="2">&lt;/b&gt;</ept> (French).</seg>
+</tuv>
+</tu>
 </body>
 </tmx>
+

@@ -181,7 +181,7 @@ public class TMXReader {
         @Override
         public void startElement(StartElement element, SegmentBuilder data)
                 throws SNAXUserException {
-            String version = requireAttrVal(element, VERSION);
+            String version = requireAttrVal(element, VERSION, errorHandler);
             if (!TMX_VERSION_1_4.equals(version)) {
                 errorHandler.error(new OtterException("Unsupported TMX version: " +
                                    version, element.getLocation()));
@@ -371,7 +371,7 @@ public class TMXReader {
         @Override
         public void startElement(StartElement element, SegmentBuilder data)
                 throws SNAXUserException {
-            BeginTag bpt = new BeginTag(requireAttrValAsInteger(element, I));
+            BeginTag bpt = new BeginTag(requireAttrValAsInteger(element, I, errorHandler));
             Integer x = attrValAsInteger(element, X);
             if (x != null) {
                 bpt.setX(x);
@@ -398,7 +398,7 @@ public class TMXReader {
         @Override
         public void startElement(StartElement element, SegmentBuilder data)
                 throws SNAXUserException {
-            EndTag ept = new EndTag(requireAttrValAsInteger(element, I));
+            EndTag ept = new EndTag(requireAttrValAsInteger(element, I, errorHandler));
             addTUVContent(ept);
             contentStack.push(ept);
         }
@@ -423,7 +423,7 @@ public class TMXReader {
                 it.setX(x);
             }
             it.setType(attrVal(element, TYPE));
-            String v = requireAttrVal(element, POS);
+            String v = requireAttrVal(element, POS, errorHandler);
             IsolatedTag.Pos pos = IsolatedTag.Pos.byAttrValue(v);
             if (pos == null) {
                 throw new OtterException("Invalid value for 'pos' attribute: " + v, 

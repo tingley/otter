@@ -17,3 +17,5 @@
     - I might need to break out these into more type-specific 
       adders
 - support ude elements
+- SNAXUserException makes it very hard to throw real runtime exceptions
+  because they are masked
