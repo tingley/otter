@@ -24,7 +24,31 @@ public class TestTMXEventReaderErrors {
         readWithErrors(reader);
         assertNotNull(handler.xmlError);
     }
+    
+    // XXX It would be nice to have checkable error typing
+    
+    @Test
+    public void testDateFormatError() throws Exception {
+        expectNonfatalError("/error_date_format.tmx", 1);
+    }
 
+    @Test
+    public void testUnsupportedVersionError() throws Exception {
+        expectNonfatalError("/error_tmx_version.tmx", 1);
+    }
+
+    void expectNonfatalError(String resource, int errorCount) throws Exception {
+        InputStream is = getClass().getResourceAsStream(resource);
+        TMXReader reader = TMXReader.createTMXEventReader(
+                            new InputStreamReader(is, "UTF-8"));
+        TestErrorHandler handler = new TestErrorHandler();
+        reader.setErrorHandler(handler);
+        readWithErrors(reader);
+        assertEquals(errorCount, handler.errors.size());
+        assertNull(handler.fatalError);
+        assertNull(handler.xmlError);
+    }
+    
     void readWithErrors(TMXReader reader) {
         try {
             readEvents(reader);

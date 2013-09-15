@@ -3,6 +3,9 @@ package com.spartansoftwareinc.otter;
 import javax.xml.namespace.QName;
 
 class TMXConstants {
+    
+    static final String TMX_VERSION_1_4 = "1.4";
+    
     static final QName TMX = new QName("tmx");
     static final QName HEADER = new QName("header");
     static final QName BODY = new QName("body");

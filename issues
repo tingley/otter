@@ -1,9 +1,9 @@
 - I also need an error handle model.  what errors?
+    - Missing required attributes should be converted to errors
     - throw errors when improper tags appear within other tags (requires
       registering element handlers)
     - flag warnings if tu/@srclang does not match global decl
     - unsupported version #
-    - unparseable date formats
     - Make sure that user's can't do thing like add <hi> tags 
       in invalid locations.
     - epts that precede bpts
@@ -16,3 +16,4 @@
 - refactor addContent() of Subflow, HighlightTag, and TUV
     - I might need to break out these into more type-specific 
       adders
+- support ude elements

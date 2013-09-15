@@ -34,7 +34,7 @@ public class TMXReader {
         factory.setProperty(XMLInputFactory.IS_COALESCING, true);
         try {
             parser = SNAXParser.createParser(factory, buildModel());
-            parser.startParsing(r, new SegmentBuilder());
+            parser.startParsing(r, new SegmentBuilder(this));
         }
         catch (XMLStreamException e) {
             errorHandler.xmlError(e);
@@ -181,7 +181,11 @@ public class TMXReader {
         @Override
         public void startElement(StartElement element, SegmentBuilder data)
                 throws SNAXUserException {
-            // TODO verify version
+            String version = requireAttrVal(element, VERSION);
+            if (!TMX_VERSION_1_4.equals(version)) {
+                errorHandler.error(new OtterException("Unsupported TMX version: " +
+                                   version, element.getLocation()));
+            }
             addEvent(new TMXEvent(START_TMX));
         }
         @Override
@@ -196,9 +200,9 @@ public class TMXReader {
                 throws SNAXUserException {
             header = new Header();
             header.setAdminLang(attrVal(element, ADMINLANG));
-            header.setChangeDate(attrValAsDate(element, CHANGEDATE));
+            header.setChangeDate(attrValAsDate(element, CHANGEDATE, errorHandler));
             header.setChangeId(attrVal(element, CHANGEID));
-            header.setCreationDate(attrValAsDate(element, CREATIONDATE));
+            header.setCreationDate(attrValAsDate(element, CREATIONDATE, errorHandler));
             header.setCreationId(attrVal(element, CREATIONID));
             header.setCreationTool(attrVal(element, CREATIONTOOL));
             header.setCreationToolVersion(attrVal(element, CREATIONTOOLVERSION));

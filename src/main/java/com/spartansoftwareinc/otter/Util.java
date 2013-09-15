@@ -10,29 +10,6 @@ import javax.xml.stream.events.Attribute;
 import javax.xml.stream.events.StartElement;
 
 class Util {
-    
-    // Sigh
-    static String toXml(String s) {
-        StringBuilder sb = new StringBuilder();
-        for (char c : s.toCharArray()) {
-            switch (c) {
-            case '<':
-                sb.append("&lt;");
-                break;
-            case '>':
-                sb.append("&gt;");
-                break;
-            case '&':
-                sb.append("&amp;");
-                break;
-            default:
-                sb.append(c);
-                break;
-            }
-        }
-        return sb.toString();
-    }
-    
     static void require(boolean condition, Location location, String message) {
         if (!condition) {
             throw new OtterException(message, location);
@@ -74,10 +51,16 @@ class Util {
     static final String writeTMXDate(Date d) {
         return new SimpleDateFormat(TMX_DATE_FORMAT).format(d);
     }
-    static Date attrValAsDate(StartElement el, QName attrName) {
+    static Date attrValAsDate(StartElement el, QName attrName, ErrorHandler handler) {
         Attribute a = el.getAttributeByName(attrName);
         if (a == null) return null;
-        return parseTMXDate(a.getValue());
+        Date d = parseTMXDate(a.getValue());
+        if (d == null) {
+            handler.error(new OtterException("Invalid date format '" + 
+                        a.getValue() + "' for " + attrName.getLocalPart(),
+                        el.getLocation()));
+        }
+        return d;
     }
     static Integer requireAttrValAsInteger(StartElement el, QName attrName) {
         Attribute a = el.getAttributeByName(attrName);
