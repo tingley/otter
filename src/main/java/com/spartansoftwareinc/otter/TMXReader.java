@@ -380,6 +380,7 @@ public class TMXReader {
             if (type != null) {
                 bpt.setType(type);
             }
+            data.startPair(bpt, element);
             addTUVContent(bpt);
             contentStack.push(bpt);
         }
@@ -399,6 +400,7 @@ public class TMXReader {
         public void startElement(StartElement element, SegmentBuilder data)
                 throws SNAXUserException {
             EndTag ept = new EndTag(requireAttrValAsInteger(element, I, errorHandler));
+            data.endPair(ept, element);
             addTUVContent(ept);
             contentStack.push(ept);
         }

@@ -43,7 +43,7 @@ public class TUV extends BaseTUVContentSink {
     public void addNote(Note note) {
         notes.add(note);
     }
-    
+
     @Override
     public int hashCode() {
         return new Hasher(super.hashCode())

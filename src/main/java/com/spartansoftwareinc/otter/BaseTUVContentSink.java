@@ -3,7 +3,10 @@ package com.spartansoftwareinc.otter;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BaseTUVContentSink implements TUVContentSink {
+/**
+ * Base class for things that accept "text" TUV content. 
+ */
+public abstract class BaseTUVContentSink implements TUVContentSink {
 
     private List<TUVContent> contents = new ArrayList<TUVContent>();
     
@@ -24,7 +27,7 @@ public class BaseTUVContentSink implements TUVContentSink {
         }
         contents.add(content);
     }
-
+    
     List<TUVContent> getContents() {
         return contents;
     }

@@ -1,5 +1,6 @@
 package com.spartansoftwareinc.otter;
 
+import java.util.BitSet;
 import java.util.List;
 
 import javax.xml.stream.events.StartElement;
@@ -10,6 +11,7 @@ class SegmentBuilder {
     private TU tu;
     private TUV tuv;
     private TMXReader reader;
+    private BitSet pairedTagIndices = new BitSet(8);
     
     SegmentBuilder(TMXReader reader) {
         this.reader = reader;
@@ -41,6 +43,7 @@ class SegmentBuilder {
     }
     
     void startTuv(StartElement el) {
+        pairedTagIndices.clear();
         String locale = attrVal(el, XMLLANG);
         require(locale != null, el.getLocation(), "TUV has no xml:lang");
         tuv = new TUV(locale);
@@ -59,4 +62,25 @@ class SegmentBuilder {
         return tuv.getContents();
     }
     
+    void startPair(BeginTag bpt, StartElement el) {
+        int iValue = bpt.getI();
+        if (pairedTagIndices.get(iValue)) {
+            reader.getErrorHandler().error(new OtterException(
+                    "TUV contains multiple bpt tags with index " + iValue, el.getLocation()));
+        }
+        else {
+            pairedTagIndices.set(iValue);
+        }
+    }
+    
+    void endPair(EndTag ept, StartElement el) {
+        int iValue = ept.getI();
+        if (!pairedTagIndices.get(iValue)) {
+            reader.getErrorHandler().error(new OtterException(
+                    "TUV contains ept without a preceding bpt, index " + iValue, el.getLocation()));
+        }
+        else {
+            pairedTagIndices.clear(iValue);
+        }
+    }
 }

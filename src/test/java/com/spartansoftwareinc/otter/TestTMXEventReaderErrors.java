@@ -55,11 +55,13 @@ public class TestTMXEventReaderErrors {
         expectFatalError("/error_it_tag_missing_pos.tmx");
     }
     
-    // Trick here is that I might be adding to a <seg> or a <sub>
-    // or a <hi> I need to keep things simple
+    // TODO test subflow and hi cases 
+    // XXX Should this be fatal or non-fatal?
+    // Really it should be cause the TU to be rejected
+    // Also, need to test multiple <bpt> with the same @i, etc
     @Test
     public void testOutOfOrderPairedTagsError() throws Exception {
-        expectFatalError("/error_out_of_order_pair.tmx");
+        expectNonfatalError("/error_out_of_order_pair.tmx", 1);
     }
     
     void expectNonfatalError(String resource, int errorCount) throws Exception {

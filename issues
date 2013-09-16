@@ -19,3 +19,4 @@
 - SNAXUserException makes it very hard to throw real runtime exceptions
   because they are masked
 - my paired tags example includes @x on ept, which it doesn't support
+- I think I need a way to discard TUs that are bogus
