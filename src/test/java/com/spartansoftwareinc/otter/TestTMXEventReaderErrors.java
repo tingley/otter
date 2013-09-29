@@ -65,9 +65,7 @@ public class TestTMXEventReaderErrors {
     }
     
     void expectNonfatalError(String resource, int errorCount) throws Exception {
-        InputStream is = getClass().getResourceAsStream(resource);
-        TMXReader reader = TMXReader.createTMXEventReader(
-                            new InputStreamReader(is, "UTF-8"));
+        TMXReader reader = TestUtil.getTMXReader(resource);
         TestErrorHandler handler = new TestErrorHandler();
         reader.setErrorHandler(handler);
         readWithErrors(reader);
@@ -77,9 +75,7 @@ public class TestTMXEventReaderErrors {
     }
     
     void expectFatalError(String resource) throws Exception {
-        InputStream is = getClass().getResourceAsStream(resource);
-        TMXReader reader = TMXReader.createTMXEventReader(
-                            new InputStreamReader(is, "UTF-8"));
+        TMXReader reader = TestUtil.getTMXReader(resource);
         TestErrorHandler handler = new TestErrorHandler();
         reader.setErrorHandler(handler);
         readWithErrors(reader);

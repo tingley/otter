@@ -21,10 +21,7 @@ public class TestTMXEventReader {
     
     @Test
     public void testHeader() throws Exception {
-        InputStream is = getClass().getResourceAsStream("/header.tmx");
-        // XXX Who handles BOMs?
-        TMXReader reader = TMXReader.createTMXEventReader(
-                            new InputStreamReader(is, "UTF-8"));
+        TMXReader reader = TestUtil.getTMXReader("/header.tmx");
         List<TMXEvent> events = readEvents(reader);
         assertNotNull(events);
         checkEvent(events.get(0), START_TMX);
@@ -63,9 +60,7 @@ public class TestTMXEventReader {
     @SuppressWarnings("serial")
     @Test
     public void testBody() throws Exception {
-        InputStream is = getClass().getResourceAsStream("/body.tmx");
-        TMXReader reader = TMXReader.createTMXEventReader(
-                            new InputStreamReader(is, "UTF-8"));
+        TMXReader reader = TestUtil.getTMXReader("/body.tmx");
         List<TU> tus = readTUs(reader);
         assertNotNull(tus);
         assertEquals(2, tus.size());
@@ -105,9 +100,7 @@ public class TestTMXEventReader {
     
     @Test
     public void testTuvPropertiesAndNotes() throws Exception {
-        InputStream is = getClass().getResourceAsStream("/tuv_properties.tmx");
-        TMXReader reader = TMXReader.createTMXEventReader(
-                            new InputStreamReader(is, "UTF-8"));
+        TMXReader reader = TestUtil.getTMXReader("/tuv_properties.tmx");
         List<TU> tus = readTUs(reader);
         assertNotNull(tus);
         assertEquals(1, tus.size());
@@ -129,9 +122,7 @@ public class TestTMXEventReader {
     
     @Test
     public void testTuPropertiesAndNotes() throws Exception {
-        InputStream is = getClass().getResourceAsStream("/tu_properties.tmx");
-        TMXReader reader = TMXReader.createTMXEventReader(
-                            new InputStreamReader(is, "UTF-8"));
+        TMXReader reader = TestUtil.getTMXReader("/tu_properties.tmx");
         List<TU> tus = readTUs(reader);
         assertNotNull(tus);
         assertEquals(1, tus.size());
@@ -149,9 +140,7 @@ public class TestTMXEventReader {
     @SuppressWarnings("serial")
     @Test
     public void testPairedTags() throws Exception {
-        InputStream is = getClass().getResourceAsStream("/paired_tags.tmx");
-        TMXReader reader = TMXReader.createTMXEventReader(
-                            new InputStreamReader(is, "UTF-8"));
+        TMXReader reader = TestUtil.getTMXReader("/paired_tags.tmx");
         List<TU> tus = readTUs(reader);
         assertNotNull(tus);
         assertEquals(1, tus.size());
@@ -180,9 +169,7 @@ public class TestTMXEventReader {
     @SuppressWarnings("serial")
     @Test
     public void testIsolatedTags() throws Exception {
-        InputStream is = getClass().getResourceAsStream("/it_tag.tmx");
-        TMXReader reader = TMXReader.createTMXEventReader(
-                            new InputStreamReader(is, "UTF-8"));
+        TMXReader reader = TestUtil.getTMXReader("/it_tag.tmx");
         List<TU> tus = readTUs(reader);
         assertNotNull(tus);
         assertEquals(2, tus.size());
@@ -224,9 +211,7 @@ public class TestTMXEventReader {
     @SuppressWarnings("serial")
     @Test
     public void testHighlightTags() throws Exception {
-        InputStream is = getClass().getResourceAsStream("/hi_tag.tmx");
-        TMXReader reader = TMXReader.createTMXEventReader(
-                            new InputStreamReader(is, "UTF-8"));
+        TMXReader reader = TestUtil.getTMXReader("/hi_tag.tmx");
         List<TU> tus = readTUs(reader);
         assertNotNull(tus);
         assertEquals(1, tus.size());
@@ -270,9 +255,7 @@ public class TestTMXEventReader {
     
     @Test
     public void testNestedHighlightTags() throws Exception {
-        InputStream is = getClass().getResourceAsStream("/hi_nested.tmx");
-        TMXReader reader = TMXReader.createTMXEventReader(
-                            new InputStreamReader(is, "UTF-8"));
+        TMXReader reader = TestUtil.getTMXReader("/hi_nested.tmx");
         List<TU> tus = readTUs(reader);
         assertNotNull(tus);
         assertEquals(1, tus.size());
@@ -308,9 +291,7 @@ public class TestTMXEventReader {
     
     @Test
     public void testSubflows() throws Exception {
-        InputStream is = getClass().getResourceAsStream("/subflow.tmx");
-        TMXReader reader = TMXReader.createTMXEventReader(
-                            new InputStreamReader(is, "UTF-8"));
+        TMXReader reader = TestUtil.getTMXReader("/subflow.tmx");
         List<TU> tus = readTUs(reader);
         assertNotNull(tus);
         assertEquals(4, tus.size());

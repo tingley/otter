@@ -4,6 +4,9 @@ import static com.spartansoftwareinc.otter.TMXEventType.TU;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,6 +42,12 @@ public class TestUtil {
             events.add(r.nextEvent());
         }
         return events;
+    }
+    
+    public static TMXReader getTMXReader(String testResource) throws UnsupportedEncodingException {
+        InputStream is = TestUtil.class.getResourceAsStream(testResource);
+        return TMXReader.createTMXEventReader(
+                            new InputStreamReader(is, "UTF-8"));
     }
 
 }
