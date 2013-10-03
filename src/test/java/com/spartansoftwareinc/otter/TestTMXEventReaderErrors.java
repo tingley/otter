@@ -61,7 +61,16 @@ public class TestTMXEventReaderErrors {
     // Also, need to test multiple <bpt> with the same @i, etc
     @Test
     public void testOutOfOrderPairedTagsError() throws Exception {
-        expectNonfatalError("/error_out_of_order_pair.tmx", 1);
+    //    expectNonfatalError("/error_out_of_order_pair.tmx", 1);
+        TMXReader reader = TestUtil.getTMXReader("/error_out_of_order_pair.tmx");
+        TestErrorHandler handler = new TestErrorHandler();
+        reader.setErrorHandler(handler);
+        readWithErrors(reader);
+        assertEquals(1, handler.tuErrors.size());
+        assertEquals(0, handler.tuErrors.get(0).sequence);
+        assertEquals(0, handler.errors.size());
+        assertNull(handler.fatalError);
+        assertNull(handler.xmlError);
     }
     
     void expectNonfatalError(String resource, int errorCount) throws Exception {
@@ -101,9 +110,22 @@ public class TestTMXEventReaderErrors {
     }
     
     class TestErrorHandler implements ErrorHandler {
+        class TUError {
+            int sequence;
+            OtterException e;
+        }
+        List<TUError> tuErrors = new ArrayList<TUError>();
         List<OtterException> errors = new ArrayList<OtterException>();
         OtterException fatalError = null;
         XMLStreamException xmlError = null;
+        
+        @Override
+        public void tuError(int tuSequence, OtterException e) {
+            TUError error = new TUError();
+            error.sequence = tuSequence;
+            error.e = e;
+            tuErrors.add(error);
+        }
         
         @Override
         public void error(OtterException e) {
@@ -121,5 +143,7 @@ public class TestTMXEventReaderErrors {
             xmlError = e;
             throw new OtterException("Halting on error", e.getLocation());
         }
+
+       
     }
 }

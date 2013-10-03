@@ -285,6 +285,8 @@ public class TMXReader {
         }
     }
     class TuHandler extends DefaultElementHandler<SegmentBuilder> {
+        private int nextSequence = 0;
+        
         @Override
         public void startElement(StartElement element, SegmentBuilder data)
                 throws SNAXUserException {
@@ -293,7 +295,9 @@ public class TMXReader {
         @Override
         public void endElement(EndElement element, SegmentBuilder data)
                 throws SNAXUserException {
-            addEvent(new TMXEvent(TMXEventType.TU, data.getTu()));
+            TUEvent e = new TUEvent(data.getTu());
+            e.setSequence(nextSequence++);
+            addEvent(e);
         }
     }
     class TuPropertyHandler extends PropertyHandler {

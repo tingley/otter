@@ -8,6 +8,11 @@ import javax.xml.stream.XMLStreamException;
  */
 public class DefaultErrorHandler implements ErrorHandler {
     @Override
+    public void tuError(int tuSequence, OtterException e) {
+        // Do nothing
+    }
+
+    @Override
     public void error(OtterException e) {
         // Do nothing   
     }

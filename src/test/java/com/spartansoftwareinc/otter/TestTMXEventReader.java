@@ -313,6 +313,23 @@ public class TestTMXEventReader {
         checkItSubflowTuv(tuvs.get("FR-FR"));
     }
     
+    @Test
+    public void testTUEventSequenceNumbers() throws Exception {
+        TMXReader reader = TestUtil.getTMXReader("/subflow.tmx");
+        List<TMXEvent> events = readEvents(reader);
+        List<TUEvent> tuEvents = new ArrayList<TUEvent>();
+        for (TMXEvent e : events) {
+            if (e.getEventType() == TMXEventType.TU){
+                assertTrue(e instanceof TUEvent);
+                tuEvents.add((TUEvent)e);
+            }
+        }
+        assertEquals(4, tuEvents.size());
+        for (int i = 0; i < tuEvents.size(); i++) {
+            assertEquals(i, tuEvents.get(i).getSequence());
+        }
+    }
+    
     private void checkBptSubflowTuv(TUV tuv) {
         assertNotNull(tuv);
         List<TUVContent> tuvContents = tuv.getContents();
