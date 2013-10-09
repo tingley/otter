@@ -1,7 +1,7 @@
 package com.spartansoftwareinc.otter;
 
 import static com.spartansoftwareinc.otter.TestUtil.readEvents;
-import static com.spartansoftwareinc.otter.TestUtil.readTUs;
+import static com.spartansoftwareinc.otter.TestUtil.readTUEvents;
 
 import java.io.StringReader;
 import java.util.ArrayList;
@@ -51,7 +51,15 @@ public class TestTMXEventReaderErrors {
     
     @Test
     public void testMissingItAttrError() throws Exception {
-        expectFatalError("/error_it_tag_missing_pos.tmx");
+        TMXReader reader = TestUtil.getTMXReader("/error_it_tag_missing_pos.tmx");
+        TestErrorHandler handler = new TestErrorHandler();
+        reader.setErrorHandler(handler);
+        readWithErrors(reader);
+        assertEquals(1, handler.tuErrors.size());
+        assertEquals(0, handler.tuErrors.get(0).sequence);
+        assertEquals(0, handler.errors.size());
+        assertNull(handler.fatalError);
+        assertNull(handler.xmlError);
     }
     
     // TODO test subflow and hi cases 
@@ -69,13 +77,21 @@ public class TestTMXEventReaderErrors {
         assertNull(handler.xmlError);
     }
 
+    // Make sure that when we report a TU error, we don't also produce
+    // that TU as an event.
     @Test
     public void testTuErrorMeansTuIsSkipped() throws Exception {
-        // Make sure that when we report a TU error, we don't also produce
-        // that TU as an event.
+        // This file contained only one TU, so when it is reported as an
+        // error, there are no TUs produced as events.
         TMXReader reader = TestUtil.getTMXReader("/error_out_of_order_pair.tmx");
-        List<TU> tus = readTUs(reader);
+        List<TUEvent> tus = readTUEvents(reader);
         assertEquals(0, tus.size());
+        // This file contains two TUs, so when the first (sequence 0) has an
+        // error, the second (sequence 1) is still exposed as an event.
+        reader = TestUtil.getTMXReader("/error_it_tag_missing_pos.tmx");
+        tus = readTUEvents(reader);
+        assertEquals(1, tus.size());
+        assertEquals(1, tus.get(0).getSequence());
     }
     
     void expectNonfatalError(String resource, int errorCount) throws Exception {

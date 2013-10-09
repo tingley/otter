@@ -10,6 +10,8 @@ import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.junit.Assert.assertTrue;
+
 public class TestUtil {
     public static void checkProperty(Property p, String propertyType, String value) {
         assertNotNull(p);
@@ -31,6 +33,18 @@ public class TestUtil {
             if (e.getEventType() == TU) {
                 assertNotNull(e.getTU());
                 tus.add(e.getTU());
+            }
+        }
+        return tus;
+    }
+    
+    public static List<TUEvent> readTUEvents(TMXReader r) {
+        List<TMXEvent> events = readEvents(r);
+        List<TUEvent> tus = new ArrayList<TUEvent>();
+        for (TMXEvent e : events) {
+            if (e.getEventType() == TU) {
+                assertTrue(e instanceof TUEvent);
+                tus.add((TUEvent)e);
             }
         }
         return tus;

@@ -299,9 +299,11 @@ public class TMXReader {
                 throws SNAXUserException {
             if (!currentTuIsInError) {
                 TUEvent e = new TUEvent(data.getTu());
-                e.setSequence(nextSequence++);
+                e.setSequence(nextSequence);
                 addEvent(e);
             }
+            // Regardless of outcome, we always increment the sequence id.
+            nextSequence++;
         }
     }
     class TuPropertyHandler extends PropertyHandler {
@@ -433,13 +435,19 @@ public class TMXReader {
                 it.setX(x);
             }
             it.setType(attrVal(element, TYPE));
-            String v = requireAttrVal(element, POS, errorHandler);
-            IsolatedTag.Pos pos = IsolatedTag.Pos.byAttrValue(v);
-            if (pos == null) {
-                throw new OtterException("Invalid value for 'pos' attribute: " + v, 
-                        element.getLocation());
+            String v = attrVal(element, POS);
+            if (v == null) {
+                reportTuError(new OtterException("<it> element missing 'pos' attribute", 
+                              element.getLocation()));
             }
-            it.setPos(pos);
+            else {
+                IsolatedTag.Pos pos = IsolatedTag.Pos.byAttrValue(v);
+                if (pos == null) {
+                    reportTuError(new OtterException("Invalid value for 'pos' attribute: " + v, 
+                            element.getLocation()));
+                }
+                it.setPos(pos);
+            }
             addTUVContent(it);
             contentStack.push(it);
         }
