@@ -50,7 +50,26 @@ public class TestTMXEventReaderErrors {
         TestErrorHandler handler = new TestErrorHandler();
         reader.setErrorHandler(handler);
         readWithErrors(reader);
-        assertEquals(1, handler.tuErrors.size());
+        // This reports multiple errors:
+        // - [0] is the missing bpt/@i
+        // - [1] is because the subsequent ept now how an @i that doesn't match 
+        assertEquals(2, handler.tuErrors.size());
+        assertEquals(0, handler.tuErrors.get(0).sequence);
+        assertEquals(0, handler.errors.size());
+        assertNull(handler.fatalError);
+        assertNull(handler.xmlError);
+    }
+    
+    @Test
+    public void testMissingEptIAttrError() throws Exception {
+        TMXReader reader = TestUtil.getTMXReader("/error_missing_ept_i.tmx");
+        TestErrorHandler handler = new TestErrorHandler();
+        reader.setErrorHandler(handler);
+        readWithErrors(reader);
+        // This reports multiple errors:
+        // - [0] is because the preceding bpt now how an @i that doesn't match 
+        // - [1] is the missing ept/@i
+        assertEquals(2, handler.tuErrors.size());
         assertEquals(0, handler.tuErrors.get(0).sequence);
         assertEquals(0, handler.errors.size());
         assertNull(handler.fatalError);

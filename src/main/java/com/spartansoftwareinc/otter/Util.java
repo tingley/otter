@@ -74,23 +74,6 @@ class Util {
         }
         return d;
     }
-    static Integer requireAttrValAsInteger(StartElement el, QName attrName, ErrorHandler handler) {
-        Attribute a = el.getAttributeByName(attrName);
-        if (a == null) {
-            handler.fatalError(
-                    new OtterException("Required attribute " + attrName + " is missing", 
-                            el.getLocation()));
-        }
-        try {
-            return Integer.valueOf(a.getValue());
-        }
-        catch (NumberFormatException e) {
-            handler.fatalError(
-                new OtterException("Not an integer value: " + a.getValue(),
-                                   el.getLocation()));
-            return 0;
-        }
-    }
     static boolean eq(Object o1, Object o2) {
         if (o1 == null && o2 == null) return true;
         if (o1 != null && o2 != null) return o1.equals(o2);

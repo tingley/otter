@@ -1,8 +1,7 @@
-- I also need an error handle model.  what errors?
-    - throw errors when improper tags appear within other tags (requires
-      registering element handlers)
+- remaining error todos
     - flag warnings if tu/@srclang does not match global decl
         - is there a way I can map this back to the TU?
+    - multiple bpts with the same @i
     - Make sure that user's can't do thing like add <hi> tags 
       in invalid locations.
     - epts that precede bpts
@@ -16,7 +15,8 @@
     - I might need to break out these into more type-specific 
       adders
 - support ude elements
-- SNAXUserException makes it very hard to throw real runtime exceptions
-  because they are masked
 - my paired tags example includes @x on ept, which it doesn't support
 - I think I need a way to discard TUs that are bogus
+
+- SNAXUserException makes it very hard to throw real runtime exceptions
+  because they are masked

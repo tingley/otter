@@ -415,7 +415,13 @@ public class TMXReader {
         @Override
         public void startElement(StartElement element, SegmentBuilder data)
                 throws SNAXUserException {
-            EndTag ept = new EndTag(requireAttrValAsInteger(element, I, errorHandler));
+            Integer i = attrValAsInteger(element, I);
+            if (i == null) {
+                reportTuError(new OtterException("<ept> missing 'i' attribute",
+                              element.getLocation()));
+                i = 0;
+            }
+            EndTag ept = new EndTag(i);
             data.endPair(ept, element);
             addTUVContent(ept);
             contentStack.push(ept);
