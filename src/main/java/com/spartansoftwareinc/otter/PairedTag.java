@@ -1,5 +1,14 @@
 package com.spartansoftwareinc.otter;
 
+/**
+ * Base class for paired tags. Paired tags support the <code>i</code>
+ * attribute, which is used to identify corresponding pairs of 
+ * {@link BeginTag} and {@link EndTag}.
+ * <br>
+ * The {@link #addContent(TUVContent)} method for PairedTag will throw
+ * an exception if it is passed anything other than {@link CodeContent} 
+ * or {@link Subflow} objects.
+ */
 public abstract class PairedTag extends InlineTag {
     private int i = NO_VALUE;
     

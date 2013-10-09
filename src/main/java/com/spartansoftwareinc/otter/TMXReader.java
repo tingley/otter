@@ -385,7 +385,7 @@ public class TMXReader {
             if (i == null) {
                 reportTuError(new OtterException("<bpt> missing 'i' attribute", 
                               element.getLocation()));
-                i = 0;
+                i = BeginTag.NO_VALUE;
             }
             BeginTag bpt = new BeginTag(i);
             Integer x = attrValAsInteger(element, X);
@@ -419,7 +419,7 @@ public class TMXReader {
             if (i == null) {
                 reportTuError(new OtterException("<ept> missing 'i' attribute",
                               element.getLocation()));
-                i = 0;
+                i = EndTag.NO_VALUE;
             }
             EndTag ept = new EndTag(i);
             data.endPair(ept, element);

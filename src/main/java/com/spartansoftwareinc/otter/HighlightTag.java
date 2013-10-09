@@ -3,7 +3,11 @@ package com.spartansoftwareinc.otter;
 import static com.spartansoftwareinc.otter.Util.eq;
 
 /**
- * A <code>&lt;hi&gt;</code> tag.
+ * A representation of a <code>&lt;hi&gt;</code> tag.
+ * <br>
+ * The {@link #addContent(TUVContent)} method for HighlightTag will throw
+ * an exception if it is passed anything other than {@link TextContent}, 
+ * {@link InlineTag}, and {@link HighlightTag} content items.
  */
 public class HighlightTag extends BaseTUVContentSink implements TUVContent, NumberedTag {
     static final int NO_VALUE = 0;

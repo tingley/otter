@@ -2,6 +2,15 @@ package com.spartansoftwareinc.otter;
 
 import static com.spartansoftwareinc.otter.Util.eq;
 
+/**
+ * A representation of a <code>&lt;bpt&gt;</code> tag.  A container that
+ * includes a BeginTag must also include a subsequent {@link EndTag} with the
+ * matching <code>i</code> value.
+ * <br>
+ * The {@link #addContent(TUVContent)} method for BeginTag will throw
+ * an exception if it is passed anything other than {@link CodeContent} 
+ * or {@link Subflow} objects.
+ */
 public class BeginTag extends PairedTag implements NumberedTag {
     private int x = NO_VALUE;
     private String type;
