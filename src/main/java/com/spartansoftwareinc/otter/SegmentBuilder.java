@@ -22,23 +22,27 @@ class SegmentBuilder {
     }
 
     void startTu(StartElement el) {
-        ErrorHandler errorHandler = reader.getErrorHandler();
-        tu = new TU();
-        // Check for optional attributes
-        tu.setId(attrVal(el, TUID));
-        tu.setEncoding(attrVal(el, ENCODING));
-        tu.setDatatype(attrVal(el, DATATYPE));
-        tu.setUsageCount(attrValAsInteger(el, USAGECOUNT));
-        tu.setLastUsageDate(attrValAsDate(el, LASTUSAGEDATE, errorHandler));
-        tu.setCreationTool(attrVal(el, CREATIONTOOL));
-        tu.setCreationToolVersion(attrVal(el, CREATIONTOOLVERSION));
-        tu.setCreationDate(attrValAsDate(el, CREATIONDATE, errorHandler));
-        tu.setCreationId(attrVal(el, CREATIONID));
-        tu.setChangeDate(attrValAsDate(el, CHANGEDATE, errorHandler));
-        tu.setSegType(attrVal(el, SEGTYPE));
-        tu.setChangeId(attrVal(el, CHANGEID));
-        tu.setTmf(attrVal(el, TMF));
-        tu.setSrcLang(attrVal(el, SRCLANG));
+        try {
+            tu = new TU();
+            // Check for optional attributes
+            tu.setId(attrVal(el, TUID));
+            tu.setEncoding(attrVal(el, ENCODING));
+            tu.setDatatype(attrVal(el, DATATYPE));
+            tu.setUsageCount(attrValAsInteger(el, USAGECOUNT));
+            tu.setLastUsageDate(attrValAsDate(el, LASTUSAGEDATE, null));
+            tu.setCreationTool(attrVal(el, CREATIONTOOL));
+            tu.setCreationToolVersion(attrVal(el, CREATIONTOOLVERSION));
+            tu.setCreationDate(attrValAsDate(el, CREATIONDATE, null));
+            tu.setCreationId(attrVal(el, CREATIONID));
+            tu.setChangeDate(attrValAsDate(el, CHANGEDATE, null));
+            tu.setSegType(attrVal(el, SEGTYPE));
+            tu.setChangeId(attrVal(el, CHANGEID));
+            tu.setTmf(attrVal(el, TMF));
+            tu.setSrcLang(attrVal(el, SRCLANG));
+        }
+        catch (OtterException e) {
+            reader.reportTuError(e);
+        }
         // TODO: warn if SRCLANG != global SRCLANG
     }
     
@@ -65,7 +69,7 @@ class SegmentBuilder {
     void startPair(BeginTag bpt, StartElement el) {
         int iValue = bpt.getI();
         if (pairedTagIndices.get(iValue)) {
-            reader.getErrorHandler().error(new OtterException(
+            reader.reportTuError(new OtterException(
                     "TUV contains multiple bpt tags with index " + iValue, el.getLocation()));
         }
         else {
@@ -76,7 +80,7 @@ class SegmentBuilder {
     void endPair(EndTag ept, StartElement el) {
         int iValue = ept.getI();
         if (!pairedTagIndices.get(iValue)) {
-            reader.getErrorHandler().error(new OtterException(
+            reader.reportTuError(new OtterException(
                     "TUV contains ept without a preceding bpt, index " + iValue, el.getLocation()));
         }
         else {

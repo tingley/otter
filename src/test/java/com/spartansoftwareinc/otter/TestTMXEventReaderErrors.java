@@ -1,9 +1,8 @@
 package com.spartansoftwareinc.otter;
 
 import static com.spartansoftwareinc.otter.TestUtil.readEvents;
+import static com.spartansoftwareinc.otter.TestUtil.readTUs;
 
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
@@ -56,12 +55,9 @@ public class TestTMXEventReaderErrors {
     }
     
     // TODO test subflow and hi cases 
-    // XXX Should this be fatal or non-fatal?
-    // Really it should be cause the TU to be rejected
     // Also, need to test multiple <bpt> with the same @i, etc
     @Test
     public void testOutOfOrderPairedTagsError() throws Exception {
-    //    expectNonfatalError("/error_out_of_order_pair.tmx", 1);
         TMXReader reader = TestUtil.getTMXReader("/error_out_of_order_pair.tmx");
         TestErrorHandler handler = new TestErrorHandler();
         reader.setErrorHandler(handler);
@@ -71,6 +67,15 @@ public class TestTMXEventReaderErrors {
         assertEquals(0, handler.errors.size());
         assertNull(handler.fatalError);
         assertNull(handler.xmlError);
+    }
+
+    @Test
+    public void testTuErrorMeansTuIsSkipped() throws Exception {
+        // Make sure that when we report a TU error, we don't also produce
+        // that TU as an event.
+        TMXReader reader = TestUtil.getTMXReader("/error_out_of_order_pair.tmx");
+        List<TU> tus = readTUs(reader);
+        assertEquals(0, tus.size());
     }
     
     void expectNonfatalError(String resource, int errorCount) throws Exception {

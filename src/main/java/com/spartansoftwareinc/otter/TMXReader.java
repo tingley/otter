@@ -46,13 +46,16 @@ public class TMXReader {
     private List<TMXEvent> events = new ArrayList<TMXEvent>();
     private Deque<TUVContentSink> contentStack = new ArrayDeque<TUVContentSink>();
     private Header header = null;
+    private int nextSequence = 0;
+    private boolean currentTuIsInError = false;
     
     /**
-     * Get the current {@link ErrorHandler} for this reader.
-     * @return current ErrorHandler
+     * Flag the current TU as being in error.
+     * @param e
      */
-    public ErrorHandler getErrorHandler() {
-        return errorHandler;
+    void reportTuError(OtterException e) {
+        currentTuIsInError = true;
+        errorHandler.tuError(nextSequence, e);
     }
     
     /**
@@ -285,19 +288,20 @@ public class TMXReader {
         }
     }
     class TuHandler extends DefaultElementHandler<SegmentBuilder> {
-        private int nextSequence = 0;
-        
         @Override
         public void startElement(StartElement element, SegmentBuilder data)
                 throws SNAXUserException {
+            currentTuIsInError = false;
             data.startTu(element);
         }
         @Override
         public void endElement(EndElement element, SegmentBuilder data)
                 throws SNAXUserException {
-            TUEvent e = new TUEvent(data.getTu());
-            e.setSequence(nextSequence++);
-            addEvent(e);
+            if (!currentTuIsInError) {
+                TUEvent e = new TUEvent(data.getTu());
+                e.setSequence(nextSequence++);
+                addEvent(e);
+            }
         }
     }
     class TuPropertyHandler extends PropertyHandler {

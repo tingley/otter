@@ -53,14 +53,24 @@ class Util {
     static final String writeTMXDate(Date d) {
         return new SimpleDateFormat(TMX_DATE_FORMAT).format(d);
     }
-    static Date attrValAsDate(StartElement el, QName attrName, ErrorHandler handler) {
+    /**
+     * If an ErrorHandler is specified, this will report an error via the error() method.
+     * Otherwise, the error is reported as an OtterException.
+     */
+    static Date attrValAsDate(StartElement el, QName attrName, ErrorHandler handler) throws OtterException {
         Attribute a = el.getAttributeByName(attrName);
         if (a == null) return null;
         Date d = parseTMXDate(a.getValue());
         if (d == null) {
-            handler.error(new OtterException("Invalid date format '" + 
-                        a.getValue() + "' for " + attrName.getLocalPart(),
-                        el.getLocation()));
+            OtterException e = new OtterException("Invalid date format '" + 
+                    a.getValue() + "' for " + attrName.getLocalPart(),
+                    el.getLocation());
+            if (handler != null) {
+                handler.error(e);
+            }
+            else {
+                throw e;
+            }
         }
         return d;
     }
