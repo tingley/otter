@@ -46,7 +46,15 @@ public class TestTMXEventReaderErrors {
     
     @Test
     public void testMissingBptIAttrError() throws Exception {
-        expectFatalError("/error_missing_bpt_i.tmx");
+        TMXReader reader = TestUtil.getTMXReader("/error_missing_bpt_i.tmx");
+        TestErrorHandler handler = new TestErrorHandler();
+        reader.setErrorHandler(handler);
+        readWithErrors(reader);
+        assertEquals(1, handler.tuErrors.size());
+        assertEquals(0, handler.tuErrors.get(0).sequence);
+        assertEquals(0, handler.errors.size());
+        assertNull(handler.fatalError);
+        assertNull(handler.xmlError);
     }
     
     @Test

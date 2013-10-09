@@ -381,7 +381,13 @@ public class TMXReader {
         @Override
         public void startElement(StartElement element, SegmentBuilder data)
                 throws SNAXUserException {
-            BeginTag bpt = new BeginTag(requireAttrValAsInteger(element, I, errorHandler));
+            Integer i = attrValAsInteger(element, I);
+            if (i == null) {
+                reportTuError(new OtterException("<bpt> missing 'i' attribute", 
+                              element.getLocation()));
+                i = 0;
+            }
+            BeginTag bpt = new BeginTag(i);
             Integer x = attrValAsInteger(element, X);
             if (x != null) {
                 bpt.setX(x);
