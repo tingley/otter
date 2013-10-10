@@ -66,4 +66,10 @@ public class IsolatedTag extends StandaloneTag {
                 (o instanceof IsolatedTag) &&
                 (pos == ((IsolatedTag)o).pos);
     }
+    
+    @Override
+    public String toString() {
+        return "IT(pos=" + pos + ", x=" + getX() + ", data='" + getContents() + "')";
+    }
+
 }

@@ -9,6 +9,7 @@ import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.io.Writer;
 import java.util.List;
+import java.util.Map;
 
 import static com.spartansoftwareinc.otter.TMXEventType.*;
 import static com.spartansoftwareinc.otter.TestUtil.*;
@@ -24,16 +25,7 @@ public class TestTMXEventWriter {
         Writer w = new OutputStreamWriter(new FileOutputStream(tmp), "UTF-8");
         TMXWriter writer = TMXWriter.createTMXEventWriter(w);
         writer.startTMX();
-        Header header = new Header();
-        header.setCreationTool("Otter TMX");
-        header.setCreationToolVersion("1.0");
-        header.setSegType("sentence");
-        header.setTmf("Otter TMX");
-        header.setAdminLang("en-US");
-        header.setSrcLang("en-US");
-        header.setDataType("text");
-        header.addProperty(new Property("type1", "Property"));
-        header.addNote(new Note("This is a note"));
+        Header header = getHeader();
         writer.writeHeader(header);
         writer.startBody();
         writer.endBody();
@@ -53,6 +45,55 @@ public class TestTMXEventWriter {
         checkEvent(events.get(3), END_BODY);
         checkEvent(events.get(4), END_TMX);
         tmp.delete();
+    }
+    
+    @Test
+    public void testUnmatchedPairedTagConversion() throws Exception {
+        File tmp = File.createTempFile("otter", ".tmx");
+        Writer w = new OutputStreamWriter(new FileOutputStream(tmp), "UTF-8");
+        TMXWriter writer = TMXWriter.createTMXEventWriter(w);
+        writer.startTMX();
+        writer.writeHeader(getHeader());
+        writer.startBody();
+        TU tu = new TU();
+        TUV src = new TUV("en-us");
+        src.addContent(new TextContent("Dangling "));
+        src.addContent(new BeginTag(1));
+        src.addContent(new TextContent(" tag"));
+        tu.addTUV(src);
+        writer.writeEvent(new TUEvent(tu));
+        writer.endBody();
+        writer.endTMX();
+        w.close();
+        Reader r = new InputStreamReader(new FileInputStream(tmp), "UTF-8");
+        TMXReader reader = TMXReader.createTMXEventReader(r);
+        List<TU> tus = readTUs(reader);
+        assertEquals(1, tus.size());
+        TU tgtTu = tus.get(0);
+        Map<String, TUV> tuvs = tgtTu.getTuvs();
+        assertEquals(1, tuvs.size());
+        TUV tgtTuv = tuvs.get("en-us");
+        assertNotNull(tgtTuv);
+        List<TUVContent> contents = tgtTuv.getContents();
+        assertEquals(3, contents.size());
+        assertEquals(new TextContent("Dangling "), contents.get(0));
+        IsolatedTag it = new IsolatedTag(IsolatedTag.Pos.BEGIN);
+        assertEquals(it, contents.get(1));
+        assertEquals(new TextContent(" tag"), contents.get(2));
+    }
+    
+    private Header getHeader() {
+        Header header = new Header();
+        header.setCreationTool("Otter TMX");
+        header.setCreationToolVersion("1.0");
+        header.setSegType("sentence");
+        header.setTmf("Otter TMX");
+        header.setAdminLang("en-US");
+        header.setSrcLang("en-US");
+        header.setDataType("text");
+        header.addProperty(new Property("type1", "Property"));
+        header.addNote(new Note("This is a note"));
+        return header;
     }
     
     @Test

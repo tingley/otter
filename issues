@@ -17,6 +17,9 @@
 - support ude elements
 - my paired tags example includes @x on ept, which it doesn't support
 - I think I need a way to discard TUs that are bogus
-
+- writer should be able to convert bpt/ept to it automatically
 - SNAXUserException makes it very hard to throw real runtime exceptions
   because they are masked
+- various writer unittests
+- need some sort of stringbuilder-y thing to simplify writing tuvs
+  TUVBuilder basically
