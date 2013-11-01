@@ -3,7 +3,9 @@ package com.spartansoftwareinc.otter;
 import java.util.BitSet;
 import java.util.List;
 
+import javax.xml.stream.events.EndElement;
 import javax.xml.stream.events.StartElement;
+
 import static com.spartansoftwareinc.otter.Util.*;
 import static com.spartansoftwareinc.otter.TMXConstants.*;
 
@@ -44,6 +46,20 @@ class SegmentBuilder {
             reader.reportTuError(e);
         }
         // TODO: warn if SRCLANG != global SRCLANG
+    }
+    
+    void endTu(EndElement el) {
+    	// Inherit default srclang if none is set
+    	if (tu.getSrcLang() == null) {
+    		tu.setSrcLang(reader.getSrcLang());
+    	}
+    	// Check to make sure that this TU contains a TUV with
+    	// the expected source locale
+    	if (!tu.getTuvs().keySet().contains(tu.getSrcLang())) {
+    		reader.reportTuError(new OtterException(
+    				"TU has no TUV with expected source locale " + reader.getSrcLang(),
+    				el.getLocation()));
+    	}
     }
     
     void startTuv(StartElement el) {

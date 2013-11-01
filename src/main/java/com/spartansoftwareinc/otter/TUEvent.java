@@ -19,6 +19,11 @@ public class TUEvent extends TMXEvent {
         super(TMXEventType.TU, tu);
     }
     
+    /**
+     * Sequence number that uniquely identifies a TU within this TMX
+     * content.  Sequence numbers are 0-indexed. 
+     * @return
+     */
     public int getSequence() {
         return sequence;
     }

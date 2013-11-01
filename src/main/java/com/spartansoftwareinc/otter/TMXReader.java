@@ -48,6 +48,15 @@ public class TMXReader {
     private Header header = null;
     private int nextSequence = 0;
     private boolean currentTuIsInError = false;
+    private String srcLang = null;
+    
+    /**
+     * Return the source language for the current TMX, as defined
+     * in the header.
+     */
+    String getSrcLang() {
+    	return srcLang;
+    }
     
     /**
      * Flag the current TU as being in error.
@@ -218,6 +227,7 @@ public class TMXReader {
             header.setSegType(attrVal(element, SEGTYPE));
             header.setSrcLang(attrVal(element, SRCLANG));
             header.setTmf(attrVal(element, TMF));
+            srcLang = header.getSrcLang();
         }
         @Override
         public void endElement(EndElement element, SegmentBuilder data)
@@ -301,6 +311,7 @@ public class TMXReader {
         @Override
         public void endElement(EndElement element, SegmentBuilder data)
                 throws SNAXUserException {
+        	data.endTu(element);
             if (!currentTuIsInError) {
                 TUEvent e = new TUEvent(data.getTu());
                 e.setSequence(nextSequence);

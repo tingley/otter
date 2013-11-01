@@ -121,6 +121,37 @@ public class TestTMXEventReaderErrors {
         assertEquals(1, tus.get(0).getSequence());
     }
     
+    // TUs that don't contain a TUV that matches the srclang value in the
+    // the TMX header should trigger TU errors.  However, if the TU contains
+    // its own srcLang attribute, it's ok.
+    @Test
+    public void testSrcLangMismatchInTu() throws Exception {
+    	TMXReader reader = TestUtil.getTMXReader("/error_srclang_mismatch.tmx");
+    	TestErrorHandler handler = new TestErrorHandler();
+    	reader.setErrorHandler(handler);
+    	List<TUEvent> tus = readTUEvents(reader);
+    	// Second TU shouldn't be counted
+    	assertEquals(2, tus.size());
+    	// Verify the first (correct) TU
+    	TU tu = tus.get(0).getTU();
+    	assertNotNull(tu);
+    	// Inherited source locale value
+    	assertEquals("EN-US", tu.getSrcLang());
+    	TUV tuv = tu.getTuvs().get(tu.getSrcLang());
+    	assertNotNull(tuv);
+    	assertEquals("Hello world!", tuv.getContents().get(0).toString());
+    	// Verify the third TU is also present, picking up the local override
+    	tu = tus.get(1).getTU();
+    	assertNotNull(tu);
+    	assertEquals("DE-DE", tu.getSrcLang());
+    	tuv = tu.getTuvs().get(tu.getSrcLang());
+    	assertNotNull(tuv);
+    	assertEquals("This matches the locally-defined source locale.", tuv.getContents().get(0).toString());
+    	// Make sure the error for the second TU happened
+    	assertEquals(1, handler.tuErrors.size());
+    	assertEquals(1, handler.tuErrors.get(0).sequence);
+    }
+    
     void expectNonfatalError(String resource, int errorCount) throws Exception {
         TMXReader reader = TestUtil.getTMXReader(resource);
         TestErrorHandler handler = new TestErrorHandler();

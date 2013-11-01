@@ -56,7 +56,7 @@ public class TestTMXEventWriter {
         writer.writeHeader(getHeader());
         writer.startBody();
         TU tu = new TU();
-        TUV src = new TUV("en-us");
+        TUV src = new TUV("en-US");
         src.addContent(new TextContent("Dangling "));
         src.addContent(new BeginTag(1));
         src.addContent(new TextContent(" tag"));
@@ -72,7 +72,7 @@ public class TestTMXEventWriter {
         TU tgtTu = tus.get(0);
         Map<String, TUV> tuvs = tgtTu.getTuvs();
         assertEquals(1, tuvs.size());
-        TUV tgtTuv = tuvs.get("en-us");
+        TUV tgtTuv = tuvs.get("en-US");
         assertNotNull(tgtTuv);
         List<TUVContent> contents = tgtTuv.getContents();
         assertEquals(3, contents.size());

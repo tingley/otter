@@ -157,6 +157,12 @@ public class TU {
     public void setTmf(String tmf) {
         this.tmf = tmf;
     }
+    /**
+     * Return the source language for this TU.  When reading from TMX,
+     * this value will default to the <code>srclang</code> defined in 
+     * the TMX header, unless a local override was provided.
+     * @return locale code
+     */
     public String getSrcLang() {
         return srcLang;
     }

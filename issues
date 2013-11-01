@@ -1,10 +1,7 @@
 - remaining error todos
-    - flag warnings if tu/@srclang does not match global decl
-        - is there a way I can map this back to the TU?
     - multiple bpts with the same @i
     - Make sure that user's can't do thing like add <hi> tags 
       in invalid locations.
-    - epts that precede bpts
 - add a factory class that takes a XMLInputFactory?
     - means I would need to handle non-consolidated characters?
 - segmentbuilder may not be needed
@@ -21,3 +18,6 @@
 - need some sort of stringbuilder-y thing to simplify writing tuvs
   TUVBuilder basically
 - writer should always write source language tuv first
+- need a way to report errors when writing
+    - eg what if we try to write a tu that doesn't include a tuv of the
+      source locale.  is this a warning?  error?
