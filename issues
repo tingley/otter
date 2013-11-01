@@ -9,17 +9,15 @@
     - means I would need to handle non-consolidated characters?
 - segmentbuilder may not be needed
 - document everything
-    - Need to clearly document what contents each tag can take.
 - allow for some filter to ignore certain properties
 - refactor addContent() of Subflow, HighlightTag, and TUV
     - I might need to break out these into more type-specific 
       adders
 - support ude elements
 - my paired tags example includes @x on ept, which it doesn't support
-- I think I need a way to discard TUs that are bogus
-- writer should be able to convert bpt/ept to it automatically
 - SNAXUserException makes it very hard to throw real runtime exceptions
   because they are masked
 - various writer unittests
 - need some sort of stringbuilder-y thing to simplify writing tuvs
   TUVBuilder basically
+- writer should always write source language tuv first

@@ -2,6 +2,7 @@ package com.spartansoftwareinc.otter;
 
 import java.io.Writer;
 import java.util.ArrayList;
+import java.util.BitSet;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -145,6 +146,7 @@ public class TMXWriter {
         attr(tuAttrs, TMF, tu.getTmf());
         attr(tuAttrs, SRCLANG, tu.getSrcLang());
         xmlWriter.add(eventFactory.createStartElement(TU, tuAttrs.iterator(), null));
+        
         // TODO: Always print the source first
         Map<String, TUV> tuvs = tu.getTuvs();
         for (Map.Entry<String, TUV> e : tuvs.entrySet()) {
@@ -152,6 +154,7 @@ public class TMXWriter {
             attr(attrs, XMLLANG, e.getKey());
             xmlWriter.add(eventFactory.createStartElement(TUV, attrs.iterator(), null));
             xmlWriter.add(eventFactory.createStartElement(SEG, null, null));
+            convertUnmatchedPairedTags(e.getValue());
             for (TUVContent content : e.getValue().getContents()) {
                 writeContent(content);
             }
@@ -159,6 +162,53 @@ public class TMXWriter {
             xmlWriter.add(eventFactory.createEndElement(TUV, null));
         }
         xmlWriter.add(eventFactory.createEndElement(TU, null));
+    }
+    
+    /**
+     * Rewrite any unmatched paired tags as isolated tags.
+     * @param tuv TUV to search for unmatched tags
+     */
+    private void convertUnmatchedPairedTags(TUV tuv) {
+        List<TUVContent> contents = tuv.getContents();
+        int len = contents.size();
+        BitSet bptIValues = new BitSet(len);
+        BitSet eptIValues = new BitSet(len);
+        for (int i = 0; i < len; i++) {
+        	TUVContent c = contents.get(i);
+        	if (c instanceof BeginTag) {
+        		bptIValues.set(((BeginTag)c).getI());
+        	}
+        	else if (c instanceof EndTag) {
+        		eptIValues.set(((EndTag)c).getI());
+        	}
+        }
+        for (int i = 0; i < len; i++) {
+        	TUVContent c = contents.get(i);
+        	if (c instanceof BeginTag) {
+        		BeginTag bpt = (BeginTag)c;
+        		// Check for ept with the same i value
+        		if (!eptIValues.get(bpt.getI())) {
+        			IsolatedTag it = new IsolatedTag(IsolatedTag.Pos.BEGIN);
+        			if (bpt.getX() != BeginTag.NO_VALUE) {
+        				it.setX(bpt.getX());
+        			}
+        			if (bpt.getType() != null) {
+        				it.setType(bpt.getType());
+        			}
+        			contents.set(i, it);
+        		}
+        	}
+        	else if (c instanceof EndTag) {
+        		EndTag ept = (EndTag)c;
+        		// Check for bpt with the same i value
+    			if (!bptIValues.get(ept.getI())) {
+        			contents.set(i, new IsolatedTag(IsolatedTag.Pos.END));
+        		}
+        	}
+        }
+        
+        // TODO: what is the correct behavior if you try to write ept 
+        // before its corresponding bpt?
     }
     
     private void writeTag(QName qname, List<Attribute> attrs, List<TUVContent> contents) 
