@@ -127,14 +127,18 @@ public class TMXReader {
             ElementSelector<SegmentBuilder> phAnchor, bptAnchor, eptAnchor, itAnchor;
             {
                 elements("tmx").attach(new TMXHandler());
-                elements("tmx", "header").attach(new HeaderHandler());
-                elements("tmx", "header", "prop").attach(new HeaderPropertyHandler());
-                elements("tmx", "header", "note").attach(new HeaderNoteHandler());
-                elements("tmx", "body").attach(new BodyHandler());
-                elements("tmx", "body", "tu").attach(new TuHandler());
-                elements("tmx", "body", "tu", "prop").attach(new TuPropertyHandler());
-                elements("tmx", "body", "tu", "note").attach(new TuNoteHandler());
-                ElementSelector<SegmentBuilder> tuvAnchor = elements("tmx", "body", "tu", "tuv");
+                ElementSelector<SegmentBuilder> header = elements("tmx", "header"); 
+                header.attach(new HeaderHandler());
+                header.element("prop").attach(new HeaderPropertyHandler());
+                header.element("note").attach(new HeaderNoteHandler());
+
+                ElementSelector<SegmentBuilder> body = elements("tmx", "body"); 
+                body.attach(new BodyHandler());
+                ElementSelector<SegmentBuilder> tu = body.element("tu");
+                tu.attach(new TuHandler());
+                tu.element("prop").attach(new TuPropertyHandler());
+                tu.element("note").attach(new TuNoteHandler());
+                ElementSelector<SegmentBuilder> tuvAnchor = tu.element("tuv");
                 ElementSelector<SegmentBuilder> segAnchor = tuvAnchor.element("seg");
                 tuvAnchor.attach(new TuvHandler());
                 segAnchor.attach(new SegHandler());
