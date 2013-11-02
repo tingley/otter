@@ -181,11 +181,6 @@ public class TestTMXEventReaderErrors {
             // our error framework
             assertEquals("Halting on error", e.getMessage());
         }
-        catch (SNAXUserException e) {
-            // XXX I don't like how my exceptions are getting masked.
-            assertTrue(e.getCause() instanceof OtterException);
-            assertEquals("Halting on error", e.getCause().getMessage());
-        }
     }
     
     class TestErrorHandler implements ErrorHandler {
