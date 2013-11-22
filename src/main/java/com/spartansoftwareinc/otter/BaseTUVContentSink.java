@@ -28,7 +28,7 @@ public abstract class BaseTUVContentSink implements TUVContentSink {
         contents.add(content);
     }
     
-    List<TUVContent> getContents() {
+    public List<TUVContent> getContents() {
         return contents;
     }
     

@@ -10,7 +10,6 @@
 - refactor addContent() of Subflow, HighlightTag, and TUV
     - I might need to break out these into more type-specific 
       adders
-- support ude elements
 - my paired tags example includes @x on ept, which it doesn't support
 - various writer unittests
 - need some sort of stringbuilder-y thing to simplify writing tuvs
@@ -19,3 +18,4 @@
 - need a way to report errors when writing
     - eg what if we try to write a tu that doesn't include a tuv of the
       source locale.  is this a warning?  error?
+- util code to serialize TUV data to something legible would be nice
