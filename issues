@@ -10,7 +10,6 @@
 - refactor addContent() of Subflow, HighlightTag, and TUV
     - I might need to break out these into more type-specific 
       adders
-- my paired tags example includes @x on ept, which it doesn't support
 - various writer unittests
 - need some sort of stringbuilder-y thing to simplify writing tuvs
   TUVBuilder basically

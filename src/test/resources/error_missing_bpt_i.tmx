@@ -15,10 +15,10 @@
 <body>
 <tu>
 <tuv xml:lang="EN-US">
-    <seg>Simple <bpt x="1">&lt;b&gt;</bpt>paired tags<ept i="1" x="2">&lt;/b&gt;</ept>.</seg>
+    <seg>Simple <bpt x="1">&lt;b&gt;</bpt>paired tags<ept i="1">&lt;/b&gt;</ept>.</seg>
 </tuv>
 <tuv xml:lang="FR-FR">
-    <seg>Simple <bpt i="1" x="1">&lt;b&gt;</bpt>paired tags<ept i="1" x="2">&lt;/b&gt;</ept> (French).</seg>
+    <seg>Simple <bpt i="1" x="1">&lt;b&gt;</bpt>paired tags<ept i="1">&lt;/b&gt;</ept> (French).</seg>
 </tuv>
 </tu>
 </body>
