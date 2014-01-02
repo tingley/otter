@@ -26,13 +26,23 @@ public class IsolatedTag extends StandaloneTag {
     
     private Pos pos;
     
-    public IsolatedTag(int x, String initialCodeData, Pos pos) {
+    public IsolatedTag(Pos pos, int x, String initialCodeData) {
         super(x, initialCodeData);
         this.pos = pos;
     }
 
-    public IsolatedTag(String initialCodeData, Pos pos) {
+    public IsolatedTag(Pos pos, String initialCodeData) {
         super(initialCodeData);
+        this.pos = pos;
+    }
+    
+    public IsolatedTag(Pos pos, int x, ComplexContent content) {
+        super(x, content);
+        this.pos = pos;
+    }
+
+    public IsolatedTag(Pos pos, ComplexContent content) {
+        super(content);
         this.pos = pos;
     }
 

@@ -29,20 +29,27 @@ public class BeginTag extends PairedTag implements NumberedTag {
         this.x = x;
     }
 
+    public BeginTag(int x, int i, ComplexContent content) {
+        super(i, content);
+        this.x = x;
+    }
+
     public int getX() {
         return x;
     }
     
-    public void setX(int x) {
+    public BeginTag setX(int x) {
         this.x = x;
+        return this;
     }
 
     public String getType() {
         return type;
     }
 
-    public void setType(String type) {
+    public BeginTag setType(String type) {
         this.type = type;
+        return this;
     }
 
     @Override

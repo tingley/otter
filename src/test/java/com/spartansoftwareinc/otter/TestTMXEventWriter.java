@@ -8,6 +8,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.io.Writer;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -15,6 +16,7 @@ import static com.spartansoftwareinc.otter.TMXEventType.*;
 import static com.spartansoftwareinc.otter.TestUtil.*;
 
 import org.junit.*;
+
 import static org.junit.Assert.*;
 
 public class TestTMXEventWriter {
@@ -45,6 +47,156 @@ public class TestTMXEventWriter {
         checkEvent(events.get(3), END_BODY);
         checkEvent(events.get(4), END_TMX);
         tmp.delete();
+    }
+    
+    void testRoundtripTUs(List<TU> tus) throws Exception {
+        File tmp = File.createTempFile("otter", ".tmx");
+        Writer w = new OutputStreamWriter(new FileOutputStream(tmp), "UTF-8");
+        TMXWriter writer = TMXWriter.createTMXEventWriter(w);
+        writer.startTMX();
+        Header header = getHeader();
+        writer.writeHeader(header);
+        writer.startBody();
+        for (TU tu : tus) {
+            writer.writeTu(tu);
+        }
+        writer.endBody();
+        writer.endTMX();
+        w.close();
+        Reader r = new InputStreamReader(new FileInputStream(tmp), "UTF-8");
+        TMXReader reader = TMXReader.createTMXEventReader(r);
+        List<TU> roundtripTUs = readTUs(reader);
+        assertEquals(tus.size(), roundtripTUs.size());
+        assertEquals(tus, roundtripTUs);
+        tmp.delete();
+    }
+    
+    @Test
+    public void testTu() throws Exception {
+        TU tu = new TU("en-US");
+        tu.tuvBuilder("en-US")
+            .text("Hello ")
+            .bpt(1, "<b>")
+            .text("paired")
+            .ept(1, "</b>")
+            .text(" world")
+            .build();
+        testRoundtripTUs(Collections.singletonList(tu));
+    }
+    
+    @Test
+    public void testTuWithSubflow() throws Exception {
+        TU tu = new TU("en-US");
+        TUVBuilder b = tu.tuvBuilder("en-US");
+        b
+            .text("Tag containing ")
+            .bpt(1, new ComplexContent().addCodes("<a href='#' title='") 
+                                        .addSubflow(b.nested().text("Subflow text")) 
+                                        .addCodes("'>"))
+            .text("a subflow")
+            .ept(1, "</a>")
+            .text(".")
+            .build();
+        testRoundtripTUs(Collections.singletonList(tu));
+    }
+    
+    // Same as previous test, except we call build() on the 
+    // nested builder before passing it
+    @Test
+    public void testTuWithSubflowBuilt() throws Exception {
+        TU tu = new TU("en-US");
+        TUVBuilder b = tu.tuvBuilder("en-US");
+        b.text("Tag containing ")
+         .bpt(1, new ComplexContent().addCodes("<a href='#' title='") 
+                                     .addSubflow(b.nested().text("Subflow text").build()) 
+                                     .addCodes("'>")) // pass mixed content
+         .text("a subflow")
+         .ept(1, "</a>")
+         .text(".")
+         .build();
+        testRoundtripTUs(Collections.singletonList(tu));
+    }
+
+    @Test
+    public void testSimpleTuHighlight() throws Exception {
+        TU tu = new TU("en-US");
+        tu.tuvBuilder("en-US")
+                .text("Content containing ")
+                .hi("highlighted")
+                .text(" text").build();
+        testRoundtripTUs(Collections.singletonList(tu));
+    }
+    
+    @Test
+    public void testTuHighlighWithTags() throws Exception {
+        TU tu = new TU("en-US");
+        TUVBuilder b = tu.tuvBuilder("en-US");
+        b.text("Content containing ")
+            .hi(b.nested().text("highlighted text including ")
+                    .bpt(1, "<b>")
+                    .text("tag content")
+                    .ept(1, "</b>"))
+            .build();
+        testRoundtripTUs(Collections.singletonList(tu));
+    }
+    
+    // Same as previous test, except we call build() on the 
+    // nested builder before passing it
+    @Test
+    public void testTuWithHighlightBuilt() throws Exception {
+        TU tu = new TU("en-US");
+        TUVBuilder b = tu.tuvBuilder("en-US");
+        b.text("Content containing ")
+            .hi(b.nested().text("highlighted text including ")
+                    .bpt(1, "<b>")
+                    .text("tag content")
+                    .ept(1, "</b>").build())
+            .build();
+        testRoundtripTUs(Collections.singletonList(tu));
+    }
+    
+    @Test
+    public void testDeepHiNesting() throws Exception {
+        // <seg>A<hi x="1">B<hi x="2">C</hi>D</hi>.</seg>
+        TU tu = new TU("en-US");
+        TUVBuilder b = tu.tuvBuilder("en-US");
+        b.text("A");
+        TUVBuilder nested = b.nested(); 
+        nested.text("B")
+              .hi(nested.nested().text("C"))
+              .text("D");
+        b.hi(nested).text(".");
+        tu.addTUV(b.build());
+        testRoundtripTUs(Collections.singletonList(tu));
+    }
+    
+    
+    @Test
+    public void testPhAttributes() throws Exception {
+        TU tu = new TU("en-US");
+        // <seg>A<ph x="1" type="break" assoc="p">&lt;br/&gt;</ph>B</seg>
+        TUVBuilder b = tu.tuvBuilder("en-US");
+        b.text("A")
+         .tag(new PlaceholderTag(1, "index", "<br/>").setAssoc("p"))
+         .text("B");
+        tu.addTUV(b.build());
+        testRoundtripTUs(Collections.singletonList(tu));
+    }
+    
+    @Test
+    public void testMultipleTags() throws Exception {
+        TU tu = new TU("en-US");
+        TUVBuilder b = tu.tuvBuilder("en-US");
+        b.text("A")
+         .tag(new PlaceholderTag(1, "index", "<br />"))
+         .text("B")
+         .tag(new BeginTag(2, 1, new ComplexContent()
+                                             .addCodes("<a href='#' title='")
+                                             .addSubflow(b.nested().text("this is translatable"))
+                                             .addCodes("'>"))
+                     .setType("link"))
+         .text("C")
+         .ept(1, "</a>");
     }
     
     @Test

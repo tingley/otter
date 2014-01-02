@@ -15,6 +15,9 @@ public abstract class StandaloneTag extends InlineTag implements NumberedTag {
     protected StandaloneTag(String initalCodeData) {
         super(initalCodeData);
     }
+    protected StandaloneTag(ComplexContent content) {
+        super(content);
+    }
     protected StandaloneTag(int x) {
         this.x = x;
     }
@@ -22,21 +25,37 @@ public abstract class StandaloneTag extends InlineTag implements NumberedTag {
         super(data);
         this.x = x;
     }
+    protected StandaloneTag(int x, ComplexContent content) {
+        super(content);
+        this.x = x;
+    }
+    protected StandaloneTag(int x, String type, String data) {
+        super(data);
+        this.x = x;
+        this.type = type;
+    }
+    public StandaloneTag(int x, String type, ComplexContent content) {
+        super(content);
+        this.x = x;
+        this.type = type;
+    }
     
     public int getX() {
         return x;
     }
     
-    public void setX(int x) {
+    public StandaloneTag setX(int x) {
         this.x = x;
+        return this;
     }
     
     public String getType() {
         return type;
     }
 
-    public void setType(String type) {
+    public StandaloneTag setType(String type) {
         this.type = type;
+        return this;
     }
 
     @Override

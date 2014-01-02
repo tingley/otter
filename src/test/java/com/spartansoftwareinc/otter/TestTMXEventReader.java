@@ -177,14 +177,14 @@ public class TestTMXEventReader {
         assertNotNull(enTuv);
         assertEquals(new ArrayList<TUVContent>(){{
             add(new TextContent("Simple "));
-            add(new IsolatedTag(1, "<b>", IsolatedTag.Pos.BEGIN));
+            add(new IsolatedTag(IsolatedTag.Pos.BEGIN, 1, "<b>"));
             add(new TextContent("isolated tags."));
         }}, enTuv.getContents());
         TUV frTuv = tuvs.get("FR-FR");
         assertNotNull(frTuv);
         assertEquals(new ArrayList<TUVContent>(){{
             add(new TextContent("Simple "));
-            add(new IsolatedTag(1, "<b>", IsolatedTag.Pos.BEGIN));
+            add(new IsolatedTag(IsolatedTag.Pos.BEGIN, 1, "<b>"));
             add(new TextContent("isolated tags (French)."));
         }}, frTuv.getContents());
         
@@ -194,14 +194,14 @@ public class TestTMXEventReader {
         assertNotNull(enTuv);
         assertEquals(new ArrayList<TUVContent>(){{
             add(new TextContent("Isolated tags are "));
-            add(new IsolatedTag(1, "</b>", IsolatedTag.Pos.END));
+            add(new IsolatedTag(IsolatedTag.Pos.END, 1, "</b>"));
             add(new TextContent("split across segments."));
         }}, enTuv.getContents());
         frTuv = tuvs.get("FR-FR");
         assertNotNull(frTuv);
         assertEquals(new ArrayList<TUVContent>(){{
             add(new TextContent("Isolated tags are "));
-            add(new IsolatedTag(1, "</b>", IsolatedTag.Pos.END));
+            add(new IsolatedTag(IsolatedTag.Pos.END, 1, "</b>"));
             add(new TextContent("split across segments (French)."));
         }}, frTuv.getContents());     
     }

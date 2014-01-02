@@ -22,6 +22,10 @@ public abstract class PairedTag extends InlineTag {
         super(data);
         this.i = i;
     }
+    public PairedTag(int i, ComplexContent content) {
+        super(content);
+        this.i = i;
+    }
     
     public int getI() {
         return i;

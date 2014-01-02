@@ -28,6 +28,23 @@ public abstract class BaseTUVContentSink implements TUVContentSink {
         contents.add(content);
     }
     
+    /**
+     * Ad multiple items to the contents of this tag.  TUV objects
+     * are restricted to {@link TextContent}, {@link InlineTag}, and
+     * {@link HighlightTag} content items.
+     * 
+     * @param contents
+     */
+    public void addContents(List<TUVContent> contents) {
+    	for (TUVContent content : contents) {
+    		addContent(content);
+    	}
+    }
+    
+    /**
+     * Get the contents of this tag.
+     * @return list of {@link TUVContent} items
+     */
     public List<TUVContent> getContents() {
         return contents;
     }

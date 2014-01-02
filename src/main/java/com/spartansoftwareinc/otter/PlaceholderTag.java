@@ -8,9 +8,24 @@ public class PlaceholderTag extends StandaloneTag {
     public PlaceholderTag(String initialCodeData) {
         super(initialCodeData);
     }
-    
+    public PlaceholderTag(ComplexContent content) {
+        super(content);
+    }
+
     public PlaceholderTag(int x, String initialCodeData) {
         super(x, initialCodeData);
+    }
+    
+    public PlaceholderTag(int x, ComplexContent content) {
+        super(x, content);
+    }
+    
+    public PlaceholderTag(int x, String type, String initialCodeData) {
+        super(x, type, initialCodeData);
+    }
+    
+    public PlaceholderTag(int x, String type, ComplexContent content) {
+        super(x, type, content);
     }
     
     public PlaceholderTag() {
@@ -21,8 +36,19 @@ public class PlaceholderTag extends StandaloneTag {
         return assoc;
     }
 
-    public void setAssoc(String assoc) {
+    public PlaceholderTag setAssoc(String assoc) {
         this.assoc = assoc;
+        return this;
+    }
+    
+    public PlaceholderTag setX(int x) {
+        super.setX(x);
+        return this;
+    }
+
+    public PlaceholderTag setType(String type) {
+        super.setType(type);
+        return this;
     }
 
     @Override

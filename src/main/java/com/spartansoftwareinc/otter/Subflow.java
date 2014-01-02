@@ -7,7 +7,7 @@ import static com.spartansoftwareinc.otter.Util.eq;
  * correspond to the portion of the TUV delimited by &lt;sub&gt; tags.
  * Subflows can contain a mix of text content and inline tags.
  */
-public class Subflow extends BaseTUVContentSink implements TUVContent {
+public class Subflow extends BaseTUVContentSink implements TagContent {
     private String type, datatype;
     
     public Subflow() {

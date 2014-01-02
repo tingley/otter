@@ -11,7 +11,7 @@ import java.util.List;
  * an exception if it is passed anything other than {@link CodeContent} 
  * or {@link Subflow} objects.
  */
-public abstract class InlineTag implements TUVContent, TUVContentSink {
+public abstract class InlineTag implements TagContent {
     static final int NO_VALUE = 0;
     private List<TUVContent> contents = new ArrayList<TUVContent>();
     
@@ -19,6 +19,9 @@ public abstract class InlineTag implements TUVContent, TUVContentSink {
     }
     protected InlineTag(String initialCodeContent) {
         contents.add(new CodeContent(initialCodeContent));
+    }
+    protected InlineTag(ComplexContent content) {
+        contents.addAll(content.getContent());
     }
 
     /**
@@ -36,7 +39,20 @@ public abstract class InlineTag implements TUVContent, TUVContentSink {
         }
         contents.add(content);
     }
-    
+
+    /**
+     * Ad multiple items to the contents of this tag.  TUV objects
+     * are restricted to {@link TextContent}, {@link InlineTag}, and
+     * {@link HighlightTag} content items.
+     * 
+     * @param contents
+     */
+    public void addContents(List<TUVContent> contents) {
+        for (TUVContent content : contents) {
+            addContent(content);
+        }
+    }
+
     public List<TUVContent> getContents() {
         return contents;
     }

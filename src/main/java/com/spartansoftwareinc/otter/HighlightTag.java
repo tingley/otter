@@ -9,7 +9,7 @@ import static com.spartansoftwareinc.otter.Util.eq;
  * an exception if it is passed anything other than {@link TextContent}, 
  * {@link InlineTag}, and {@link HighlightTag} content items.
  */
-public class HighlightTag extends BaseTUVContentSink implements TUVContent, NumberedTag {
+public class HighlightTag extends BaseTUVContentSink implements NumberedTag {
     static final int NO_VALUE = 0;
     private int x = NO_VALUE;
     private String type;
@@ -24,16 +24,18 @@ public class HighlightTag extends BaseTUVContentSink implements TUVContent, Numb
         return x;
     }
     
-    public void setX(int x) {
+    public HighlightTag setX(int x) {
         this.x = x;
+        return this;
     }
     
     public String getType() {
         return type;
     }
     
-    public void setType(String type) {
+    public HighlightTag setType(String type) {
         this.type = type;
+        return this;
     }
     
     @Override

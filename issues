@@ -11,10 +11,14 @@
     - I might need to break out these into more type-specific 
       adders
 - various writer unittests
-- need some sort of stringbuilder-y thing to simplify writing tuvs
-  TUVBuilder basically
 - writer should always write source language tuv first
 - need a way to report errors when writing
     - eg what if we try to write a tu that doesn't include a tuv of the
       source locale.  is this a warning?  error?
 - util code to serialize TUV data to something legible would be nice
+- use xmlunit
+- arguably TUVBuilder should only support build() at the top level, 
+  nested builders shouldn't
+    - this becomes tricky to implement because of the method chaining.
+      if build() is in a subclass, the return value will be something
+      that would need to be cast down in order to call it.

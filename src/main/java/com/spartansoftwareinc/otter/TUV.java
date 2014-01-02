@@ -62,4 +62,18 @@ public class TUV extends BaseTUVContentSink {
                properties.equals(((TUV)o).properties);
     }
 
+    @Override
+    public String toString() {
+    	StringBuilder sb = new StringBuilder();
+    	sb.append("TUV(").append(locale).append(", ");
+    	if (!notes.isEmpty()) {
+    		sb.append("notes=").append(notes).append(", ");
+    	}
+    	if (!properties.isEmpty()) {
+    		sb.append("properties=").append(properties).append(", ");
+    	}
+    	sb.append("content=").append(getContents());
+    	sb.append(")");
+    	return sb.toString();
+    }
 }

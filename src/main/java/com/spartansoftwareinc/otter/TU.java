@@ -19,6 +19,21 @@ public class TU {
     
     public TU() {
     }
+
+    public TU(String srcLang) {
+        this.srcLang = srcLang;
+    }
+
+    /**
+     * Return a {@link TUVBuilder} to build a TUV of the specified 
+     * locale.  The {@link TUV} will be added to this TU when 
+     * {@link TUVBuilder#build()} is called. 
+     * @param locale locale for the TUV to build
+     * @return {@link TUVBuilder} instance
+     */
+    public TUVBuilder tuvBuilder(String locale) {
+        return new TUVBuilder(this, locale);
+    }
     
     public void addTUV(TUV tuv) {
         tuvs.put(tuv.getLocale(), tuv);
@@ -192,5 +207,11 @@ public class TU {
     }
     public void setChangeDate(Date changeDate) {
         this.changeDate = changeDate;
+    }
+    
+    @Override
+    public String toString() {
+    	// XXX not including most attrs
+    	return "TU(" + tuvs + ")";
     }
 }

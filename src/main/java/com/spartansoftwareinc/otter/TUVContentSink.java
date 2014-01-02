@@ -1,5 +1,7 @@
 package com.spartansoftwareinc.otter;
 
+import java.util.List;
+
 /**
  * Any object that supports TUV content items.
  * <br>
@@ -8,4 +10,5 @@ package com.spartansoftwareinc.otter;
  */
 interface TUVContentSink {
     void addContent(TUVContent content);
+    void addContents(List<TUVContent> contents);
 }
