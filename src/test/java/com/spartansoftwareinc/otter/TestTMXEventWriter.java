@@ -70,6 +70,14 @@ public class TestTMXEventWriter {
         assertEquals(tus, roundtripTUs);
         tmp.delete();
     }
+
+    void verifyAgainstSnippet(String snippetFile, List<TU> tus) throws Exception {
+        Reader r = new InputStreamReader(getClass().getResourceAsStream("/snippets/" + snippetFile + ".tmx"), "UTF-8");
+        TMXReader reader = TMXReader.createTMXEventReader(r);
+        List<TU> roundtripTUs = readTUs(reader);
+        assertEquals(tus.size(), roundtripTUs.size());
+        assertEquals(tus, roundtripTUs);
+    }
     
     @Test
     public void testTu() throws Exception {
@@ -82,6 +90,7 @@ public class TestTMXEventWriter {
             .text(" world")
             .build();
         testRoundtripTUs(Collections.singletonList(tu));
+        verifyAgainstSnippet("testTu", Collections.singletonList(tu));
     }
     
     @Test
@@ -98,6 +107,7 @@ public class TestTMXEventWriter {
             .text(".")
             .build();
         testRoundtripTUs(Collections.singletonList(tu));
+        verifyAgainstSnippet("testTuWithSubflow", Collections.singletonList(tu));
     }
     
     // Same as previous test, except we call build() on the 
@@ -115,6 +125,7 @@ public class TestTMXEventWriter {
          .text(".")
          .build();
         testRoundtripTUs(Collections.singletonList(tu));
+        verifyAgainstSnippet("testTuWithSubflow", Collections.singletonList(tu));
     }
 
     @Test
@@ -125,10 +136,11 @@ public class TestTMXEventWriter {
                 .hi("highlighted")
                 .text(" text").build();
         testRoundtripTUs(Collections.singletonList(tu));
+        verifyAgainstSnippet("testSimpleTuHighlight", Collections.singletonList(tu));
     }
     
     @Test
-    public void testTuHighlighWithTags() throws Exception {
+    public void testTuHighlightWithTags() throws Exception {
         TU tu = new TU("en-US");
         TUVBuilder b = tu.tuvBuilder("en-US");
         b.text("Content containing ")
@@ -138,6 +150,7 @@ public class TestTMXEventWriter {
                     .ept(1, "</b>"))
             .build();
         testRoundtripTUs(Collections.singletonList(tu));
+        verifyAgainstSnippet("testTuHighlightWithTags", Collections.singletonList(tu));
     }
     
     // Same as previous test, except we call build() on the 
@@ -153,6 +166,7 @@ public class TestTMXEventWriter {
                     .ept(1, "</b>").build())
             .build();
         testRoundtripTUs(Collections.singletonList(tu));
+        verifyAgainstSnippet("testTuHighlightWithTags", Collections.singletonList(tu));
     }
     
     @Test
@@ -168,6 +182,7 @@ public class TestTMXEventWriter {
         b.hi(nested).text(".");
         tu.addTUV(b.build());
         testRoundtripTUs(Collections.singletonList(tu));
+        verifyAgainstSnippet("testDeepHiNesting", Collections.singletonList(tu));
     }
     
     
@@ -181,6 +196,7 @@ public class TestTMXEventWriter {
          .text("B");
         tu.addTUV(b.build());
         testRoundtripTUs(Collections.singletonList(tu));
+        verifyAgainstSnippet("testPhAttributes", Collections.singletonList(tu));
     }
     
     @Test
@@ -199,6 +215,7 @@ public class TestTMXEventWriter {
          .ept(1, "</a>");
         tu.addTUV(b.build());
         testRoundtripTUs(Collections.singletonList(tu));
+        verifyAgainstSnippet("testMultipleTags", Collections.singletonList(tu));
     }
     
     @Test
