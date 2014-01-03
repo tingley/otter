@@ -58,7 +58,7 @@ public class TestUtil {
         return events;
     }
     
-    public static TMXReader getTMXReader(String testResource) throws UnsupportedEncodingException {
+    public static TMXReader getTMXReader(String testResource) throws Exception {
         InputStream is = TestUtil.class.getResourceAsStream(testResource);
         return TMXReader.createTMXEventReader(
                             new InputStreamReader(is, "UTF-8"));

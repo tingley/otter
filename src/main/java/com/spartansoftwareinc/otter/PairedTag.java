@@ -31,8 +31,9 @@ public abstract class PairedTag extends InlineTag {
         return i;
     }
     
-    public void setI(int i) {
+    public PairedTag setI(int i) {
         this.i = i;
+        return this;
     }
     
     @Override

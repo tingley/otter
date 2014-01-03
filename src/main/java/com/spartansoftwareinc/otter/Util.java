@@ -1,5 +1,8 @@
 package com.spartansoftwareinc.otter;
 
+import java.io.IOException;
+import java.io.PushbackReader;
+import java.io.Reader;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -10,6 +13,14 @@ import javax.xml.stream.events.Attribute;
 import javax.xml.stream.events.StartElement;
 
 class Util {
+    static Reader stripBOM(Reader r) throws IOException {
+        PushbackReader pushback = new PushbackReader(r, 1);
+        int bom = pushback.read();
+        if (bom != -1 && bom != '\uFEFF') {
+            pushback.unread(bom);
+        }
+        return pushback;
+    }
     static void require(boolean condition, Location location, String message) {
         if (!condition) {
             throw new OtterException(message, location);

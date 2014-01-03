@@ -18,6 +18,13 @@ public class TestTMXEventReader {
     }
     
     @Test
+    public void testBOM() throws Exception {
+        TMXReader reader = TestUtil.getTMXReader("/bom.tmx");
+        List<TU> tus = readTUs(reader);
+        assertEquals(1, tus.size());
+    }
+    
+    @Test
     public void testHeader() throws Exception {
         TMXReader reader = TestUtil.getTMXReader("/header.tmx");
         List<TMXEvent> events = readEvents(reader);

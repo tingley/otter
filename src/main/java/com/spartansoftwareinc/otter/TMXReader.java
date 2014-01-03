@@ -1,11 +1,14 @@
 package com.spartansoftwareinc.otter;
 
+import java.io.IOException;
+import java.io.PushbackReader;
 import java.io.Reader;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Deque;
 import java.util.List;
 
+import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.events.Characters;
@@ -18,15 +21,41 @@ import net.sundell.snax.NodeModel;
 import net.sundell.snax.NodeModelBuilder;
 import net.sundell.snax.SNAXParser;
 import net.sundell.snax.SNAXUserException;
-
 import static com.spartansoftwareinc.otter.TMXConstants.*;
 import static com.spartansoftwareinc.otter.TMXEventType.*;
 import static com.spartansoftwareinc.otter.Util.*;
 
+/**
+ * A class to read Translation Memory Exchange (TMX) 1.4b documents.  TMX
+ * documents are parsed and presented to the user as a series of
+ * {@link TMXEvent} objects.  Errors, if encountered, will be
+ * reported via the {@link ErrorHandler} interface.  Note that the
+ * default behavior for most non-fatal errors is to ignore them.  To
+ * change this behavior, use {@link #setErrorHandler(ErrorHandler)} to
+ * specify a different {@link ErrorHandler} implementation.  Note that
+ * while <code>TMXReadr</code> attempts to detect and report errors in
+ * the TMX structure, it does not validate the document against a DTD. 
+ * <p>
+ * A <code>TMXReader</code> expects to be provided XML data via a
+ * {@link Reader}.  A Unicode byte-order mark (BOM), if present,
+ * will be stripped automatically.
+ * <p>
+ * <code>TMXReader</code> uses the {@link XMLEventReader} mechanism
+ * to parse the underlying XML.  As a result, it is stream-based and
+ * does not need to hold the entire document in memory.
+ * 
+ * @see <a href="http://www.gala-global.org/oscarStandards/tmx/">http://www.gala-global.org/oscarStandards/tmx/</a>
+ */
 public class TMXReader {
     
-    public static TMXReader createTMXEventReader(Reader r) {
-        return new TMXReader(r);
+    /**
+     * Create a new <code>TMXReader</code> to parse TMX from the provided
+     * <code>Reader</code>.
+     * @param r
+     * @return
+     */
+    public static TMXReader createTMXEventReader(Reader r) throws IOException {
+        return new TMXReader(stripBOM(r));
     }
 
     private TMXReader(Reader r) {
@@ -121,17 +150,17 @@ public class TMXReader {
         return null;
     }
     
-    protected void addEvent(TMXEvent event) {
+    private void addEvent(TMXEvent event) {
         events.add(event);
     }
     
-    protected void addTUVContent(TUVContent content) {
+    private void addTUVContent(TUVContent content) {
         contentStack.peek().addContent(content);
     }
-    protected void addTextContent(String text) {
+    private void addTextContent(String text) {
         addTUVContent(new TextContent(text));
     }
-    protected void addCodeContent(String codes) {
+    private void addCodeContent(String codes) {
         addTUVContent(new CodeContent(codes));
     }
     

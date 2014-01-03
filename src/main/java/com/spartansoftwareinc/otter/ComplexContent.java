@@ -1,7 +1,6 @@
 package com.spartansoftwareinc.otter;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -13,8 +12,7 @@ import java.util.List;
 public class ComplexContent {
     private List<TUVContent> content = new ArrayList<TUVContent>();
     
-    public ComplexContent(TUVContent... contents) {
-        content.addAll(Arrays.asList(contents));
+    public ComplexContent() {
     }
     
     /**

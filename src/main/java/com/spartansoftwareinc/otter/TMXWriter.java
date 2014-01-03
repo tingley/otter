@@ -16,8 +16,40 @@ import javax.xml.stream.events.Attribute;
 
 import static com.spartansoftwareinc.otter.TMXConstants.*;
 
+/**
+ * A class to write TMX 1.4b documents.  A <code>TMXWriter</code>
+ * may be either fed raw {@link TMXEvent} objects (such as those
+ * provided from a {@link TMXReader}, or individual methods may
+ * be called to write out particular document structures.
+ * <p>
+ * As a TMX document is structured, <code>TMXWriter</code> requires
+ * that certain types of data be written at certain places in the document.
+ * For example, an attempt to call {@link #writeHeader}
+ * after a call to {@link #startBody} has been made will result in an
+ * error.
+ * <p>
+ * <code>TMXWriter</code> interacts with a <code>Writer</code>
+ * rather than an <code>OutputStream</code>, so it does not specify
+ * the encoding of the data it writes.  Furthermore, it does not write
+ * a Unicode byte-order mark (BOM).  If a BOM is needed, it should be 
+ * written out explicitly before passing the <code>Writer</code> to
+ * <code>TMXWriter</code>. 
+ * <p>
+ * <code>TMXWriter</code> uses the {@link XMLEventWriter} mechanism
+ * to construct the underlying XML.  As a result, it is stream-based and
+ * does not hold the entire document in memory.
+ * 
+ * @see <a href="http://www.gala-global.org/oscarStandards/tmx/">http://www.gala-global.org/oscarStandards/tmx/</a>
+ */
 public class TMXWriter {
 
+    /**
+     * Create a new <code>TMXWriter</code> that writes TMX to the specified 
+     * <code>Writer</code>.
+     * @param w 
+     * @return
+     * @throws XMLStreamException
+     */
     public static TMXWriter createTMXEventWriter(Writer w) 
                 throws XMLStreamException {
         return new TMXWriter(w);
@@ -31,7 +63,12 @@ public class TMXWriter {
         xmlWriter = factory.createXMLEventWriter(w);
         eventFactory = XMLEventFactory.newInstance();
     }
-        
+    
+    /**
+     * Write a raw {@link TMXEvent}.
+     * @param event
+     * @throws XMLStreamException
+     */
     public void writeEvent(TMXEvent event) throws XMLStreamException {
         switch (event.getEventType()) {
         case START_TMX:
@@ -57,6 +94,11 @@ public class TMXWriter {
         }
     }
     
+    /**
+     * Begin writing a TMX document, including the <code>&lt;tmx&gt;</code>
+     * element itself and version information.
+     * @throws XMLStreamException
+     */
     public void startTMX() throws XMLStreamException {
         xmlWriter.add(eventFactory.createStartDocument());
         ArrayList<Attribute> attrs = new ArrayList<Attribute>();
@@ -64,11 +106,21 @@ public class TMXWriter {
         xmlWriter.add(eventFactory.createStartElement(TMX, attrs.iterator(), null));
     }
     
+    /**
+     * Finish writing a TMX document.
+     * @throws XMLStreamException
+     */
     public void endTMX() throws XMLStreamException {
         xmlWriter.add(eventFactory.createEndElement(TMX, null));
         xmlWriter.add(eventFactory.createEndDocument());
     }
     
+    /**
+     * Write a TMX Header.  This should include any notes or properties
+     * that should be included in the header declaration.
+     * @param h header information, including any notes and properties
+     * @throws XMLStreamException
+     */
     public void writeHeader(Header h) throws XMLStreamException {
         ArrayList<Attribute> attrs = new ArrayList<Attribute>();
         // TODO: enforce attr requirements
@@ -105,7 +157,7 @@ public class TMXWriter {
         }
     }
     
-    public void writeProperty(String type, String value) throws XMLStreamException {
+    void writeProperty(String type, String value) throws XMLStreamException {
         ArrayList<Attribute> attrs = new ArrayList<Attribute>();
         attrs.add(eventFactory.createAttribute(TYPE, type));
         xmlWriter.add(eventFactory.createStartElement(PROPERTY, attrs.iterator(), null));
@@ -113,20 +165,34 @@ public class TMXWriter {
         xmlWriter.add(eventFactory.createEndElement(PROPERTY, null));
     }
     
-    public void writeNote(String value) throws XMLStreamException {
+    void writeNote(String value) throws XMLStreamException {
         xmlWriter.add(eventFactory.createStartElement(NOTE, null, null));
         xmlWriter.add(eventFactory.createCharacters(value));
         xmlWriter.add(eventFactory.createEndElement(NOTE, null));
     }
     
+    /**
+     * Begin writing the body of a TMX document.  All TUs must
+     * be written within the body.
+     * @throws XMLStreamException
+     */
     public void startBody() throws XMLStreamException {
         xmlWriter.add(eventFactory.createStartElement(BODY, null, null));
     }
     
+    /**
+     * Finish writing the body of a TMX document.
+     * @throws XMLStreamException
+     */
     public void endBody() throws XMLStreamException {
         xmlWriter.add(eventFactory.createEndElement(BODY, null));
     }
     
+    /**
+     * Write a {@link TU} and all of its data.
+     * @param tu
+     * @throws XMLStreamException
+     */
     public void writeTu(TU tu) throws XMLStreamException {
         ArrayList<Attribute> tuAttrs = new ArrayList<Attribute>();
         attr(tuAttrs, TUID, tu.getId());

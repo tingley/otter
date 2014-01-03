@@ -34,6 +34,10 @@ public class BeginTag extends PairedTag implements NumberedTag {
         this.x = x;
     }
 
+    public BeginTag setI(int i) {
+        return (BeginTag)super.setI(i);
+    }
+    
     public int getX() {
         return x;
     }

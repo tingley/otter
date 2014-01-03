@@ -18,6 +18,10 @@ public class EndTag extends PairedTag {
         super(i, initialCodes);
     }
 
+    public EndTag setI(int i) {
+        return (EndTag)super.setI(i);
+    }
+
     @Override
     public boolean equals(Object o) {
         return super.equals(o) && (o instanceof EndTag);
