@@ -197,6 +197,8 @@ public class TestTMXEventWriter {
                      .setType("link"))
          .text("C")
          .ept(1, "</a>");
+        tu.addTUV(b.build());
+        testRoundtripTUs(Collections.singletonList(tu));
     }
     
     @Test
