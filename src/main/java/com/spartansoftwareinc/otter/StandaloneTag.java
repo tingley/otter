@@ -2,6 +2,8 @@ package com.spartansoftwareinc.otter;
 
 import static com.spartansoftwareinc.otter.Util.eq;
 
+import java.util.List;
+
 /**
  * Base class for standalone inline tags.
  */
@@ -40,6 +42,30 @@ public abstract class StandaloneTag extends InlineTag implements NumberedTag {
         this.type = type;
     }
     
+    /**
+     * Add an item to the contents of this tag.  StandaloneTag objects
+     * are restricted to {@link CodeContent} and {@link Subflow} content
+     * items.
+     * 
+     * @param content content item to add to this tag
+     * @throws IllegalArgumentException if an invalid content item is added 
+     */
+    @Override
+    public StandaloneTag addContent(TUVContent content) {
+        return (StandaloneTag)super.addContent(content);
+    }
+
+    /**
+     * Add multiple items to the contents of this tag.  StandaloneTag objects
+     * are restricted to {@link CodeContent} and {@link Subflow} content
+     * items.
+     * 
+     * @param contents
+     */
+    public StandaloneTag addContents(List<TUVContent> contents) {
+        return (StandaloneTag)super.addContents(contents);
+    }
+
     public int getX() {
         return x;
     }

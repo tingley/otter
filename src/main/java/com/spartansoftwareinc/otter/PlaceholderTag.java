@@ -2,9 +2,15 @@ package com.spartansoftwareinc.otter;
 
 import static com.spartansoftwareinc.otter.Util.eq;
 
+import java.util.List;
+
 public class PlaceholderTag extends StandaloneTag {
     private String assoc;
     
+    
+    public PlaceholderTag() {
+        super();
+    }
     public PlaceholderTag(String initialCodeData) {
         super(initialCodeData);
     }
@@ -28,10 +34,30 @@ public class PlaceholderTag extends StandaloneTag {
         super(x, type, content);
     }
     
-    public PlaceholderTag() {
-        super();
+    /**
+     * Add an item to the contents of this tag.  PlaceholderTag objects
+     * are restricted to {@link CodeContent} and {@link Subflow} content
+     * items.
+     * 
+     * @param content content item to add to this tag
+     * @throws IllegalArgumentException if an invalid content item is added 
+     */
+    @Override
+    public PlaceholderTag addContent(TUVContent content) {
+        return (PlaceholderTag)super.addContent(content);
     }
-    
+
+    /**
+     * Add multiple items to the contents of this tag.  PlaceholderTag objects
+     * are restricted to {@link CodeContent} and {@link Subflow} content
+     * items.
+     * 
+     * @param contents
+     */
+    public PlaceholderTag addContents(List<TUVContent> contents) {
+        return (PlaceholderTag)super.addContents(contents);
+    }
+
     public String getAssoc() {
         return assoc;
     }

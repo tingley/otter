@@ -3,45 +3,116 @@ package com.spartansoftwareinc.otter;
 import java.util.List;
 import java.util.ArrayList;
 
+/**
+ * Representation of a <code>&lt;tuv&gt;</code> element and all 
+ * of its child content.  A <code>TUV</code> associates a locale with
+ * a translation representation comprised of {@link TUVContent} objects.
+ * These may represent literal text, various types of inline tag, etc.
+ */
 public class TUV extends BaseTUVContentSink {
     private String locale;
     private List<Property> properties = new ArrayList<Property>();
     private List<Note> notes = new ArrayList<Note>();
-    
+
     public TUV(String locale) {
         this.locale = locale;
     }
-    
+
+    /**
+     * Add an item to the contents of this TUV.  TUVs
+     * are restricted to {@link TextContent}, {@link InlineTag}, and
+     * {@link HighlightTag} content items.
+     *
+     * @param content content item to add to this object
+     * @throws IllegalArgumentException if an invalid content item is added 
+     */
+    public TUV addContent(TUVContent content) {
+        return (TUV)super.addContent(content);
+    }
+
+    /**
+     * Ad multiple items to the contents of this TUV.  TUVs
+     * are restricted to {@link TextContent}, {@link InlineTag}, and
+     * {@link HighlightTag} content items.
+     *
+     * @param contents
+     */
+    public BaseTUVContentSink addContents(List<TUVContent> contents) {
+        return (TUV)super.addContents(contents);
+    }
+
+    /**
+     * Get the locale string for this TUV.
+     * @return
+     */
     public String getLocale() {
         return locale;
     }
-    
-    public void setLocale(String locale) {
+
+    /**
+     * Set the locale string for this TUV.
+     * @param locale
+     */
+    public TUV setLocale(String locale) {
         this.locale = locale;
+        return this;
     }
 
+    /**
+     * Get the properties for this TUV.  The list returned by 
+     * this method is mutable.
+     * @return
+     */
     public List<Property> getProperties() {
         return properties;
     }
 
-    public void setProperties(List<Property> properties) {
-        this.properties = properties;
+    /**
+     * Set the properties for this TUV.  This method will make a 
+     * copy of the list passed to it.
+     * @param properties
+     */
+    public TUV setProperties(List<Property> properties) {
+        this.properties = new ArrayList<Property>(properties);
+        return this;
     }
 
-    public void addProperty(Property property) {
+    /**
+     * Add a property to this TUV.
+     * @param property
+     */
+    public TUV addProperty(Property property) {
         properties.add(property);
+        return this;
     }
 
+    /**
+     * Get the notes for this TUV.  The list returned by this method
+     * is mutable.
+     * @return
+     */
     public List<Note> getNotes() {
         return notes;
     }
 
-    public void setNotes(List<Note> notes) {
-        this.notes = notes;
+    /**
+     * Set the notes for this TUV.  This method will make a 
+     * copy of the list passed to it.
+     * @param notes
+     */
+    public TUV setNotes(List<Note> notes) {
+        this.notes = new ArrayList<Note>(notes);
+        return this;
     }
     
-    public void addNote(Note note) {
+    /**
+     * Add a note to this TUV.
+     * @param note
+     * @return
+     */
+    public TUV addNote(Note note) {
         notes.add(note);
+        return this;
     }
 
     @Override

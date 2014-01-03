@@ -33,24 +33,26 @@ public abstract class InlineTag implements TagContent {
      * @throws IllegalArgumentException if an invalid content item is added 
      */
     @Override
-    public void addContent(TUVContent content) {
+    public InlineTag addContent(TUVContent content) {
         if (!(content instanceof CodeContent) && !(content instanceof Subflow)) {
             throw new IllegalArgumentException("Illegal paired tag content: " + content);
         }
         contents.add(content);
+        return this;
     }
 
     /**
      * Ad multiple items to the contents of this tag.  TUV objects
-     * are restricted to {@link TextContent}, {@link InlineTag}, and
-     * {@link HighlightTag} content items.
+     * are restricted to {@link CodeContent} and {@link Subflow} content
+     * items.
      * 
      * @param contents
      */
-    public void addContents(List<TUVContent> contents) {
+    public InlineTag addContents(List<TUVContent> contents) {
         for (TUVContent content : contents) {
             addContent(content);
         }
+        return this;
     }
 
     public List<TUVContent> getContents() {

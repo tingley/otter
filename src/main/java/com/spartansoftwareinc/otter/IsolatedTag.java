@@ -1,5 +1,7 @@
 package com.spartansoftwareinc.otter;
 
+import java.util.List;
+
 /**
  * A <code>&lt;it&gt;</code> tag.
  */
@@ -23,9 +25,18 @@ public class IsolatedTag extends StandaloneTag {
             return null;
         }
     }
-    
+
     private Pos pos;
-    
+
+    public IsolatedTag() {
+        super();
+    }
+
+    public IsolatedTag(Pos pos) {
+        super();
+        this.pos = pos;
+    }
+
     public IsolatedTag(Pos pos, int x, String initialCodeData) {
         super(x, initialCodeData);
         this.pos = pos;
@@ -35,7 +46,7 @@ public class IsolatedTag extends StandaloneTag {
         super(initialCodeData);
         this.pos = pos;
     }
-    
+
     public IsolatedTag(Pos pos, int x, ComplexContent content) {
         super(x, content);
         this.pos = pos;
@@ -45,14 +56,29 @@ public class IsolatedTag extends StandaloneTag {
         super(content);
         this.pos = pos;
     }
-
-    public IsolatedTag(Pos pos) {
-        super();
-        this.pos = pos;
-    }
     
-    public IsolatedTag() {
-        super();
+    /**
+     * Add an item to the contents of this tag.  IsolatedTag objects
+     * are restricted to {@link CodeContent} and {@link Subflow} content
+     * items.
+     * 
+     * @param content content item to add to this tag
+     * @throws IllegalArgumentException if an invalid content item is added 
+     */
+    @Override
+    public IsolatedTag addContent(TUVContent content) {
+        return (IsolatedTag)super.addContent(content);
+    }
+
+    /**
+     * Add multiple items to the contents of this tag.  IsolatedTag objects
+     * are restricted to {@link CodeContent} and {@link Subflow} content
+     * items.
+     * 
+     * @param contents
+     */
+    public IsolatedTag addContents(List<TUVContent> contents) {
+        return (IsolatedTag)super.addContents(contents);
     }
     
     public Pos getPos() {

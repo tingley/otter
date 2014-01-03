@@ -9,6 +9,6 @@ import java.util.List;
  * of TUVContent items they support. 
  */
 interface TUVContentSink {
-    void addContent(TUVContent content);
-    void addContents(List<TUVContent> contents);
+    TUVContentSink addContent(TUVContent content);
+    TUVContentSink addContents(List<TUVContent> contents);
 }
