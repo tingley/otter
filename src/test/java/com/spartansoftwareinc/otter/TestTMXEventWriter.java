@@ -93,6 +93,15 @@ public class TestTMXEventWriter {
         verifyAgainstSnippet("testTu", Collections.singletonList(tu));
     }
     
+    @Test(expected = IllegalStateException.class)
+    public void testTUVBuilderMultipleBuildCalls() {
+        TU tu = new TU("en-US");
+        TUVBuilder b = tu.tuvBuilder("en-US");
+        b.text("Hello world");
+        b.build();
+        b.build(); // This should throw an exception
+    }
+
     @Test
     public void testTuWithSubflow() throws Exception {
         TU tu = new TU("en-US");

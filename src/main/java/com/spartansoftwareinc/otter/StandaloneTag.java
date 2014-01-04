@@ -66,19 +66,37 @@ public abstract class StandaloneTag extends InlineTag implements NumberedTag {
         return (StandaloneTag)super.addContents(contents);
     }
 
+    /**
+     * Return the value of the <code>x</code> attribute for this tag.
+     * @return value of <code>x</code> attribute
+     */
     public int getX() {
         return x;
     }
     
+    /**
+     * Set the value of the <code>x</code> attribute for this tag
+     * @param x new value
+     * @return this
+     */
     public StandaloneTag setX(int x) {
         this.x = x;
         return this;
     }
     
+    /**
+     * Return the value of the <code>type</code> attribute for this tag.
+     * @return value of <code>type</code> attribute
+     */
     public String getType() {
         return type;
     }
 
+    /**
+     * Set the value of the <code>type</code> attribute for this tag
+     * @param x new value
+     * @return this
+     */
     public StandaloneTag setType(String type) {
         this.type = type;
         return this;

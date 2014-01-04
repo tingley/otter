@@ -25,3 +25,6 @@
 - writer needs to throw errors if you call things at the wrong time
 - ensure order of parameters in tag constructors is consistent
 - review some tag constructors, I think I may have too many (esp PlaceholderTag)
+- what is the correct behavior of calling TUVBuilder.build() multiple times
+- support other <note> attributes: o-encoding, xml:lang
+- support other <property> attributes: o-encoding, xml:lang

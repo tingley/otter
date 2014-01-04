@@ -1,6 +1,5 @@
 package com.spartansoftwareinc.otter;
 
-
 /**
  * Convenience class to simplify the creation 
  * of mixed content TUs.
@@ -8,6 +7,7 @@ package com.spartansoftwareinc.otter;
 public class TUVBuilder {
 	private TU tu = null;
 	private TUV tuv;
+	private boolean built = false;
 	
 	TUVBuilder(String locale) {
 		tuv = new TUV(locale);
@@ -27,7 +27,21 @@ public class TUVBuilder {
 	    return new TUVBuilder(tuv.getLocale());
 	}
 	
+	/**
+	 * Generate a <code>TUV</code> based on the content that has been
+	 * added to this <code>TUVBuilder</code>.  This <code>TUV<code> will also
+	 * be added to the {@link TU} that created this object.
+	 * <p>   
+	 * Calling this method multiple times will cause an 
+	 * {@link IllegalStateException} to be thrown.
+	 * @return TUV
+	 */
 	public TUV build() {
+	    if (built) {
+	        throw new IllegalStateException(
+	                "TUVBuilder.built() called multiple times");
+	    }
+	    built = true;
 	    if (tu != null) {
 	        tu.addTUV(tuv);
 	    }

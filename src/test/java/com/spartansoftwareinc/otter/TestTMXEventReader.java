@@ -120,8 +120,8 @@ public class TestTMXEventReader {
         assertNotNull(frTuv);
         List<Property> tuvProperties = frTuv.getProperties();
         assertEquals(1, tuvProperties.size());
-        assertEquals("x-type", tuvProperties.get(0).type);
-        assertEquals("TEXT", tuvProperties.get(0).value);
+        assertEquals("x-type", tuvProperties.get(0).getType());
+        assertEquals("TEXT", tuvProperties.get(0).getValue());
         assertEquals(0, frTuv.getNotes().size());
     }
     
@@ -134,8 +134,8 @@ public class TestTMXEventReader {
         TU tu = tus.get(0);
         List<Property> properties = tu.getProperties();
         assertEquals(1, properties.size());
-        assertEquals("x-type", properties.get(0).type);
-        assertEquals("TEXT", properties.get(0).value);
+        assertEquals("x-type", properties.get(0).getType());
+        assertEquals("TEXT", properties.get(0).getValue());
 
         List<Note> notes = tu.getNotes();
         assertEquals(1, notes.size());

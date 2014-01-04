@@ -42,7 +42,7 @@ public abstract class InlineTag implements TagContent {
     }
 
     /**
-     * Ad multiple items to the contents of this tag.  TUV objects
+     * Add multiple items to the contents of this tag.  TUV objects
      * are restricted to {@link CodeContent} and {@link Subflow} content
      * items.
      * 
@@ -55,6 +55,10 @@ public abstract class InlineTag implements TagContent {
         return this;
     }
 
+    /**
+     * Get the contents of this object.
+     * @return list of {@link TUVContent} items
+     */
     public List<TUVContent> getContents() {
         return contents;
     }
