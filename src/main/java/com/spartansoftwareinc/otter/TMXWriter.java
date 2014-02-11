@@ -143,7 +143,7 @@ public class TMXWriter {
         addAttr(attrs, DATATYPE, h.getDataType());
         xmlWriter.add(eventFactory.createStartElement(HEADER, attrs.iterator(), null));
         for (Property property : h.getProperties()) {
-            writeProperty(property.getType(), property.getValue());
+            writeProperty(property.getType(), property.getValue(), property.getEncoding());
         }
         for (Note note : h.getNotes()) {
             writeNote(note.getContent());
@@ -157,9 +157,12 @@ public class TMXWriter {
         }
     }
     
-    void writeProperty(String type, String value) throws XMLStreamException {
+    void writeProperty(String type, String value, String encoding) throws XMLStreamException {
         ArrayList<Attribute> attrs = new ArrayList<Attribute>();
         attrs.add(eventFactory.createAttribute(TYPE, type));
+        if (encoding != null) {
+            attrs.add(eventFactory.createAttribute(ENCODING, encoding));
+        }
         xmlWriter.add(eventFactory.createStartElement(PROPERTY, attrs.iterator(), null));
         xmlWriter.add(eventFactory.createCharacters(value));
         xmlWriter.add(eventFactory.createEndElement(PROPERTY, null));

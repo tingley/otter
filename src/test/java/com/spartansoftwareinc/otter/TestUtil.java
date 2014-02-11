@@ -6,17 +6,18 @@ import static org.junit.Assert.assertNotNull;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.assertTrue;
 
 public class TestUtil {
-    public static void checkProperty(Property p, String propertyType, String value) {
+    public static void checkProperty(Property p, String propertyType, String value,
+                                     String encoding) {
         assertNotNull(p);
         assertEquals(propertyType, p.getType());
         assertEquals(value, p.getValue());
+        assertEquals(encoding, p.getEncoding());
     }
     public static void checkNote(Note n, String note) {
         assertNotNull(n);

@@ -270,12 +270,13 @@ public class TMXReader {
     }
     abstract class PropertyHandler extends DefaultElementHandler<SegmentBuilder> {
         private StringBuilder value = new StringBuilder();
-        private String type = null;
+        private String type = null, encoding = null;
         @Override
         public void startElement(StartElement element, SegmentBuilder data)
                 throws SNAXUserException {
             value.setLength(0);
             type = attrVal(element, TYPE);
+            encoding = attrVal(element, ENCODING);
         }
         @Override
         public void characters(StartElement parent, Characters characters,
@@ -286,7 +287,7 @@ public class TMXReader {
         public void endElement(EndElement element, SegmentBuilder data)
                 throws SNAXUserException {
             require(type != null, element.getLocation(), "Property type was not set");
-            handleProperty(data, new Property(type, value.toString()));
+            handleProperty(data, new Property(type, value.toString()).setEncoding(encoding));
         }
         abstract void handleProperty(SegmentBuilder data, Property property);
     }

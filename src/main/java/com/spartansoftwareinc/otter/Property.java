@@ -8,6 +8,7 @@ import static com.spartansoftwareinc.otter.Util.eq;
  */
 public class Property {
     private String type, value;
+    private String encoding;
     
     public Property(String type, String value) {
         this.type = type;
@@ -49,12 +50,32 @@ public class Property {
         this.value = value;
         return this;
     }
+    
+    /**
+     * Get the value of the <code>o-encoding</code> attribute
+     * for this property.
+     * @return encoding value 
+     */
+    public String getEncoding() {
+        return encoding;
+    }
+
+    /**
+     * Set the value of the <code>o-encoding</code> attribute for
+     * this property.  No validation is performed.
+     * @param encoding encoding for this property
+     */
+    public Property setEncoding(String encoding) {
+        this.encoding = encoding;
+        return this;
+    }
 
     @Override
     public int hashCode() {
         return new Hasher()
             .add(type)
             .add(value)
+            .add(encoding)
             .value();
     }
     
@@ -63,6 +84,18 @@ public class Property {
         if (o == this) return true;
         if (o == null || !(o instanceof Property)) return false;
         Property p = (Property)o;
-        return eq(type, p.type) && eq(value, p.value);
+        return eq(type, p.type) && eq(value, p.value) && 
+               eq(encoding, p.encoding);
+    }
+    
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Property(type='" + type + "' value='" + value + "'");
+        if (encoding != null) {
+            sb.append(" encoding='" + encoding + "'");
+        }
+        sb.append(")");
+        return sb.toString();
     }
 }

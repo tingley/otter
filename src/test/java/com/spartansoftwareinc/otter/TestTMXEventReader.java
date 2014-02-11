@@ -50,9 +50,9 @@ public class TestTMXEventReader {
 
         List<Property> properties = header.getProperties();
         assertEquals(3, properties.size());
-        checkProperty(properties.get(0), "type1", "Property");
-        checkProperty(properties.get(1), "type2", "Property with o-encoding");
-        checkProperty(properties.get(2), "type3", "Property with lang \"fr\"");
+        checkProperty(properties.get(0), "type1", "Property", null);
+        checkProperty(properties.get(1), "type2", "Property with o-encoding", "ASCII");
+        checkProperty(properties.get(2), "type3", "Property with lang \"fr\"", null);
         List<Note> notes = header.getNotes();
         assertEquals(2, notes.size());
         checkNote(notes.get(0), "This is a note with an encoding.");
