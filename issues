@@ -2,8 +2,6 @@
     - multiple bpts with the same @i
     - Make sure that user's can't do thing like add <hi> tags 
       in invalid locations.
-- add a factory class that takes a XMLInputFactory?
-    - means I would need to handle non-consolidated characters?
 - segmentbuilder may not be needed
 - document everything
 - allow for some filter to ignore certain properties

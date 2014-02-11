@@ -55,11 +55,14 @@ public class TMXWriter {
         return new TMXWriter(w);
     }
 
+    // Thread-safe after initialization
+    private static XMLOutputFactory factory = XMLOutputFactory.newFactory();
+    
     private XMLEventWriter xmlWriter;
+    // XMLEventFactory is not thread-safe 
     private XMLEventFactory eventFactory;
     
     private TMXWriter(Writer w) throws XMLStreamException {
-        XMLOutputFactory factory = XMLOutputFactory.newFactory();
         xmlWriter = factory.createXMLEventWriter(w);
         eventFactory = XMLEventFactory.newInstance();
     }

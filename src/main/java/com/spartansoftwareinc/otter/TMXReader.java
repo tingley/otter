@@ -57,15 +57,20 @@ public class TMXReader {
         return new TMXReader(stripBOM(r));
     }
 
-    private TMXReader(Reader r) {
-        XMLInputFactory factory = XMLInputFactory.newFactory();
-        factory.setProperty(XMLInputFactory.IS_COALESCING, true);
+    // Thread-safe after initialization
+    private static XMLInputFactory inputFactory;
+    static {
+        inputFactory = XMLInputFactory.newFactory();
+        inputFactory.setProperty(XMLInputFactory.IS_COALESCING, true);
         // Disable DTD loading - this is necessary to prevent
         // Woodstox (if present) from bombing out when it can't find
         // the TMX DTD.
-        factory.setProperty(XMLInputFactory.SUPPORT_DTD, false);
+        inputFactory.setProperty(XMLInputFactory.SUPPORT_DTD, false);
+    }
+    
+    private TMXReader(Reader r) {
         try {
-            parser = SNAXParser.createParser(factory, buildModel());
+            parser = SNAXParser.createParser(inputFactory, buildModel());
             parser.startParsing(r, new SegmentBuilder(this));
         }
         catch (XMLStreamException e) {
