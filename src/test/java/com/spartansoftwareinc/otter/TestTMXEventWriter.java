@@ -28,9 +28,10 @@ public class TestTMXEventWriter {
         TMXWriter writer = TMXWriter.createTMXEventWriter(w);
         writer.startTMX();
         Header header = getHeader();
-        Property encodingProperty = new Property("type2", "value2");
-        encodingProperty.setEncoding("UTF-8");
+        Property encodingProperty = new Property("type2", "value2").setEncoding("UTF-8");
         header.addProperty(encodingProperty);
+        Property langProperty = new Property("type3", "value3").setLang("en-US");
+        header.addProperty(langProperty);
         writer.writeHeader(header);
         writer.startBody();
         writer.endBody();
@@ -45,6 +46,7 @@ public class TestTMXEventWriter {
         assertNotNull(rHeader);
         assertEquals(header.getProperties().get(0), rHeader.getProperties().get(0));
         assertEquals(encodingProperty, rHeader.getProperties().get(1));
+        assertEquals(langProperty, rHeader.getProperties().get(2));
         assertEquals(header, rHeader);
         checkNote(header.getNotes().get(0), "This is a note");
         checkEvent(events.get(2), START_BODY);

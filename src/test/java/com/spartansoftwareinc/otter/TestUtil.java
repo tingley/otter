@@ -13,11 +13,12 @@ import static org.junit.Assert.assertTrue;
 
 public class TestUtil {
     public static void checkProperty(Property p, String propertyType, String value,
-                                     String encoding) {
+                                     String encoding, String xmlLang) {
         assertNotNull(p);
         assertEquals(propertyType, p.getType());
         assertEquals(value, p.getValue());
         assertEquals(encoding, p.getEncoding());
+        assertEquals(xmlLang, p.getLang());
     }
     public static void checkNote(Note n, String note) {
         assertNotNull(n);

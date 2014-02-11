@@ -143,7 +143,7 @@ public class TMXWriter {
         addAttr(attrs, DATATYPE, h.getDataType());
         xmlWriter.add(eventFactory.createStartElement(HEADER, attrs.iterator(), null));
         for (Property property : h.getProperties()) {
-            writeProperty(property.getType(), property.getValue(), property.getEncoding());
+            writeProperty(property);
         }
         for (Note note : h.getNotes()) {
             writeNote(note.getContent());
@@ -157,14 +157,17 @@ public class TMXWriter {
         }
     }
     
-    void writeProperty(String type, String value, String encoding) throws XMLStreamException {
+    void writeProperty(Property prop) throws XMLStreamException {
         ArrayList<Attribute> attrs = new ArrayList<Attribute>();
-        attrs.add(eventFactory.createAttribute(TYPE, type));
-        if (encoding != null) {
-            attrs.add(eventFactory.createAttribute(ENCODING, encoding));
+        attrs.add(eventFactory.createAttribute(TYPE, prop.getType()));
+        if (prop.getEncoding() != null) {
+            attrs.add(eventFactory.createAttribute(ENCODING, prop.getEncoding()));
+        }
+        if (prop.getLang() != null) {
+            attrs.add(eventFactory.createAttribute(XMLLANG, prop.getLang()));
         }
         xmlWriter.add(eventFactory.createStartElement(PROPERTY, attrs.iterator(), null));
-        xmlWriter.add(eventFactory.createCharacters(value));
+        xmlWriter.add(eventFactory.createCharacters(prop.getValue()));
         xmlWriter.add(eventFactory.createEndElement(PROPERTY, null));
     }
     

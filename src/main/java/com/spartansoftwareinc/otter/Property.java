@@ -8,7 +8,7 @@ import static com.spartansoftwareinc.otter.Util.eq;
  */
 public class Property {
     private String type, value;
-    private String encoding;
+    private String encoding, lang;
     
     public Property(String type, String value) {
         this.type = type;
@@ -53,7 +53,7 @@ public class Property {
     
     /**
      * Get the value of the <code>o-encoding</code> attribute
-     * for this property.
+     * for this property, if present.
      * @return encoding value 
      */
     public String getEncoding() {
@@ -64,9 +64,30 @@ public class Property {
      * Set the value of the <code>o-encoding</code> attribute for
      * this property.  No validation is performed.
      * @param encoding encoding for this property
+     * @return property object
      */
     public Property setEncoding(String encoding) {
         this.encoding = encoding;
+        return this;
+    }
+    
+    /**
+     * Get the value of the <code>xml:lang</code> attribute
+     * for this property, if present.
+     * @return xml:lang value
+     */
+    public String getLang() {
+        return lang;
+    }
+
+    /**
+     * Set the value of the <code>xml:lang</code> attribute for
+     * this property.  No validation is performed.
+     * @param lang xml:lang value for this property
+     * @return property object
+     */
+    public Property setLang(String lang) {
+        this.lang = lang;
         return this;
     }
 
@@ -76,6 +97,7 @@ public class Property {
             .add(type)
             .add(value)
             .add(encoding)
+            .add(lang)
             .value();
     }
     
@@ -85,7 +107,7 @@ public class Property {
         if (o == null || !(o instanceof Property)) return false;
         Property p = (Property)o;
         return eq(type, p.type) && eq(value, p.value) && 
-               eq(encoding, p.encoding);
+               eq(encoding, p.encoding) && eq(lang, p.lang);
     }
     
     @Override
@@ -93,7 +115,10 @@ public class Property {
         StringBuilder sb = new StringBuilder();
         sb.append("Property(type='" + type + "' value='" + value + "'");
         if (encoding != null) {
-            sb.append(" encoding='" + encoding + "'");
+            sb.append(" o-encoding='" + encoding + "'");
+        }
+        if (lang != null) {
+            sb.append(" xml:lang='" + lang + "'");
         }
         sb.append(")");
         return sb.toString();
