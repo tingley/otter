@@ -24,40 +24,24 @@ public class BeginTag extends PairedTag implements NumberedTag {
     public BeginTag(int i) {
         super(i);
     }
-
-    /**
-     * Constructor, specifying the <code>i</code> and 
-     * <code>x</code> attribute values.
-     * @param x value of the optional <code>x</code> attribute
-     * @param i value of the required <code>i</code> attribute
-     */
-    public BeginTag(int x, int i) {
-        super(i);
-        this.x = x;
-    }
-
     /**
      * Constructor, specifying the <code>i</code> and <code>x</code>
      * attribute values and the native code data for this tag.
-     * @param x value of the optional <code>x</code> attribute
      * @param i value of the required <code>i</code> attribute
      * @param codeData native code data for this tag
      */
-    public BeginTag(int x, int i, String codeData) {
+    public BeginTag(int i, String codeData) {
         super(i, codeData);
-        this.x = x;
     }
 
     /**
      * Constructor, specifying the <code>i</code> and <code>x</code>
      * attribute values and the complex code content for  this tag.
-     * @param x value of the optional <code>x</code> attribute
      * @param i value of the required <code>i</code> attribute
      * @param codeData complex code data for this tag
      */
-    public BeginTag(int x, int i, ComplexContent content) {
+    public BeginTag(int i, ComplexContent content) {
         super(i, content);
-        this.x = x;
     }
 
     /**

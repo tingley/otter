@@ -37,18 +37,8 @@ public class IsolatedTag extends StandaloneTag {
         this.pos = pos;
     }
 
-    public IsolatedTag(Pos pos, int x, String initialCodeData) {
-        super(x, initialCodeData);
-        this.pos = pos;
-    }
-
     public IsolatedTag(Pos pos, String initialCodeData) {
         super(initialCodeData);
-        this.pos = pos;
-    }
-
-    public IsolatedTag(Pos pos, int x, ComplexContent content) {
-        super(x, content);
         this.pos = pos;
     }
 

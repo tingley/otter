@@ -202,10 +202,9 @@ public class TestTMXEventWriter {
     @Test
     public void testPhAttributes() throws Exception {
         TU tu = new TU("en-US");
-        // <seg>A<ph x="1" type="break" assoc="p">&lt;br/&gt;</ph>B</seg>
         TUVBuilder b = tu.tuvBuilder("en-US");
         b.text("A")
-         .tag(new PlaceholderTag(1, "index", "<br/>").setAssoc("p"))
+         .tag(new PlaceholderTag("<br/>").setX(1).setType("index").setAssoc("p"))
          .text("B");
         tu.addTUV(b.build());
         testRoundtripTUs(Collections.singletonList(tu));
@@ -217,12 +216,12 @@ public class TestTMXEventWriter {
         TU tu = new TU("en-US");
         TUVBuilder b = tu.tuvBuilder("en-US");
         b.text("A")
-         .tag(new PlaceholderTag(1, "index", "<br />"))
+         .tag(new PlaceholderTag("<br />").setX(1).setType("index"))
          .text("B")
-         .tag(new BeginTag(2, 1, new ComplexContent()
-                                             .addCodes("<a href='#' title='")
-                                             .addSubflow(b.nested().text("this is translatable"))
-                                             .addCodes("'>"))
+         .tag(new BeginTag(1, new ComplexContent()
+                                     .addCodes("<a href='#' title='")
+                                     .addSubflow(b.nested().text("this is translatable"))
+                                     .addCodes("'>")).setX(2)
                      .setType("link"))
          .text("C")
          .ept(1, "</a>");

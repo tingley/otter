@@ -222,7 +222,7 @@ public class TUVBuilder {
      * @return
      */
     public TUVBuilder hi(int x, String textContent) {
-        HighlightTag hi = new HighlightTag(x);
+        HighlightTag hi = new HighlightTag().setX(x);
         hi.addContent(new TextContent(textContent));
         tuv.addContent(hi);
         return this;
@@ -272,7 +272,7 @@ public class TUVBuilder {
      * @return
      */
     public TUVBuilder hi(int x, TUV highlightedContent) {
-        HighlightTag hi = new HighlightTag(x);
+        HighlightTag hi = new HighlightTag().setX(x);
         hi.addContents(highlightedContent.getContents());
         tuv.addContent(hi);
         return this;

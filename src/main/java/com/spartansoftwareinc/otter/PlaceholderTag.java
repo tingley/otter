@@ -7,7 +7,6 @@ import java.util.List;
 public class PlaceholderTag extends StandaloneTag {
     private String assoc;
     
-    
     public PlaceholderTag() {
         super();
     }
@@ -16,22 +15,6 @@ public class PlaceholderTag extends StandaloneTag {
     }
     public PlaceholderTag(ComplexContent content) {
         super(content);
-    }
-
-    public PlaceholderTag(int x, String initialCodeData) {
-        super(x, initialCodeData);
-    }
-    
-    public PlaceholderTag(int x, ComplexContent content) {
-        super(x, content);
-    }
-    
-    public PlaceholderTag(int x, String type, String initialCodeData) {
-        super(x, type, initialCodeData);
-    }
-    
-    public PlaceholderTag(int x, String type, ComplexContent content) {
-        super(x, type, content);
     }
     
     /**

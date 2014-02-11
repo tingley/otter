@@ -91,14 +91,14 @@ public class TestTMXEventReader {
         assertNotNull(enTuv);
         assertEquals(new ArrayList<TUVContent>(){{
             add(new TextContent("Simple "));
-            add(new PlaceholderTag(1, "<br/>"));
+            add(new PlaceholderTag("<br/>").setX(1));
             add(new TextContent(" tags."));
         }}, enTuv.getContents());
         frTuv = tuvs.get("FR-FR");
         assertNotNull(frTuv);
         assertEquals(new ArrayList<TUVContent>(){{
             add(new TextContent("Simple "));
-            add(new PlaceholderTag(1, "<br/>"));
+            add(new PlaceholderTag("<br/>").setX(1));
             add(new TextContent(" tags (French)."));
         }}, frTuv.getContents());        
     }
@@ -155,7 +155,7 @@ public class TestTMXEventReader {
         assertNotNull(enTuv);
         assertEquals(new ArrayList<TUVContent>(){{
             add(new TextContent("Simple "));
-            add(new BeginTag(1, 1, "<b>"));
+            add(new BeginTag(1, "<b>").setX(1));
             add(new TextContent("paired tags"));
             add(new EndTag(1, "</b>"));
             add(new TextContent("."));
@@ -164,7 +164,7 @@ public class TestTMXEventReader {
         assertNotNull(frTuv);
         assertEquals(new ArrayList<TUVContent>(){{
             add(new TextContent("Simple "));
-            add(new BeginTag(1, 1, "<b>"));
+            add(new BeginTag(1, "<b>").setX(1));
             add(new TextContent("paired tags"));
             add(new EndTag(1, "</b>"));
             add(new TextContent(" (French)."));
@@ -184,14 +184,14 @@ public class TestTMXEventReader {
         assertNotNull(enTuv);
         assertEquals(new ArrayList<TUVContent>(){{
             add(new TextContent("Simple "));
-            add(new IsolatedTag(IsolatedTag.Pos.BEGIN, 1, "<b>"));
+            add(new IsolatedTag(IsolatedTag.Pos.BEGIN, "<b>").setX(1));
             add(new TextContent("isolated tags."));
         }}, enTuv.getContents());
         TUV frTuv = tuvs.get("FR-FR");
         assertNotNull(frTuv);
         assertEquals(new ArrayList<TUVContent>(){{
             add(new TextContent("Simple "));
-            add(new IsolatedTag(IsolatedTag.Pos.BEGIN, 1, "<b>"));
+            add(new IsolatedTag(IsolatedTag.Pos.BEGIN, "<b>").setX(1));
             add(new TextContent("isolated tags (French)."));
         }}, frTuv.getContents());
         
@@ -201,14 +201,14 @@ public class TestTMXEventReader {
         assertNotNull(enTuv);
         assertEquals(new ArrayList<TUVContent>(){{
             add(new TextContent("Isolated tags are "));
-            add(new IsolatedTag(IsolatedTag.Pos.END, 1, "</b>"));
+            add(new IsolatedTag(IsolatedTag.Pos.END, "</b>").setX(1));
             add(new TextContent("split across segments."));
         }}, enTuv.getContents());
         frTuv = tuvs.get("FR-FR");
         assertNotNull(frTuv);
         assertEquals(new ArrayList<TUVContent>(){{
             add(new TextContent("Isolated tags are "));
-            add(new IsolatedTag(IsolatedTag.Pos.END, 1, "</b>"));
+            add(new IsolatedTag(IsolatedTag.Pos.END, "</b>").setX(1));
             add(new TextContent("split across segments (French)."));
         }}, frTuv.getContents());     
     }
@@ -234,7 +234,7 @@ public class TestTMXEventReader {
         assertNull(hi.getType());
         assertEquals(new ArrayList<TUVContent>(){{
             add(new TextContent("highlighted text including "));
-            add(new BeginTag(2, 1, "<b>"));
+            add(new BeginTag(1, "<b>").setX(2));
             add(new TextContent("tag content"));
             add(new EndTag(1, "</b>"));
         }}, hi.getContents());
@@ -251,7 +251,7 @@ public class TestTMXEventReader {
         assertNull(hi.getType());
         assertEquals(new ArrayList<TUVContent>(){{
             add(new TextContent("highlighted text including "));
-            add(new BeginTag(2, 1, "<b>"));
+            add(new BeginTag(1, "<b>").setX(2));
             add(new TextContent("tag content"));
             add(new EndTag(1, "</b>"));
         }}, hi.getContents());

@@ -9,8 +9,6 @@ import java.util.List;
 
 import javax.xml.stream.XMLStreamException;
 
-import net.sundell.snax.SNAXUserException;
-
 import org.junit.Test;
 import static org.junit.Assert.*;
 

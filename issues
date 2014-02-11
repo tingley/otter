@@ -24,5 +24,4 @@
       that would need to be cast down in order to call it.
 - writer needs to throw errors if you call things at the wrong time
 - ensure order of parameters in tag constructors is consistent
-- review some tag constructors, I think I may have too many (esp PlaceholderTag)
 - what is the correct behavior of calling TUVBuilder.build() multiple times

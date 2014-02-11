@@ -26,8 +26,8 @@ public class EndTag extends PairedTag {
      * @param i value of the required <code>i</code> attribute
      * @param codeData native code data for this tag
      */
-    public EndTag(int i, String initialCodes) {
-        super(i, initialCodes);
+    public EndTag(int i, String codeData) {
+        super(i, codeData);
     }
 
     /**

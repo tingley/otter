@@ -16,9 +16,6 @@ public class HighlightTag extends BaseTUVContentSink implements NumberedTag {
     
     public HighlightTag() {
     }
-    public HighlightTag(int x) {
-        this.x = x;
-    }
 
     public int getX() {
         return x;
