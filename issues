@@ -9,7 +9,6 @@
     - I might need to break out these into more type-specific 
       adders
 - various writer unittests
-- writer should always write source language tuv first
 - need a way to report errors when writing
     - eg what if we try to write a tu that doesn't include a tuv of the
       source locale.  is this a warning?  error?
@@ -28,4 +27,7 @@
   written?  This is actually stricter than the spec demands.  I 
   may need a strict mode.
 - write BOM on output
-- writer: enforce attributes for tags
+- check for required TUV attributes (only xml:lang)
+- unittest to show i'm ignoring case when comparing TUV locales
+- unittest to show i'm writing src locale first
+- BaseTUVContentSink.addContents() should use a bounding wildcard

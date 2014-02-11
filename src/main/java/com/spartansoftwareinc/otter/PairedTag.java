@@ -29,6 +29,11 @@ public abstract class PairedTag extends InlineTag {
         this.i = i;
     }
 
+    @Override
+    boolean hasRequiredAttributes() {
+        return (i != NO_VALUE);
+    }
+
     /**
      * Add an item to the contents of this tag.  PairedTag objects
      * are restricted to {@link CodeContent} and {@link Subflow} content

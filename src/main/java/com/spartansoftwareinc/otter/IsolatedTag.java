@@ -47,6 +47,11 @@ public class IsolatedTag extends StandaloneTag {
         this.pos = pos;
     }
     
+    @Override
+    boolean hasRequiredAttributes() {
+        return pos != null;
+    }
+    
     /**
      * Add an item to the contents of this tag.  IsolatedTag objects
      * are restricted to {@link CodeContent} and {@link Subflow} content

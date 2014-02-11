@@ -25,6 +25,15 @@ public abstract class InlineTag implements TagContent {
     }
 
     /**
+     * Returns true if this tag has non-null values for all
+     * required attributes.
+     * @return true if all required attributes have values
+     */
+    boolean hasRequiredAttributes() {
+        return true;
+    }
+    
+    /**
      * Add an item to the contents of this tag.  InlineTag objects
      * are restricted to {@link CodeContent} and {@link Subflow} content
      * items.

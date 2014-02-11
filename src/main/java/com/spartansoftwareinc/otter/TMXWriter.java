@@ -4,6 +4,7 @@ import java.io.Writer;
 import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -61,6 +62,7 @@ public class TMXWriter {
     private XMLEventWriter xmlWriter;
     // XMLEventFactory is not thread-safe 
     private XMLEventFactory eventFactory;
+    private String headerSrcLang;
     
     private TMXWriter(Writer w) throws XMLStreamException {
         xmlWriter = factory.createXMLEventWriter(w);
@@ -152,6 +154,7 @@ public class TMXWriter {
             writeNote(note);
         }
         xmlWriter.add(eventFactory.createEndElement(HEADER, null));
+        headerSrcLang = h.getSrcLang();
     }
     
     private void addAttr(List<Attribute> attrs, QName qname, String value, boolean required) {
@@ -231,23 +234,40 @@ public class TMXWriter {
         attr(tuAttrs, TMF, tu.getTmf());
         attr(tuAttrs, SRCLANG, tu.getSrcLang());
         xmlWriter.add(eventFactory.createStartElement(TU, tuAttrs.iterator(), null));
-        
-        // TODO: Always print the source first
-        // TODO: throw an error when there is no TU in the source locale
-        Map<String, TUV> tuvs = tu.getTuvs();
-        for (Map.Entry<String, TUV> e : tuvs.entrySet()) {
-            ArrayList<Attribute> attrs = new ArrayList<Attribute>();
-            attr(attrs, XMLLANG, e.getKey());
-            xmlWriter.add(eventFactory.createStartElement(TUV, attrs.iterator(), null));
-            xmlWriter.add(eventFactory.createStartElement(SEG, null, null));
-            convertUnmatchedPairedTags(e.getValue());
-            for (TUVContent content : e.getValue().getContents()) {
-                writeContent(content);
-            }
-            xmlWriter.add(eventFactory.createEndElement(SEG, null));
-            xmlWriter.add(eventFactory.createEndElement(TUV, null));
+
+        // Language codes are case-insensitive, so normalize them
+        // to check for the source.
+        Map<String, TUV> tuvs = normalizeLocaleMap(tu.getTuvs());
+        // Always print the source language first, if present 
+        TUV srcTuv = tuvs.remove(headerSrcLang.toLowerCase());
+        if (srcTuv != null) {
+            writeTuv(srcTuv);
+        }
+        for (TUV tuv : tuvs.values()) {
+            writeTuv(tuv);
         }
         xmlWriter.add(eventFactory.createEndElement(TU, null));
+    }
+
+    private Map<String, TUV> normalizeLocaleMap(Map<String, TUV> original) {
+        Map<String, TUV> updated = new HashMap<String, TUV>();
+        for (Map.Entry<String, TUV> e : original.entrySet()) {
+            updated.put(e.getKey().toLowerCase(), e.getValue());
+        }
+        return updated;
+    }
+
+    private void writeTuv(TUV tuv) throws XMLStreamException {
+        ArrayList<Attribute> attrs = new ArrayList<Attribute>();
+        attr(attrs, XMLLANG, tuv.getLocale());
+        xmlWriter.add(eventFactory.createStartElement(TUV, attrs.iterator(), null));
+        xmlWriter.add(eventFactory.createStartElement(SEG, null, null));
+        convertUnmatchedPairedTags(tuv);
+        for (TUVContent content : tuv.getContents()) {
+            writeContent(content);
+        }
+        xmlWriter.add(eventFactory.createEndElement(SEG, null));
+        xmlWriter.add(eventFactory.createEndElement(TUV, null));
     }
     
     /**
@@ -310,23 +330,31 @@ public class TMXWriter {
         if (content instanceof SimpleContent) {
             xmlWriter.add(eventFactory.createCharacters(((SimpleContent)content).getValue()));
         }
-        else if (content instanceof PlaceholderTag) {
-            writePh((PlaceholderTag)content);
-        }
-        else if (content instanceof BeginTag) {
-            writeBpt((BeginTag)content);
-        }
-        else if (content instanceof EndTag) {
-            writeEpt((EndTag)content);
-        }
-        else if (content instanceof IsolatedTag) {
-            writeIt((IsolatedTag)content);
-        }
-        else if (content instanceof HighlightTag) {
-            writeHi((HighlightTag)content);
-        }
-        else if (content instanceof Subflow) {
-            writeSubflow((Subflow)content);
+        else {
+            // Check for tags with missing attributes
+            if (content instanceof InlineTag && 
+                !((InlineTag)content).hasRequiredAttributes()) {
+                    throw new OtterException("Tag is missing required attributes: "
+                                             + content);
+            }
+            if (content instanceof PlaceholderTag) {
+                writePh((PlaceholderTag)content);
+            }
+            else if (content instanceof BeginTag) {
+                writeBpt((BeginTag)content);
+            }
+            else if (content instanceof EndTag) {
+                writeEpt((EndTag)content);
+            }
+            else if (content instanceof IsolatedTag) {
+                writeIt((IsolatedTag)content);
+            }
+            else if (content instanceof HighlightTag) {
+                writeHi((HighlightTag)content);
+            }
+            else if (content instanceof Subflow) {
+                writeSubflow((Subflow)content);
+            }
         }
     }
     

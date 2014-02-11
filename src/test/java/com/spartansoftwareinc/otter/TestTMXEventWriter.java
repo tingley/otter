@@ -9,6 +9,8 @@ import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.io.StringWriter;
 import java.io.Writer;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -80,6 +82,39 @@ public class TestTMXEventWriter {
         }
         assertTrue("Failed to throw error writing a Header that was missing '" + missingField + "'", 
                    caughtError);
+    }
+
+    @Test
+    public void testWriterMissingRequiredTagAtributes() throws Exception {
+        TMXWriter writer = TMXWriter.createTMXEventWriter(new StringWriter());
+        writer.startTMX();
+        writer.writeHeader(getHeader());
+        testTagTUV(writer, Collections.singletonList(new IsolatedTag()), true); // missing @pos
+        // The PairedTag correction code will convert unpaired bpt/ept into it,
+        // which makes the check useless unless they're both there!
+        List<InlineTag> l = new ArrayList<InlineTag>();
+        l.add(new BeginTag(1).setI(PairedTag.NO_VALUE));
+        l.add(new EndTag(1).setI(PairedTag.NO_VALUE));
+        testTagTUV(writer, l, true); // missing @i
+        testTagTUV(writer, Collections.singletonList(new PlaceholderTag()), false);
+    }
+    
+    private void testTagTUV(TMXWriter writer, Collection<? extends InlineTag> tags, boolean expectFailure)
+                                        throws XMLStreamException {
+        TU tu = new TU();
+        TUV tuv = new TUV(getHeader().getSrcLang());
+        tu.addTUV(tuv);
+        for (InlineTag tag : tags) {
+            tuv.addContent(tag);
+        }
+        boolean caughtError = false;
+        try {
+            writer.writeTu(tu);
+        }
+        catch (OtterException e) {
+            caughtError = true;
+        }
+        assertEquals("Unexpected result writing tag " + tags, expectFailure, caughtError);
     }
     
     void testRoundtripTUs(List<TU> tus) throws Exception {

@@ -43,7 +43,7 @@ public class BeginTag extends PairedTag implements NumberedTag {
     public BeginTag(int i, ComplexContent content) {
         super(i, content);
     }
-
+    
     /**
      * Add an item to the contents of this tag.  BeginTag objects
      * are restricted to {@link CodeContent} and {@link Subflow} content
