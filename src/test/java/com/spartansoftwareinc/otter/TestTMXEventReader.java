@@ -55,8 +55,8 @@ public class TestTMXEventReader {
         checkProperty(properties.get(2), "type3", "Property with lang \"fr\"", null, "fr");
         List<Note> notes = header.getNotes();
         assertEquals(2, notes.size());
-        checkNote(notes.get(0), "This is a note with an encoding.");
-        checkNote(notes.get(1), "This is a note with lang \"en\".");
+        assertEquals(new Note("This is a note with an encoding.").setEncoding("ASCII"), notes.get(0));
+        assertEquals(new Note("This is a note with lang \"en\".").setLang("en"), notes.get(1));
         checkEvent(events.get(2), START_BODY);
         checkEvent(events.get(3), END_BODY);
         checkEvent(events.get(4), END_TMX);

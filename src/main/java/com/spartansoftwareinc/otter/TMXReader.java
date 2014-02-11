@@ -301,10 +301,13 @@ public class TMXReader {
     }
     abstract class NoteHandler extends DefaultElementHandler<SegmentBuilder> {
         private StringBuilder value = new StringBuilder();
+        private String encoding = null, lang = null;
         @Override
         public void startElement(StartElement element, SegmentBuilder data)
                 throws SNAXUserException {
             value.setLength(0);
+            encoding = attrVal(element, ENCODING);
+            lang = attrVal(element, XMLLANG);
         }
         @Override
         public void characters(StartElement parent, Characters characters,
@@ -314,7 +317,8 @@ public class TMXReader {
         @Override
         public void endElement(EndElement element, SegmentBuilder data)
                 throws SNAXUserException {
-            handleNote(data, new Note(value.toString()));
+            handleNote(data, new Note(value.toString())
+                                    .setEncoding(encoding).setLang(lang));
         }
         abstract void handleNote(SegmentBuilder data, Note note);
     }

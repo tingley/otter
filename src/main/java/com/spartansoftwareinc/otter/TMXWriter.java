@@ -146,7 +146,7 @@ public class TMXWriter {
             writeProperty(property);
         }
         for (Note note : h.getNotes()) {
-            writeNote(note.getContent());
+            writeNote(note);
         }
         xmlWriter.add(eventFactory.createEndElement(HEADER, null));
     }
@@ -171,9 +171,16 @@ public class TMXWriter {
         xmlWriter.add(eventFactory.createEndElement(PROPERTY, null));
     }
     
-    void writeNote(String value) throws XMLStreamException {
-        xmlWriter.add(eventFactory.createStartElement(NOTE, null, null));
-        xmlWriter.add(eventFactory.createCharacters(value));
+    void writeNote(Note note) throws XMLStreamException {
+        ArrayList<Attribute> attrs = new ArrayList<Attribute>();
+        if (note.getEncoding() != null) {
+            attrs.add(eventFactory.createAttribute(ENCODING, note.getEncoding()));
+        }
+        if (note.getLang() != null) {
+            attrs.add(eventFactory.createAttribute(XMLLANG, note.getLang()));
+        }
+        xmlWriter.add(eventFactory.createStartElement(NOTE, attrs.iterator(), null));
+        xmlWriter.add(eventFactory.createCharacters(note.getContent()));
         xmlWriter.add(eventFactory.createEndElement(NOTE, null));
     }
     
