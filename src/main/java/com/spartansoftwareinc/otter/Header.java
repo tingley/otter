@@ -33,112 +33,126 @@ public class Header {
         return properties;
     }
     
-    public void addProperty(Property prop) {
+    public Header addProperty(Property prop) {
         properties.add(prop);
+        return this;
     }
     
     public List<Note> getNotes() {
         return notes;
     }
     
-    public void addNote(Note note) {
+    public Header addNote(Note note) {
         notes.add(note);
+        return this;
     }
     
     public String getCreationTool() {
         return creationTool;
     }
 
-    public void setCreationTool(String creationTool) {
+    public Header setCreationTool(String creationTool) {
         this.creationTool = creationTool;
+        return this;
     }
 
     public String getCreationToolVersion() {
         return creationVersion;
     }
 
-    public void setCreationToolVersion(String creationVersion) {
+    public Header setCreationToolVersion(String creationVersion) {
         this.creationVersion = creationVersion;
+        return this;
     }
 
     public String getSegType() {
         return segType;
     }
 
-    public void setSegType(String segType) {
+    public Header setSegType(String segType) {
         this.segType = segType;
+        return this;
     }
 
     public String getTmf() {
         return tmf;
     }
 
-    public void setTmf(String tmf) {
+    public Header setTmf(String tmf) {
         this.tmf = tmf;
+        return this;
     }
 
     public String getAdminLang() {
         return adminLang;
     }
 
-    public void setAdminLang(String adminLang) {
+    public Header setAdminLang(String adminLang) {
         this.adminLang = adminLang;
+        return this;
     }
 
     public String getSrcLang() {
         return srcLang;
     }
 
-    public void setSrcLang(String srcLang) {
+    public Header setSrcLang(String srcLang) {
         this.srcLang = srcLang;
+        return this;
     }
 
     public String getDataType() {
         return dataType;
     }
 
-    public void setDataType(String dataType) {
+    public Header setDataType(String dataType) {
         this.dataType = dataType;
+        return this;
     }
 
     public String getEncoding() {
         return encoding;
     }
 
-    public void setEncoding(String encoding) {
+    public Header setEncoding(String encoding) {
         this.encoding = encoding;
+        return this;
     }
 
     public Date getCreationDate() {
         return creationDate;
     }
 
-    public void setCreationDate(Date creationDate) {
+    public Header setCreationDate(Date creationDate) {
         this.creationDate = creationDate;
+        return this;
     }
 
     public String getCreationId() {
         return creationId;
     }
 
-    public void setCreationId(String creationId) {
+    public Header setCreationId(String creationId) {
         this.creationId = creationId;
+        return this;
     }
 
     public Date getChangeDate() {
         return changeDate;
     }
 
-    public void setChangeDate(Date changeDate) {
+    public Header setChangeDate(Date changeDate) {
         this.changeDate = changeDate;
+        return this;
     }
 
     public String getChangeId() {
         return changeId;
     }
 
-    public void setChangeId(String changeId) {
+    public Header setChangeId(String changeId) {
         this.changeId = changeId;
+        return this;
     }
 
     @Override

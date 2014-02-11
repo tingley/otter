@@ -122,28 +122,28 @@ public class TMXWriter {
      * Write a TMX Header.  This should include any notes or properties
      * that should be included in the header declaration.
      * @param h header information, including any notes and properties
-     * @throws XMLStreamException
+     * @throws XMLStreamException if an XML error occurs
+     * @throws OtterException if an invalid header is passed
      */
     public void writeHeader(Header h) throws XMLStreamException {
         ArrayList<Attribute> attrs = new ArrayList<Attribute>();
-        // TODO: enforce attr requirements
-        addAttr(attrs, CREATIONID, h.getCreationId());
+        addAttr(attrs, CREATIONID, h.getCreationId(), false);
         if (h.getCreationDate() != null) {
-            addAttr(attrs, CREATIONDATE, Util.writeTMXDate(h.getCreationDate()));
+            addAttr(attrs, CREATIONDATE, Util.writeTMXDate(h.getCreationDate()), false);
         }
-        addAttr(attrs, CREATIONTOOL, h.getCreationTool());
-        addAttr(attrs, CREATIONTOOLVERSION, h.getCreationToolVersion());
-        addAttr(attrs, SEGTYPE, h.getSegType());
-        addAttr(attrs, TMF, h.getTmf());
-        addAttr(attrs, ADMINLANG, h.getAdminLang());
-        addAttr(attrs, SRCLANG, h.getSrcLang());
-        addAttr(attrs, SEGTYPE, h.getSegType());
+        addAttr(attrs, CREATIONTOOL, h.getCreationTool(), true);
+        addAttr(attrs, CREATIONTOOLVERSION, h.getCreationToolVersion(), true);
+        addAttr(attrs, SEGTYPE, h.getSegType(), true);
+        addAttr(attrs, TMF, h.getTmf(), true);
+        addAttr(attrs, ADMINLANG, h.getAdminLang(), true);
+        addAttr(attrs, SRCLANG, h.getSrcLang(), true);
+        addAttr(attrs, SEGTYPE, h.getSegType(), true);
         if (h.getChangeDate() != null) {
-            addAttr(attrs, CHANGEDATE, Util.writeTMXDate(h.getChangeDate()));
+            addAttr(attrs, CHANGEDATE, Util.writeTMXDate(h.getChangeDate()), false);
         }
-        addAttr(attrs, CHANGEID, h.getChangeId());
-        addAttr(attrs, ENCODING, h.getEncoding());
-        addAttr(attrs, DATATYPE, h.getDataType());
+        addAttr(attrs, CHANGEID, h.getChangeId(), false);
+        addAttr(attrs, ENCODING, h.getEncoding(), false);
+        addAttr(attrs, DATATYPE, h.getDataType(), true);
         xmlWriter.add(eventFactory.createStartElement(HEADER, attrs.iterator(), null));
         for (Property property : h.getProperties()) {
             writeProperty(property);
@@ -154,9 +154,12 @@ public class TMXWriter {
         xmlWriter.add(eventFactory.createEndElement(HEADER, null));
     }
     
-    private void addAttr(List<Attribute> attrs, QName qname, String value) {
+    private void addAttr(List<Attribute> attrs, QName qname, String value, boolean required) {
         if (value != null) {
             attrs.add(eventFactory.createAttribute(qname, value));
+        }
+        else if (required) {
+            throw new OtterException("Header is missing required attribute '" + qname + "'");
         }
     }
     
@@ -230,6 +233,7 @@ public class TMXWriter {
         xmlWriter.add(eventFactory.createStartElement(TU, tuAttrs.iterator(), null));
         
         // TODO: Always print the source first
+        // TODO: throw an error when there is no TU in the source locale
         Map<String, TUV> tuvs = tu.getTuvs();
         for (Map.Entry<String, TUV> e : tuvs.entrySet()) {
             ArrayList<Attribute> attrs = new ArrayList<Attribute>();

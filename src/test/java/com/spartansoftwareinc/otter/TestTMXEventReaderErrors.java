@@ -192,7 +192,7 @@ public class TestTMXEventReaderErrors {
         XMLStreamException xmlError = null;
         
         @Override
-        public void tuError(int tuSequence, OtterException e) {
+        public void tuError(int tuSequence, OtterInputException e) {
             TUError error = new TUError();
             error.sequence = tuSequence;
             error.e = e;
@@ -200,20 +200,20 @@ public class TestTMXEventReaderErrors {
         }
         
         @Override
-        public void error(OtterException e) {
+        public void error(OtterInputException e) {
             errors.add(e);
         }
 
         @Override
-        public void fatalError(OtterException e) {
+        public void fatalError(OtterInputException e) {
             fatalError = e;
-            throw new OtterException("Halting on error", e.getLocation());
+            throw new OtterInputException("Halting on error", e.getLocation());
         }
 
         @Override
         public void xmlError(XMLStreamException e) {
             xmlError = e;
-            throw new OtterException("Halting on error", e.getLocation());
+            throw new OtterInputException("Halting on error", e.getLocation());
         }
 
        

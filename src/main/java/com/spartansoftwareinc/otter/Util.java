@@ -23,7 +23,7 @@ class Util {
     }
     static void require(boolean condition, Location location, String message) {
         if (!condition) {
-            throw new OtterException(message, location);
+            throw new OtterInputException(message, location);
         }
     }
     static String attrVal(StartElement el, QName attrName) {
@@ -34,7 +34,7 @@ class Util {
         Attribute a = el.getAttributeByName(attrName);
         if (a == null) {
             handler.fatalError(
-                    new OtterException("Required attribute " + attrName + " is missing", 
+                    new OtterInputException("Required attribute " + attrName + " is missing", 
                             el.getLocation()));
         }
         return a.getValue();
@@ -46,7 +46,7 @@ class Util {
             return Integer.valueOf(a.getValue());
         }
         catch (NumberFormatException e) {
-            throw new OtterException("Not an integer value: " + a.getValue(),
+            throw new OtterInputException("Not an integer value: " + a.getValue(),
                                      el.getLocation());
         }
     }
@@ -73,7 +73,7 @@ class Util {
         if (a == null) return null;
         Date d = parseTMXDate(a.getValue());
         if (d == null) {
-            OtterException e = new OtterException("Invalid date format '" + 
+            OtterInputException e = new OtterInputException("Invalid date format '" + 
                     a.getValue() + "' for " + attrName.getLocalPart(),
                     el.getLocation());
             if (handler != null) {

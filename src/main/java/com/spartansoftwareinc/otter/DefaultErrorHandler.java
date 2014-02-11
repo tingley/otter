@@ -8,22 +8,22 @@ import javax.xml.stream.XMLStreamException;
  */
 public class DefaultErrorHandler implements ErrorHandler {
     @Override
-    public void tuError(int tuSequence, OtterException e) {
+    public void tuError(int tuSequence, OtterInputException e) {
         // Do nothing
     }
 
     @Override
-    public void error(OtterException e) {
+    public void error(OtterInputException e) {
         // Do nothing   
     }
 
     @Override
-    public void fatalError(OtterException e) {
+    public void fatalError(OtterInputException e) {
         throw e;
     }
 
     @Override
     public void xmlError(XMLStreamException e) {
-        throw new OtterException(e, e.getLocation());
+        throw new OtterInputException(e, e.getLocation());
     }
 }

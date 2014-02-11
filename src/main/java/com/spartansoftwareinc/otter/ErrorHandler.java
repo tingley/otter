@@ -19,20 +19,20 @@ public interface ErrorHandler {
      *          as an event.  See {@link TUEvent#getSequence()}.
      * @param e exception that triggered this error call
      */
-    void tuError(int tuSequence, OtterException e);
+    void tuError(int tuSequence, OtterInputException e);
     
     /**
      * Receive notification of a recoverable error that is not related to a 
      * specific TU.
      * @param e exception that triggered this error call
      */
-    void error(OtterException e);
+    void error(OtterInputException e);
 
     /**
      * Receive notification of a fatal error.
      * @param e exception that triggered this error call
      */
-    void fatalError(OtterException e);
+    void fatalError(OtterInputException e);
     
     /**
      * Receive notification of an underlying XML error.

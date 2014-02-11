@@ -23,3 +23,9 @@
 - writer needs to throw errors if you call things at the wrong time
 - ensure order of parameters in tag constructors is consistent
 - what is the correct behavior of calling TUVBuilder.build() multiple times
+- support <map> and <ude>
+- throw an exception if no source language TUV is present when a TU is
+  written?  This is actually stricter than the spec demands.  I 
+  may need a strict mode.
+- write BOM on output
+- writer: enforce attributes for tags

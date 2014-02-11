@@ -7,10 +7,13 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.Reader;
+import java.io.StringWriter;
 import java.io.Writer;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+
+import javax.xml.stream.XMLStreamException;
 
 import static com.spartansoftwareinc.otter.TMXEventType.*;
 import static com.spartansoftwareinc.otter.TestUtil.*;
@@ -51,6 +54,32 @@ public class TestTMXEventWriter {
         checkEvent(events.get(3), END_BODY);
         checkEvent(events.get(4), END_TMX);
         tmp.delete();
+    }
+    
+    @Test
+    public void testWriterMissingRequiredAttributes() throws Exception {
+        TMXWriter writer = TMXWriter.createTMXEventWriter(new StringWriter());
+        writer.startTMX();
+        expectErrorWritingHeader(writer, getHeader().setCreationTool(null), "creationTool");
+        expectErrorWritingHeader(writer, getHeader().setCreationToolVersion(null), "creationVersion");
+        expectErrorWritingHeader(writer, getHeader().setSegType(null), "segType");
+        expectErrorWritingHeader(writer, getHeader().setTmf(null), "tmf");
+        expectErrorWritingHeader(writer, getHeader().setAdminLang(null), "adminLang");
+        expectErrorWritingHeader(writer, getHeader().setSrcLang(null), "srcLang");
+        expectErrorWritingHeader(writer, getHeader().setDataType(null), "datatype");
+    }
+    
+    private void expectErrorWritingHeader(TMXWriter writer, Header header, String missingField)
+                                          throws XMLStreamException {
+        boolean caughtError = false;
+        try {
+            writer.writeHeader(header);
+        }
+        catch (OtterException e) {
+            caughtError = true;
+        }
+        assertTrue("Failed to throw error writing a Header that was missing '" + missingField + "'", 
+                   caughtError);
     }
     
     void testRoundtripTUs(List<TU> tus) throws Exception {

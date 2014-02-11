@@ -99,7 +99,7 @@ public class TMXReader {
      * Flag the current TU as being in error.
      * @param e
      */
-    void reportTuError(OtterException e) {
+    void reportTuError(OtterInputException e) {
         currentTuIsInError = true;
         errorHandler.tuError(nextSequence, e);
     }
@@ -117,7 +117,7 @@ public class TMXReader {
      * involve the parser consuming some portion of the source XML.
      * Errors encountered during parsing are reported via the 
      * {@link ErrorHandler} interface.  The default ErrorHandler will
-     * throw {@link OtterException} for any XML errors encountered
+     * throw {@link OtterInputException} for any XML errors encountered
      * during parsing.
      * 
      * @return true if any events are available, false if the end of 
@@ -236,7 +236,7 @@ public class TMXReader {
                 throws SNAXUserException {
             String version = requireAttrVal(element, VERSION, errorHandler);
             if (!TMX_VERSION_1_4.equals(version)) {
-                errorHandler.error(new OtterException("Unsupported TMX version: " +
+                errorHandler.error(new OtterInputException("Unsupported TMX version: " +
                                    version, element.getLocation()));
             }
             addEvent(new TMXEvent(START_TMX));
@@ -442,7 +442,7 @@ public class TMXReader {
                 throws SNAXUserException {
             Integer i = attrValAsInteger(element, I);
             if (i == null) {
-                reportTuError(new OtterException("<bpt> missing 'i' attribute", 
+                reportTuError(new OtterInputException("<bpt> missing 'i' attribute", 
                               element.getLocation()));
                 i = BeginTag.NO_VALUE;
             }
@@ -476,7 +476,7 @@ public class TMXReader {
                 throws SNAXUserException {
             Integer i = attrValAsInteger(element, I);
             if (i == null) {
-                reportTuError(new OtterException("<ept> missing 'i' attribute",
+                reportTuError(new OtterInputException("<ept> missing 'i' attribute",
                               element.getLocation()));
                 i = EndTag.NO_VALUE;
             }
@@ -508,13 +508,13 @@ public class TMXReader {
             it.setType(attrVal(element, TYPE));
             String v = attrVal(element, POS);
             if (v == null) {
-                reportTuError(new OtterException("<it> element missing 'pos' attribute", 
+                reportTuError(new OtterInputException("<it> element missing 'pos' attribute", 
                               element.getLocation()));
             }
             else {
                 IsolatedTag.Pos pos = IsolatedTag.Pos.byAttrValue(v);
                 if (pos == null) {
-                    reportTuError(new OtterException("Invalid value for 'pos' attribute: " + v, 
+                    reportTuError(new OtterInputException("Invalid value for 'pos' attribute: " + v, 
                             element.getLocation()));
                 }
                 it.setPos(pos);

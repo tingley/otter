@@ -42,7 +42,7 @@ class SegmentBuilder {
             tu.setTmf(attrVal(el, TMF));
             tu.setSrcLang(attrVal(el, SRCLANG));
         }
-        catch (OtterException e) {
+        catch (OtterInputException e) {
             reader.reportTuError(e);
         }
         // TODO: warn if SRCLANG != global SRCLANG
@@ -56,7 +56,7 @@ class SegmentBuilder {
     	// Check to make sure that this TU contains a TUV with
     	// the expected source locale
     	if (!tu.getTuvs().keySet().contains(tu.getSrcLang())) {
-    		reader.reportTuError(new OtterException(
+    		reader.reportTuError(new OtterInputException(
     				"TU has no TUV with expected source locale " + reader.getSrcLang(),
     				el.getLocation()));
     	}
@@ -85,7 +85,7 @@ class SegmentBuilder {
     void startPair(BeginTag bpt, StartElement el) {
         int iValue = bpt.getI();
         if (pairedTagIndices.get(iValue)) {
-            reader.reportTuError(new OtterException(
+            reader.reportTuError(new OtterInputException(
                     "TUV contains multiple bpt tags with index " + iValue, el.getLocation()));
         }
         else {
@@ -96,7 +96,7 @@ class SegmentBuilder {
     void endPair(EndTag ept, StartElement el) {
         int iValue = ept.getI();
         if (!pairedTagIndices.get(iValue)) {
-            reader.reportTuError(new OtterException(
+            reader.reportTuError(new OtterInputException(
                     "TUV contains ept without a preceding bpt, index " + iValue, el.getLocation()));
         }
         else {
