@@ -27,7 +27,6 @@
   written?  This is actually stricter than the spec demands.  I 
   may need a strict mode.
 - write BOM on output
-- check for required TUV attributes (only xml:lang)
 - unittest to show i'm ignoring case when comparing TUV locales
 - unittest to show i'm writing src locale first
 - BaseTUVContentSink.addContents() should use a bounding wildcard

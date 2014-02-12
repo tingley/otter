@@ -38,7 +38,16 @@ public class TU {
     public void addTUV(TUV tuv) {
         tuvs.put(tuv.getLocale(), tuv);
     }
+
+    // case-insensitive TUV languages?
+    // technically, nothing prevents multiple TUVs from
+    // having the same language. 
     
+    /**
+     * Return the TUVs for this TU as a Map, keyed
+     * by their 
+     * @return
+     */
     public Map<String, TUV> getTuvs() {
         return tuvs;
     }

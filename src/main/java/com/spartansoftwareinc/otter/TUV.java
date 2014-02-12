@@ -16,6 +16,9 @@ public class TUV extends BaseTUVContentSink {
 
     public TUV(String locale) {
         this.locale = locale;
+        if (locale == null) {
+            throw new OtterException("Can't construct a TUV without a locale");
+        }
     }
 
     /**
@@ -47,15 +50,6 @@ public class TUV extends BaseTUVContentSink {
      */
     public String getLocale() {
         return locale;
-    }
-
-    /**
-     * Set the locale string for this TUV.
-     * @param locale
-     */
-    public TUV setLocale(String locale) {
-        this.locale = locale;
-        return this;
     }
 
     /**
