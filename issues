@@ -20,13 +20,12 @@
       if build() is in a subclass, the return value will be something
       that would need to be cast down in order to call it.
 - writer needs to throw errors if you call things at the wrong time
-- ensure order of parameters in tag constructors is consistent
 - what is the correct behavior of calling TUVBuilder.build() multiple times
 - support <map> and <ude>
 - throw an exception if no source language TUV is present when a TU is
   written?  This is actually stricter than the spec demands.  I 
   may need a strict mode.
-- write BOM on output
 - unittest to show i'm ignoring case when comparing TUV locales
 - unittest to show i'm writing src locale first
 - BaseTUVContentSink.addContents() should use a bounding wildcard
+- consider removing the body events
