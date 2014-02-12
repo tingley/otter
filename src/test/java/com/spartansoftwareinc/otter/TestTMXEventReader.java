@@ -57,9 +57,7 @@ public class TestTMXEventReader {
         assertEquals(2, notes.size());
         assertEquals(new Note("This is a note with an encoding.").setEncoding("ASCII"), notes.get(0));
         assertEquals(new Note("This is a note with lang \"en\".").setLang("en"), notes.get(1));
-        checkEvent(events.get(2), START_BODY);
-        checkEvent(events.get(3), END_BODY);
-        checkEvent(events.get(4), END_TMX);
+        checkEvent(events.get(2), END_TMX);
     }
     
     @SuppressWarnings("serial")

@@ -178,8 +178,8 @@ public class TMXReader {
                 header.element("prop").attach(new HeaderPropertyHandler());
                 header.element("note").attach(new HeaderNoteHandler());
 
+                // <body> is currently a no-op for producing user data
                 ElementSelector<SegmentBuilder> body = elements("tmx", "body"); 
-                body.attach(new BodyHandler());
                 ElementSelector<SegmentBuilder> tu = body.element("tu");
                 tu.attach(new TuHandler());
                 tu.element("prop").attach(new TuPropertyHandler());
@@ -331,18 +331,6 @@ public class TMXReader {
         @Override
         void handleNote(SegmentBuilder data, Note note) {
             header.addNote(note);
-        }
-    }
-    class BodyHandler extends DefaultElementHandler<SegmentBuilder> {
-        @Override
-        public void startElement(StartElement element, SegmentBuilder data)
-                throws SNAXUserException {
-            addEvent(new TMXEvent(START_BODY));
-        }
-        @Override
-        public void endElement(EndElement element, SegmentBuilder data)
-                throws SNAXUserException {
-            addEvent(new TMXEvent(END_BODY));
         }
     }
     class TuHandler extends DefaultElementHandler<SegmentBuilder> {

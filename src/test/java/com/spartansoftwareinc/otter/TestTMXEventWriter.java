@@ -38,8 +38,6 @@ public class TestTMXEventWriter {
         header.addNote(new Note("note2").setEncoding("UTF-16BE"));
         header.addNote(new Note("note3").setLang("de-DE"));
         writer.writeHeader(header);
-        writer.startBody();
-        writer.endBody();
         writer.endTMX();
         w.close();
         Reader r = new InputStreamReader(new FileInputStream(tmp), "UTF-8");
@@ -52,9 +50,7 @@ public class TestTMXEventWriter {
         assertEquals(header.getProperties(), rHeader.getProperties());
         assertEquals(header.getNotes(), rHeader.getNotes());
         assertEquals(header, rHeader);
-        checkEvent(events.get(2), START_BODY);
-        checkEvent(events.get(3), END_BODY);
-        checkEvent(events.get(4), END_TMX);
+        checkEvent(events.get(2), END_TMX);
         tmp.delete();
     }
     
@@ -124,11 +120,9 @@ public class TestTMXEventWriter {
         writer.startTMX();
         Header header = getHeader();
         writer.writeHeader(header);
-        writer.startBody();
         for (TU tu : tus) {
             writer.writeTu(tu);
         }
-        writer.endBody();
         writer.endTMX();
         w.close();
         Reader r = new InputStreamReader(new FileInputStream(tmp), "UTF-8");
@@ -301,7 +295,6 @@ public class TestTMXEventWriter {
         TMXWriter writer = TMXWriter.createTMXEventWriter(w);
         writer.startTMX();
         writer.writeHeader(getHeader());
-        writer.startBody();
         TU tu = new TU();
         TUV src = new TUV("en-US");
         src.addContent(new TextContent("Dangling "));
@@ -309,7 +302,6 @@ public class TestTMXEventWriter {
         src.addContent(new TextContent(" tag"));
         tu.addTUV(src);
         writer.writeEvent(new TUEvent(tu));
-        writer.endBody();
         writer.endTMX();
         w.close();
         Reader r = new InputStreamReader(new FileInputStream(tmp), "UTF-8");

@@ -28,4 +28,3 @@
 - unittest to show i'm ignoring case when comparing TUV locales
 - unittest to show i'm writing src locale first
 - BaseTUVContentSink.addContents() should use a bounding wildcard
-- consider removing the body events

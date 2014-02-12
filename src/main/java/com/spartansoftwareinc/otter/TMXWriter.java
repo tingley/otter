@@ -63,7 +63,8 @@ public class TMXWriter {
     // XMLEventFactory is not thread-safe 
     private XMLEventFactory eventFactory;
     private String headerSrcLang;
-    
+    private boolean inBody = false;
+
     private TMXWriter(Writer w) throws XMLStreamException {
         xmlWriter = factory.createXMLEventWriter(w);
         eventFactory = XMLEventFactory.newInstance();
@@ -84,12 +85,6 @@ public class TMXWriter {
             break;
         case HEADER:
             writeHeader(event.getHeader());
-            break;
-        case START_BODY:
-            startBody();
-            break;
-        case END_BODY:
-            endBody();
             break;
         case TU:
             writeTu(event.getTU());
@@ -116,6 +111,7 @@ public class TMXWriter {
      * @throws XMLStreamException
      */
     public void endTMX() throws XMLStreamException {
+        endBody();
         xmlWriter.add(eventFactory.createEndElement(TMX, null));
         xmlWriter.add(eventFactory.createEndDocument());
     }
@@ -155,6 +151,9 @@ public class TMXWriter {
         }
         xmlWriter.add(eventFactory.createEndElement(HEADER, null));
         headerSrcLang = h.getSrcLang();
+        
+        // After writing a header, we're now in the body
+        startBody();
     }
     
     private void addAttr(List<Attribute> attrs, QName qname, String value, boolean required) {
@@ -198,15 +197,22 @@ public class TMXWriter {
      * be written within the body.
      * @throws XMLStreamException
      */
-    public void startBody() throws XMLStreamException {
+    private void startBody() throws XMLStreamException {
+        if (inBody) {
+            throw new OtterException("Multiple headers?");
+        }
         xmlWriter.add(eventFactory.createStartElement(BODY, null, null));
+        inBody = true;
     }
     
     /**
      * Finish writing the body of a TMX document.
      * @throws XMLStreamException
      */
-    public void endBody() throws XMLStreamException {
+    private void endBody() throws XMLStreamException {
+        if (!inBody) {
+            throw new OtterException("Wrote an invalid TMX document (no header?)");
+        }
         xmlWriter.add(eventFactory.createEndElement(BODY, null));
     }
     
