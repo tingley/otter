@@ -31,33 +31,30 @@ public class TestTMXEventWriter {
         File tmp = File.createTempFile("otter", ".tmx");
         Writer w = new OutputStreamWriter(new FileOutputStream(tmp), "UTF-8");
         TMXWriter writer = TMXWriter.createTMXEventWriter(w);
-        writer.startTMX();
         Header header = getHeader();
         header.addProperty(new Property("type2", "value2").setEncoding("UTF-8"));
         header.addProperty(new Property("type3", "value3").setLang("en-US"));
         header.addNote(new Note("note2").setEncoding("UTF-16BE"));
         header.addNote(new Note("note3").setLang("de-DE"));
-        writer.writeHeader(header);
+        writer.startTMX(header);
         writer.endTMX();
         w.close();
         Reader r = new InputStreamReader(new FileInputStream(tmp), "UTF-8");
         TMXReader reader = TMXReader.createTMXEventReader(r);
         List<TMXEvent> events = readEvents(reader);
         checkEvent(events.get(0), TMXEventType.START_TMX);
-        checkEvent(events.get(1), TMXEventType.HEADER);
-        Header rHeader = events.get(1).getHeader();
+        Header rHeader = events.get(0).getHeader();
         assertNotNull(rHeader);
         assertEquals(header.getProperties(), rHeader.getProperties());
         assertEquals(header.getNotes(), rHeader.getNotes());
         assertEquals(header, rHeader);
-        checkEvent(events.get(2), END_TMX);
+        checkEvent(events.get(1), END_TMX);
         tmp.delete();
     }
     
     @Test
     public void testWriterMissingRequiredAttributes() throws Exception {
         TMXWriter writer = TMXWriter.createTMXEventWriter(new StringWriter());
-        writer.startTMX();
         expectErrorWritingHeader(writer, getHeader().setCreationTool(null), "creationTool");
         expectErrorWritingHeader(writer, getHeader().setCreationToolVersion(null), "creationVersion");
         expectErrorWritingHeader(writer, getHeader().setSegType(null), "segType");
@@ -71,7 +68,7 @@ public class TestTMXEventWriter {
                                           throws XMLStreamException {
         boolean caughtError = false;
         try {
-            writer.writeHeader(header);
+            writer.startTMX(header);
         }
         catch (OtterException e) {
             caughtError = true;
@@ -83,8 +80,7 @@ public class TestTMXEventWriter {
     @Test
     public void testWriterMissingRequiredTagAtributes() throws Exception {
         TMXWriter writer = TMXWriter.createTMXEventWriter(new StringWriter());
-        writer.startTMX();
-        writer.writeHeader(getHeader());
+        writer.startTMX(getHeader());
         testTagTUV(writer, Collections.singletonList(new IsolatedTag()), true); // missing @pos
         // The PairedTag correction code will convert unpaired bpt/ept into it,
         // which makes the check useless unless they're both there!
@@ -117,9 +113,7 @@ public class TestTMXEventWriter {
         File tmp = File.createTempFile("otter", ".tmx");
         Writer w = new OutputStreamWriter(new FileOutputStream(tmp), "UTF-8");
         TMXWriter writer = TMXWriter.createTMXEventWriter(w);
-        writer.startTMX();
-        Header header = getHeader();
-        writer.writeHeader(header);
+        writer.startTMX(getHeader());
         for (TU tu : tus) {
             writer.writeTu(tu);
         }
@@ -293,8 +287,7 @@ public class TestTMXEventWriter {
         File tmp = File.createTempFile("otter", ".tmx");
         Writer w = new OutputStreamWriter(new FileOutputStream(tmp), "UTF-8");
         TMXWriter writer = TMXWriter.createTMXEventWriter(w);
-        writer.startTMX();
-        writer.writeHeader(getHeader());
+        writer.startTMX(getHeader());
         TU tu = new TU();
         TUV src = new TUV("en-US");
         src.addContent(new TextContent("Dangling "));

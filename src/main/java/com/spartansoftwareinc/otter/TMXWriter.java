@@ -78,13 +78,10 @@ public class TMXWriter {
     public void writeEvent(TMXEvent event) throws XMLStreamException {
         switch (event.getEventType()) {
         case START_TMX:
-            startTMX();
+            startTMX(event.getHeader());
             break;
         case END_TMX:
             endTMX();
-            break;
-        case HEADER:
-            writeHeader(event.getHeader());
             break;
         case TU:
             writeTu(event.getTU());
@@ -99,11 +96,12 @@ public class TMXWriter {
      * element itself and version information.
      * @throws XMLStreamException
      */
-    public void startTMX() throws XMLStreamException {
+    public void startTMX(Header header) throws XMLStreamException {
         xmlWriter.add(eventFactory.createStartDocument());
         ArrayList<Attribute> attrs = new ArrayList<Attribute>();
         attrs.add(eventFactory.createAttribute(VERSION, "1.4"));
         xmlWriter.add(eventFactory.createStartElement(TMX, attrs.iterator(), null));
+        writeHeader(header);
     }
     
     /**
@@ -123,7 +121,7 @@ public class TMXWriter {
      * @throws XMLStreamException if an XML error occurs
      * @throws OtterException if an invalid header is passed
      */
-    public void writeHeader(Header h) throws XMLStreamException {
+    private void writeHeader(Header h) throws XMLStreamException {
         ArrayList<Attribute> attrs = new ArrayList<Attribute>();
         addAttr(attrs, CREATIONID, h.getCreationId(), false);
         if (h.getCreationDate() != null) {

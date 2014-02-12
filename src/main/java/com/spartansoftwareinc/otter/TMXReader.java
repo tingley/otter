@@ -239,7 +239,6 @@ public class TMXReader {
                 errorHandler.error(new OtterInputException("Unsupported TMX version: " +
                                    version, element.getLocation()));
             }
-            addEvent(new TMXEvent(START_TMX));
         }
         @Override
         public void endElement(EndElement element, SegmentBuilder data)
@@ -269,7 +268,7 @@ public class TMXReader {
         @Override
         public void endElement(EndElement element, SegmentBuilder data)
                 throws SNAXUserException {
-            addEvent(new TMXEvent(TMXEventType.HEADER, header));
+            addEvent(new TMXEvent(TMXEventType.START_TMX, header));
             header = null;
         }
     }

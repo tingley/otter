@@ -31,8 +31,7 @@ public class TestTMXEventReader {
         assertNotNull(events);
         checkEvent(events.get(0), START_TMX);
         // Check the header
-        checkEvent(events.get(1), HEADER);
-        Header header = events.get(1).getHeader();
+        Header header = events.get(0).getHeader();
         assertNotNull(header);
         assertEquals("TRADOS Translator's Workbench for Windows", header.getCreationTool());
         assertEquals("Edition 8 Build 863", header.getCreationToolVersion());
@@ -57,7 +56,7 @@ public class TestTMXEventReader {
         assertEquals(2, notes.size());
         assertEquals(new Note("This is a note with an encoding.").setEncoding("ASCII"), notes.get(0));
         assertEquals(new Note("This is a note with lang \"en\".").setLang("en"), notes.get(1));
-        checkEvent(events.get(2), END_TMX);
+        checkEvent(events.get(1), END_TMX);
     }
     
     @SuppressWarnings("serial")
