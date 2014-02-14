@@ -36,7 +36,8 @@ public class EndTag extends PairedTag {
      * items.
      * 
      * @param content content item to add to this tag
-     * @throws IllegalArgumentException if an invalid content item is added 
+     * @throws IllegalArgumentException if an invalid content item is added
+     * @return this EndTag instance 
      */
     @Override
     public EndTag addContent(TUVContent content) {
@@ -48,7 +49,9 @@ public class EndTag extends PairedTag {
      * are restricted to {@link CodeContent} and {@link Subflow} content
      * items.
      * 
-     * @param contents
+     * @param contents content items to add to this tag
+     * @throws IllegalArgumentException if an invalid content item is added
+     * @return this EndTag instance
      */
     public EndTag addContents(List<TUVContent> contents) {
         return (EndTag)super.addContents(contents);
@@ -57,7 +60,7 @@ public class EndTag extends PairedTag {
     /**
      * Set the value of the <code>i</code> attribute for this tag.
      * @param i new <code>i</code> value
-     * @return
+     * @return this EndTag instance
      */
     public EndTag setI(int i) {
         return (EndTag)super.setI(i);

@@ -22,7 +22,7 @@ public class TUEvent extends TMXEvent {
     /**
      * Sequence number that uniquely identifies a TU within this TMX
      * content.  Sequence numbers are 0-indexed. 
-     * @return
+     * @return sequence number for this TUEvent
      */
     public int getSequence() {
         return sequence;

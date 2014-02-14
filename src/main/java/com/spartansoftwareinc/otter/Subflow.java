@@ -21,7 +21,8 @@ public class Subflow extends BaseTUVContentSink implements TagContent {
      * {@link HighlightTag} content items.
      *
      * @param content content item to add to this object
-     * @throws IllegalArgumentException if an invalid content item is added 
+     * @throws IllegalArgumentException if an invalid content item is added
+     * @return updated Subflow instance 
      */
     public Subflow addContent(TUVContent content) {
         return (Subflow)super.addContent(content);
@@ -32,7 +33,9 @@ public class Subflow extends BaseTUVContentSink implements TagContent {
      * are restricted to {@link TextContent}, {@link InlineTag}, and
      * {@link HighlightTag} content items.
      *
-     * @param contents
+     * @param contents content items to add to this subflow
+     * @throws IllegalArgumentException if an invalid content item is added
+     * @return updated Subflow instance
      */
     public Subflow addContents(List<TUVContent> contents) {
         return (Subflow)super.addContents(contents);
@@ -41,7 +44,7 @@ public class Subflow extends BaseTUVContentSink implements TagContent {
     /**
      * Get the value of the <code>type</code> attribute for this
      * subflow.
-     * @return
+     * @return type for this subflow
      */
     public String getType() {
         return type;
@@ -50,8 +53,8 @@ public class Subflow extends BaseTUVContentSink implements TagContent {
     /**
      * Set the value of the <code>type</code> attribute for this 
      * subflow.
-     * @param type
-     * @return
+     * @param type new type value
+     * @return updated Subflow instance
      */
     public Subflow setType(String type) {
         this.type = type;
@@ -61,7 +64,7 @@ public class Subflow extends BaseTUVContentSink implements TagContent {
     /**
      * Get the value of the <code>datatype</code> attribute for this 
      * subflow.
-     * @return
+     * @return datatype for this subflow
      */
     public String getDatatype() {
         return datatype;
@@ -69,7 +72,8 @@ public class Subflow extends BaseTUVContentSink implements TagContent {
 
     /**
      * Set the value of the <code>datatype</code> attribute for this subflow.
-     * @param datatype
+     * @param datatype new datatype value
+     * @return updated Subflow instance
      */
     public Subflow setDatatype(String datatype) {
         this.datatype = datatype;

@@ -25,7 +25,8 @@ public class ComplexContent {
     
     /**
      * Add the contents of a {@link TUVBuilder} as a subflow
-     * @param tuvContent
+     * @param builder a TUVBuilder object, the contents of which will be
+     *        added to this object as a subflow
      */
     public ComplexContent addSubflow(TUVBuilder builder) {
         content.add(convertToSubflow(builder.build()));
@@ -34,7 +35,8 @@ public class ComplexContent {
 
     /**
      * Add the contents of a {@link TUV} as a subflow
-     * @param tuvContent
+     * @param tuv a TUV object, the contents of which will be
+     *      added to this object as a subflow
      */
     public ComplexContent addSubflow(TUV tuv) {
         content.add(convertToSubflow(tuv));

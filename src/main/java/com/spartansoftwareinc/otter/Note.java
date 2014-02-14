@@ -10,16 +10,23 @@ public class Note {
     private String content;
     private String encoding, lang;
 
+    /**
+     * Construct an empty note.
+     */
     public Note() {
     }
     
+    /**
+     * Construct a note with the specified content.
+     * @param content content of this note.
+     */
     public Note(String content) {
         this.content = content;
     }
 
     /**
      * Get the note content.
-     * @return
+     * @return content of this note
      */
     public String getContent() {
         return content;
@@ -27,7 +34,8 @@ public class Note {
 
     /**
      * Set the note content.
-     * @param content
+     * @param content new content for this Note
+     * @return this Note instance
      */
     public Note setContent(String content) {
         this.content = content;
@@ -47,7 +55,7 @@ public class Note {
      * Set the value of the <code>o-encoding</code> attribute for
      * this note.  No validation is performed.
      * @param encoding encoding for this note
-     * @return note object
+     * @return this Note instance
      */
     public Note setEncoding(String encoding) {
         this.encoding = encoding;
@@ -67,7 +75,7 @@ public class Note {
      * Set the value of the <code>xml:lang</code> attribute for
      * this note.  No validation is performed.
      * @param lang xml:lang value for this note
-     * @return note object
+     * @return this Note instance
      */
     public Note setLang(String lang) {
         this.lang = lang;

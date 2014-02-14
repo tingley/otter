@@ -27,7 +27,8 @@ public abstract class StandaloneTag extends InlineTag implements NumberedTag {
      * items.
      * 
      * @param content content item to add to this tag
-     * @throws IllegalArgumentException if an invalid content item is added 
+     * @throws IllegalArgumentException if an invalid content item is added
+     * @return updated StandaloneTag instance 
      */
     @Override
     public StandaloneTag addContent(TUVContent content) {
@@ -39,7 +40,9 @@ public abstract class StandaloneTag extends InlineTag implements NumberedTag {
      * are restricted to {@link CodeContent} and {@link Subflow} content
      * items.
      * 
-     * @param contents
+     * @param contents content items to add to this tag
+     * @throws IllegalArgumentException if an invalid content item is added
+     * @return updated StandaloneTag instance
      */
     public StandaloneTag addContents(List<TUVContent> contents) {
         return (StandaloneTag)super.addContents(contents);
@@ -56,7 +59,7 @@ public abstract class StandaloneTag extends InlineTag implements NumberedTag {
     /**
      * Set the value of the <code>x</code> attribute for this tag
      * @param x new value
-     * @return this
+     * @return updated StandaloneTag instance
      */
     public StandaloneTag setX(int x) {
         this.x = x;
@@ -73,8 +76,8 @@ public abstract class StandaloneTag extends InlineTag implements NumberedTag {
 
     /**
      * Set the value of the <code>type</code> attribute for this tag
-     * @param x new value
-     * @return this
+     * @param type new type value
+     * @return updated StandaloneTag instance
      */
     public StandaloneTag setType(String type) {
         this.type = type;

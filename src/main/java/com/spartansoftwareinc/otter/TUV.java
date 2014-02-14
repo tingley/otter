@@ -38,7 +38,7 @@ public class TUV extends BaseTUVContentSink {
      * are restricted to {@link TextContent}, {@link InlineTag}, and
      * {@link HighlightTag} content items.
      *
-     * @param contents
+     * @param contents content items to add to this object
      */
     public BaseTUVContentSink addContents(List<TUVContent> contents) {
         return (TUV)super.addContents(contents);
@@ -46,7 +46,7 @@ public class TUV extends BaseTUVContentSink {
 
     /**
      * Get the locale string for this TUV.
-     * @return
+     * @return locale string for this TUV
      */
     public String getLocale() {
         return locale;
@@ -55,7 +55,7 @@ public class TUV extends BaseTUVContentSink {
     /**
      * Get the properties for this TUV.  The list returned by 
      * this method is mutable.
-     * @return
+     * @return properties for this TUV
      */
     public List<Property> getProperties() {
         return properties;
@@ -64,7 +64,8 @@ public class TUV extends BaseTUVContentSink {
     /**
      * Set the properties for this TUV.  This method will make a 
      * copy of the list passed to it.
-     * @param properties
+     * @param properties new properties for this TUV
+     * @return this TUV
      */
     public TUV setProperties(List<Property> properties) {
         this.properties = new ArrayList<Property>(properties);
@@ -73,7 +74,8 @@ public class TUV extends BaseTUVContentSink {
 
     /**
      * Add a property to this TUV.
-     * @param property
+     * @param property new property for this TUV
+     * @return this TUV
      */
     public TUV addProperty(Property property) {
         properties.add(property);
@@ -83,7 +85,7 @@ public class TUV extends BaseTUVContentSink {
     /**
      * Get the notes for this TUV.  The list returned by this method
      * is mutable.
-     * @return
+     * @return list of notes for this TUV
      */
     public List<Note> getNotes() {
         return notes;
@@ -92,7 +94,8 @@ public class TUV extends BaseTUVContentSink {
     /**
      * Set the notes for this TUV.  This method will make a 
      * copy of the list passed to it.
-     * @param notes
+     * @param notes new list of notes for this TUV
+     * @return this TUV
      */
     public TUV setNotes(List<Note> notes) {
         this.notes = new ArrayList<Note>(notes);
@@ -101,8 +104,8 @@ public class TUV extends BaseTUVContentSink {
     
     /**
      * Add a note to this TUV.
-     * @param note
-     * @return
+     * @param note note to add to this TUV
+     * @return this TUV 
      */
     public TUV addNote(Note note) {
         notes.add(note);

@@ -27,7 +27,7 @@ public class Property {
     /**
      * Set the type of this property.
      * @param type
-     * @return
+     * @return this Property instance
      */
     public Property setType(String type) {
         this.type = type;
@@ -36,7 +36,7 @@ public class Property {
 
     /**
      * Get the value of this property.
-     * @return
+     * @return property value
      */
     public String getValue() {
         return value;
@@ -44,7 +44,8 @@ public class Property {
 
     /**
      * Set the value of this property.
-     * @param value
+     * @param value new property value
+     * @return this Property instance
      */
     public Property setValue(String value) {
         this.value = value;
@@ -64,7 +65,7 @@ public class Property {
      * Set the value of the <code>o-encoding</code> attribute for
      * this property.  No validation is performed.
      * @param encoding encoding for this property
-     * @return property object
+     * @return this Property instance
      */
     public Property setEncoding(String encoding) {
         this.encoding = encoding;

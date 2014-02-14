@@ -40,7 +40,8 @@ public abstract class PairedTag extends InlineTag {
      * items.
      * 
      * @param content content item to add to this tag
-     * @throws IllegalArgumentException if an invalid content item is added 
+     * @throws IllegalArgumentException if an invalid content item is added
+     * @return this PairedTag instance
      */
     @Override
     public PairedTag addContent(TUVContent content) {
@@ -52,7 +53,9 @@ public abstract class PairedTag extends InlineTag {
      * are restricted to {@link TextContent}, {@link InlineTag}, and
      * {@link HighlightTag} content items.
      * 
-     * @param contents
+     * @param contents content items to be added to this tag
+     * @throws IllegalArgumentException if an invalid content item is added
+     * @return this PairedTag instance
      */
     public PairedTag addContents(List<TUVContent> contents) {
         return (PairedTag)super.addContents(contents);
@@ -60,7 +63,7 @@ public abstract class PairedTag extends InlineTag {
 
     /**
      * Get the value of the <code>i</code> attribute for this tag.
-     * @return
+     * @return value of the <code>i</code> attribute
      */
     public int getI() {
         return i;
@@ -69,7 +72,7 @@ public abstract class PairedTag extends InlineTag {
     /**
      * Set the value of the <code>i</code> attribute for this tag.
      * @param i new <code>i</code> value
-     * @return
+     * @return this PairedTag instance
      */
     public PairedTag setI(int i) {
         this.i = i;

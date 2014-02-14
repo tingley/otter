@@ -28,3 +28,7 @@
 - unittest to show i'm ignoring case when comparing TUV locales
 - unittest to show i'm writing src locale first
 - BaseTUVContentSink.addContents() should use a bounding wildcard
+- I think there may be cases related to case-insensitive languages 
+  that I'm not handling correctly.
+- There's nothing in the spec that prevents a single TU from having
+  multiple TUVs with the same language.  What is the best behavior?

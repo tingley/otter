@@ -47,13 +47,13 @@ public class TMXWriter {
     /**
      * Create a new <code>TMXWriter</code> that writes TMX to the specified 
      * <code>Writer</code>.
-     * @param w 
-     * @return
+     * @param writer output writer for the TMX
+     * @return new TMXWriter
      * @throws XMLStreamException
      */
-    public static TMXWriter createTMXEventWriter(Writer w) 
+    public static TMXWriter createTMXEventWriter(Writer writer) 
                 throws XMLStreamException {
-        return new TMXWriter(w);
+        return new TMXWriter(writer);
     }
 
     // Thread-safe after initialization
@@ -93,7 +93,8 @@ public class TMXWriter {
     
     /**
      * Begin writing a TMX document, including the <code>&lt;tmx&gt;</code>
-     * element itself and version information.
+     * element itself, version information, and header information.
+     * @param header Header information for this TMX file
      * @throws XMLStreamException
      */
     public void startTMX(Header header) throws XMLStreamException {

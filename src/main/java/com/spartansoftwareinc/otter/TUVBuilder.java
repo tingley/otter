@@ -21,7 +21,8 @@ public class TUVBuilder {
 	/**
 	 * Return a nested TUVBuilder that will insert its
 	 * contents at the current build point.
-	 * @return
+	 * @return a new TUVBuilder inserted at the current point
+	 *         in the parent TUV
 	 */
 	public TUVBuilder nested() {
 	    return new TUVBuilder(tuv.getLocale());
@@ -34,7 +35,7 @@ public class TUVBuilder {
 	 * <p>   
 	 * Calling this method multiple times will cause an 
 	 * {@link IllegalStateException} to be thrown.
-	 * @return TUV
+	 * @return TUV constructed from the contents of this builder
 	 */
 	public TUV build() {
 	    if (built) {
@@ -51,7 +52,7 @@ public class TUVBuilder {
 	/**
 	 * Add text to thi
 	 * @param content
-	 * @return
+	 * @return this TUVBuilder
 	 */
 	public TUVBuilder text(String content) {
 		tuv.addContent(new TextContent(content));
@@ -65,7 +66,7 @@ public class TUVBuilder {
 	 * implementations of {@link TUVContentSink#addContent(TUVContent)},
 	 * as appropriate.
 	 * @param content {@link TUVContent} object to add.
-	 * @return
+	 * @return this TUVBuilder
 	 */
 	public TUVBuilder tag(TagContent content) {
 	    tuv.addContent(content);
@@ -77,7 +78,7 @@ public class TUVBuilder {
 	 * code content.
 	 * @param i
 	 * @param codeContent
-	 * @return
+	 * @return this TUVBuilder
 	 */
 	public TUVBuilder bpt(int i, String codeContent) {
 		BeginTag bpt = new BeginTag(i);
@@ -89,7 +90,7 @@ public class TUVBuilder {
      * <code>x</code> value and code content.
      * @param i
      * @param codeContent
-     * @return
+     * @return this TUVBuilder
      */
 	public TUVBuilder bpt(int i, int x, String codeContent) {
 	    BeginTag bpt = new BeginTag(i);
@@ -101,8 +102,8 @@ public class TUVBuilder {
      * Add a {@link BeginTag} with the specified <code>i</code> value and
      * complex code contents.
      * @param i
-     * @param codeContent
-     * @return
+     * @param content
+     * @return this TUVBuilder
      */
 	public TUVBuilder bpt(int i, ComplexContent content) {
 	    BeginTag bpt = new BeginTag(i);
@@ -113,8 +114,8 @@ public class TUVBuilder {
      * Add a {@link BeginTag} with the specified <code>i</code> and
      * <code>x</code> values and complex code contents.
      * @param i
-     * @param codeContent
-     * @return
+     * @param content
+     * @return this TUVBuilder
      */
 	public TUVBuilder bpt(int i, int x, ComplexContent content) {
 	    BeginTag bpt = new BeginTag(i);
@@ -127,7 +128,7 @@ public class TUVBuilder {
 	 * and code contents.
 	 * @param i
 	 * @param codeContent
-	 * @return
+	 * @return this TUVBuilder
 	 */
 	public TUVBuilder ept(int i, String codeContent) {
 		tuv.addContent(new EndTag(i, codeContent));
@@ -137,7 +138,7 @@ public class TUVBuilder {
 	/**
 	 * Add a {@link PlaceholderTag} with the specified code contents.
 	 * @param codeContent
-	 * @return
+	 * @return this TUVBuilder
 	 */
 	public TUVBuilder ph(String codeContent) {
 		PlaceholderTag ph = new PlaceholderTag();
@@ -148,7 +149,7 @@ public class TUVBuilder {
 	 * Add a {@link PlaceholderTag} with the specified <code>x</code>
 	 * value and code contents.
 	 * @param codeContent
-	 * @return
+	 * @return this TUVBuilder
 	 */
 	public TUVBuilder ph(int x, String codeContent) {
         PlaceholderTag ph = new PlaceholderTag();
@@ -159,7 +160,7 @@ public class TUVBuilder {
 	/**
 	 * Add a {@link PlaceholderTag} with the specified complex content.
 	 * @param content
-	 * @return
+	 * @return this TUVBuilder
 	 */
 	public TUVBuilder ph(ComplexContent content) {
 	    PlaceholderTag ph = new PlaceholderTag();
@@ -170,7 +171,7 @@ public class TUVBuilder {
      * Add a {@link PlaceholderTag} with the specified <code>x</code>
      * value and complex code contents.
      * @param content
-     * @return
+     * @return this TUVBuilder
      */
     public TUVBuilder ph(int x, ComplexContent content) {
         PlaceholderTag ph = new PlaceholderTag();
@@ -183,7 +184,7 @@ public class TUVBuilder {
      * value and code contents.
      * @param pos
      * @param codeContent
-     * @return
+     * @return this TUVBuilder
      */
     public TUVBuilder it(IsolatedTag.Pos pos, String codeContent) {
         IsolatedTag it = new IsolatedTag(pos);
@@ -194,8 +195,8 @@ public class TUVBuilder {
      * Add a {@link IsolatedTag} with the specified <code>pos</code>
      * value and complex contents.
      * @param pos
-     * @param codeContent
-     * @return
+     * @param content
+     * @return this TUVBuilder
      */
     public TUVBuilder it(IsolatedTag.Pos pos, ComplexContent content) {
         IsolatedTag it = new IsolatedTag(pos);
@@ -205,7 +206,7 @@ public class TUVBuilder {
     /**
      * Add a {@link HighlightTag} with the specified text content.
      * @param textContent
-     * @return
+     * @return this TUVBuilder
      */
     public TUVBuilder hi(String textContent) {
         HighlightTag hi = new HighlightTag();
@@ -219,7 +220,7 @@ public class TUVBuilder {
      * and text content.
      * @param x
      * @param textContent
-     * @return
+     * @return this TUVBuilder
      */
     public TUVBuilder hi(int x, String textContent) {
         HighlightTag hi = new HighlightTag().setX(x);
@@ -233,7 +234,7 @@ public class TUVBuilder {
      * {@link TUVBuilder}.
      * and text content.
      * @param highlightedContent
-     * @return
+     * @return this TUVBuilder
      */
     public TUVBuilder hi(TUVBuilder highlightedContent) {
         return hi(highlightedContent.build());
@@ -244,7 +245,7 @@ public class TUVBuilder {
      * the content collected in the specified {@link TUVBuilder}.
      * @param x
      * @param highlightedContent
-     * @return
+     * @return this TUVBuilder
      */
     public TUVBuilder hi(int x, TUVBuilder highlightedContent) {
         return hi(x, highlightedContent.build());
@@ -255,7 +256,7 @@ public class TUVBuilder {
      * {@link TUV}.
      * and text content.
      * @param highlightedContent
-     * @return
+     * @return this TUVBuilder
      */
     public TUVBuilder hi(TUV highlightedContent) {
         HighlightTag hi = new HighlightTag();
@@ -269,7 +270,7 @@ public class TUVBuilder {
      * the content collected in the specified {@link TUV}.
      * @param x
      * @param highlightedContent
-     * @return
+     * @return this TUVBuilder
      */
     public TUVBuilder hi(int x, TUV highlightedContent) {
         HighlightTag hi = new HighlightTag().setX(x);

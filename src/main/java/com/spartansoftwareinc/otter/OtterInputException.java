@@ -11,7 +11,7 @@ public class OtterInputException extends OtterException {
 
     /**
      * Get the XML Parsing location where this error occurred.
-     * @return
+     * @return Location where the error occurred in the XML
      */
     public Location getLocation() {
         return location;

@@ -50,11 +50,11 @@ public class TMXReader {
     /**
      * Create a new <code>TMXReader</code> to parse TMX from the provided
      * <code>Reader</code>.
-     * @param r
-     * @return
+     * @param reader reader containing character content to be parsed as TMX
+     * @return new TMXReader
      */
-    public static TMXReader createTMXEventReader(Reader r) throws IOException {
-        return new TMXReader(stripBOM(r));
+    public static TMXReader createTMXEventReader(Reader reader) throws IOException {
+        return new TMXReader(stripBOM(reader));
     }
 
     // Thread-safe after initialization

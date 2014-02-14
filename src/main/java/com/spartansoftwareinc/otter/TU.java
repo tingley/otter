@@ -8,6 +8,14 @@ import java.util.Map;
 
 import static com.spartansoftwareinc.otter.Util.eq;
 
+/**
+ * Representation of a <code>tu</code> element.  A TU is the basic
+ * unittest of multilingual information in a TMX.  Each TU contains one or more
+ * {@link TUV}.  (TUs containing only a single TUV are legal under the specification,
+ * although they serve no practical purpose in most situations. Each TU
+ * has a source language, either set explicitly as an attribute or inherited
+ * from the source language set in the TMX header.
+ */
 public class TU {
     private Map<String, TUV> tuvs = new HashMap<String, TUV>();
     private String id, encoding, datatype, creationTool, creationToolVersion, 
@@ -16,10 +24,16 @@ public class TU {
     private Date lastUsageDate, creationDate, changeDate;
     private List<Property> properties = new ArrayList<Property>();
     private List<Note> notes = new ArrayList<Note>();
-    
+
+    /**
+     * Construct a new TU.
+     */
     public TU() {
     }
 
+    /**
+     * Construct a new TU with the specified source language.
+     */
     public TU(String srcLang) {
         this.srcLang = srcLang;
     }
@@ -45,8 +59,8 @@ public class TU {
     
     /**
      * Return the TUVs for this TU as a Map, keyed
-     * by their 
-     * @return
+     * by their locale
+     * @return map of language and TUV data 
      */
     public Map<String, TUV> getTuvs() {
         return tuvs;

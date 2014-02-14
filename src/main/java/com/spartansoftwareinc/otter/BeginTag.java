@@ -38,7 +38,7 @@ public class BeginTag extends PairedTag implements NumberedTag {
      * Constructor, specifying the <code>i</code> and <code>x</code>
      * attribute values and the complex code content for  this tag.
      * @param i value of the required <code>i</code> attribute
-     * @param codeData complex code data for this tag
+     * @param content complex content for this tag
      */
     public BeginTag(int i, ComplexContent content) {
         super(i, content);
@@ -51,6 +51,7 @@ public class BeginTag extends PairedTag implements NumberedTag {
      * 
      * @param content content item to add to this tag
      * @throws IllegalArgumentException if an invalid content item is added 
+     * @return this BeginTag instance
      */
     @Override
     public BeginTag addContent(TUVContent content) {
@@ -62,7 +63,8 @@ public class BeginTag extends PairedTag implements NumberedTag {
      * are restricted to {@link CodeContent} and {@link Subflow} content
      * items.
      * 
-     * @param contents
+     * @param contents content items to add to this tag
+     * @return this BeginTag instance
      */
     public BeginTag addContents(List<TUVContent> contents) {
         return (BeginTag)super.addContents(contents);
@@ -71,7 +73,7 @@ public class BeginTag extends PairedTag implements NumberedTag {
     /**
      * Set the value of the <code>i</code> attribute for this tag.
      * @param i new <code>i</code> value
-     * @return
+     * @return this BeginTag instance
      */
     public BeginTag setI(int i) {
         return (BeginTag)super.setI(i);
@@ -79,7 +81,7 @@ public class BeginTag extends PairedTag implements NumberedTag {
     
     /**
      * Get the value of the <code>x</code> attribute for this tag.
-     * @return
+     * @return value of the <code>x</code> attribute
      */
     public int getX() {
         return x;
@@ -88,7 +90,7 @@ public class BeginTag extends PairedTag implements NumberedTag {
     /**
      * Set the value of the <code>x</code> attribute for this tag.
      * @param x new <code>x</code> value
-     * @return
+     * @return this BeginTag instance
      */
     public BeginTag setX(int x) {
         this.x = x;
@@ -97,7 +99,7 @@ public class BeginTag extends PairedTag implements NumberedTag {
 
     /**
      * Get the value of the <code>type</code> attribute for this tag.
-     * @return
+     * @return value of the <code>type</code> attribute for this tag 
      */
     public String getType() {
         return type;
@@ -106,7 +108,7 @@ public class BeginTag extends PairedTag implements NumberedTag {
     /**
      * Set the value of the <code>type</code> attribute for this tag.
      * @param type new <code>type</code> value
-     * @return
+     * @return this BeginTag instance
      */
     public BeginTag setType(String type) {
         this.type = type;

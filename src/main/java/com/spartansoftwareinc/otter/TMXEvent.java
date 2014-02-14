@@ -4,8 +4,8 @@ import static com.spartansoftwareinc.otter.Util.eq;
 
 /**
  * Represents a simplified TMX parsing event.
- * {@link TMXEventType.START_TMX} events include a {@link Header},
- * and {@link TMXEventType.TU} events include a {@link TU}.
+ * {@link TMXEventType#START_TMX} events include a {@link Header},
+ * and {@link TMXEventType#TU} events include a {@link TU}.
  */
 public class TMXEvent {
     private TMXEventType eventType;
