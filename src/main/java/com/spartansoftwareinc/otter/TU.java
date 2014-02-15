@@ -13,8 +13,9 @@ import static com.spartansoftwareinc.otter.Util.eq;
  * unittest of multilingual information in a TMX.  Each TU contains one or more
  * {@link TUV}.  (TUs containing only a single TUV are legal under the specification,
  * although they serve no practical purpose in most situations. Each TU
- * has a source language, either set explicitly as an attribute or inherited
- * from the source language set in the TMX header.
+ * has an optional source language.  When reading TUs from a {@link TMXReader},
+ * the source language will be inherited from the TMX header if it is not
+ * set explicitly.
  */
 public class TU {
     private Map<String, TUV> tuvs = new HashMap<String, TUV>();

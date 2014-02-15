@@ -2,13 +2,11 @@
     - multiple bpts with the same @i
     - Make sure that user's can't do thing like add <hi> tags 
       in invalid locations.
-- segmentbuilder may not be needed
 - document everything
 - allow for some filter to ignore certain properties
 - refactor addContent() of Subflow, HighlightTag, and TUV
     - I might need to break out these into more type-specific 
       adders
-- various writer unittests
 - need a way to report errors when writing
     - eg what if we try to write a tu that doesn't include a tuv of the
       source locale.  is this a warning?  error?
@@ -32,3 +30,6 @@
   that I'm not handling correctly.
 - There's nothing in the spec that prevents a single TU from having
   multiple TUVs with the same language.  What is the best behavior?
+- might be nice to provide some basic tools (rewrite locale, maybe some 
+  sort of sed/awk-type thing for editing TUs).  Should I bundle this,
+  or make it a separate project?
