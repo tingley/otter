@@ -1,5 +1,5 @@
 - remaining error todos
-    - multiple bpts with the same @i
+    - multiple bpts with the same @i (fixed for reading, test for writing)
     - Make sure that user's can't do thing like add <hi> tags 
       in invalid locations.
 - document everything
@@ -33,3 +33,4 @@
 - might be nice to provide some basic tools (rewrite locale, maybe some 
   sort of sed/awk-type thing for editing TUs).  Should I bundle this,
   or make it a separate project?
+- refactor segmentbuilder validation logic with stuff called from tuvbuilder

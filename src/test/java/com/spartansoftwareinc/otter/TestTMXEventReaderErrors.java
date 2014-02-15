@@ -53,6 +53,25 @@ public class TestTMXEventReaderErrors {
         // - [1] is because the subsequent ept now how an @i that doesn't match 
         assertEquals(2, handler.tuErrors.size());
         assertEquals(0, handler.tuErrors.get(0).sequence);
+        assertEquals(0, handler.tuErrors.get(1).sequence);
+        assertEquals(0, handler.errors.size());
+        assertNull(handler.fatalError);
+        assertNull(handler.xmlError);
+    }
+
+    @Test
+    public void testDuplicateBptIAttrError() throws Exception {
+        TMXReader reader = TestUtil.getTMXReader("/error_duplicate_bpt_i.tmx");
+        TestErrorHandler handler = new TestErrorHandler();
+        reader.setErrorHandler(handler);
+        readWithErrors(reader);
+        // This reports multiple errors
+        // - [0] is because the second bpt the same ID as the first
+        // - [1] is because the second ept doesn't find a bpt with a matching ID 
+        //       (because its matching bpt was rejected)
+        assertEquals(2, handler.tuErrors.size());
+        assertEquals(0, handler.tuErrors.get(0).sequence);
+        assertEquals(0, handler.tuErrors.get(1).sequence);
         assertEquals(0, handler.errors.size());
         assertNull(handler.fatalError);
         assertNull(handler.xmlError);

@@ -13,7 +13,10 @@ class SegmentBuilder {
     private TU tu;
     private TUV tuv;
     private TMXReader reader;
-    private BitSet pairedTagIndices = new BitSet(8);
+    // Indices that have appeared in a bpt but not yet matched
+    private BitSet openedTagIndices = new BitSet(8);
+    // Indices that have been seen at all (matched or unmatched)
+    private BitSet usedTagIndices = new BitSet(8);
     
     SegmentBuilder(TMXReader reader) {
         this.reader = reader;
@@ -63,7 +66,8 @@ class SegmentBuilder {
     }
     
     void startTuv(StartElement el) {
-        pairedTagIndices.clear();
+        openedTagIndices.clear();
+        usedTagIndices.clear();
         String locale = attrVal(el, XMLLANG);
         require(locale != null, el.getLocation(), "TUV has no xml:lang");
         tuv = new TUV(locale);
@@ -84,23 +88,24 @@ class SegmentBuilder {
     
     void startPair(BeginTag bpt, StartElement el) {
         int iValue = bpt.getI();
-        if (pairedTagIndices.get(iValue)) {
+        if (usedTagIndices.get(iValue)) {
             reader.reportTuError(new OtterInputException(
                     "TUV contains multiple bpt tags with index " + iValue, el.getLocation()));
         }
         else {
-            pairedTagIndices.set(iValue);
+            openedTagIndices.set(iValue);
+            usedTagIndices.set(iValue);
         }
     }
     
     void endPair(EndTag ept, StartElement el) {
         int iValue = ept.getI();
-        if (!pairedTagIndices.get(iValue)) {
+        if (!openedTagIndices.get(iValue)) {
             reader.reportTuError(new OtterInputException(
                     "TUV contains ept without a preceding bpt, index " + iValue, el.getLocation()));
         }
         else {
-            pairedTagIndices.clear(iValue);
+            openedTagIndices.clear(iValue);
         }
     }
 }
