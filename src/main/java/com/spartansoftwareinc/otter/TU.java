@@ -49,9 +49,15 @@ public class TU {
     public TUVBuilder tuvBuilder(String locale) {
         return new TUVBuilder(this, locale);
     }
-    
-    public void addTUV(TUV tuv) {
+
+    /**
+     * Add a TUV to this TU.
+     * @param tuv
+     * @return TU with TUV added.
+     */
+    public TU addTUV(TUV tuv) {
         tuvs.put(tuv.getLocale(), tuv);
+        return this;
     }
 
     // case-insensitive TUV languages?
@@ -67,32 +73,62 @@ public class TU {
         return tuvs;
     }
     
-    public void setTuvs(Map<String, TUV> tuvs) {
+    /**
+     * Set TUVs for this TU
+     * @param tuvs
+     * @return TU instance with updated TUVs
+     */
+    public TU setTuvs(Map<String, TUV> tuvs) {
         this.tuvs = tuvs;
+        return this;
     }
     
     public List<Property> getProperties() {
         return properties;
     }
 
-    public void setProperties(List<Property> properties) {
+    /**
+     * Set properties for this TU.
+     * @param properties
+     * @return TU instance with updated properties
+     */
+    public TU setProperties(List<Property> properties) {
         this.properties = properties;
+        return this;
     }
 
-    public void addProperty(Property property) {
+    /**
+     * Add a property to this TU.
+     * @param property
+     * @return TU instance with property added
+     */
+    public TU addProperty(Property property) {
         properties.add(property);
+        return this;
     }
 
     public List<Note> getNotes() {
         return notes;
     }
 
-    public void setNotes(List<Note> notes) {
+    /**
+     * Set notes for this TU.
+     * @param notes
+     * @return TU instance with updated notes
+     */
+    public TU setNotes(List<Note> notes) {
         this.notes = notes;
+        return this;
     }
     
-    public void addNote(Note note) {
+    /**
+     * Add a note to this TU.
+     * @param note
+     * @return TU instance with note added
+     */
+    public TU addNote(Note note) {
         notes.add(note);
+        return this;
     }
     
     @Override

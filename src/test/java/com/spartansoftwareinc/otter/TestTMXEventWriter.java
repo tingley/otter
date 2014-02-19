@@ -90,7 +90,28 @@ public class TestTMXEventWriter {
         testTagTUV(writer, l, true); // missing @i
         testTagTUV(writer, Collections.singletonList(new PlaceholderTag()), false);
     }
-    
+
+    @Test
+    public void testDuplicateBPTattributeIvalues() throws Exception {
+        TMXWriter writer = TMXWriter.createTMXEventWriter(new StringWriter());
+        writer.startTMX(getHeader());
+        TU tu = new TU();
+        Exception exception = null;
+        try {
+            tu.addTUV(tu.tuvBuilder("en-US")
+                    .text("hello ")
+                    .bpt(1, "<b>").text("bold").ept(1, "</b>")
+                    .text(" and ")
+                    .bpt(1, "<i>").text("italic").ept(1, "</i>") // these should cause an error
+                    .text(" world.").build());
+            writer.writeTu(tu);
+        }
+        catch (Exception e) {
+            exception = e;
+        }
+        assertNotNull("No exception thrown for duplicate @i values", exception);   
+    }
+
     private void testTagTUV(TMXWriter writer, Collection<? extends InlineTag> tags, boolean expectFailure)
                                         throws XMLStreamException {
         TU tu = new TU();
@@ -281,7 +302,7 @@ public class TestTMXEventWriter {
         testRoundtripTUs(Collections.singletonList(tu));
         verifyAgainstSnippet("testMultipleTags", Collections.singletonList(tu));
     }
-    
+
     @Test
     public void testUnmatchedPairedTagConversion() throws Exception {
         File tmp = File.createTempFile("otter", ".tmx");

@@ -276,7 +276,8 @@ public class TMXWriter {
     }
     
     /**
-     * Rewrite any unmatched paired tags as isolated tags.
+     * Rewrite any unmatched paired tags as isolated tags.  This
+     * also checks for duplicate tag @i values.
      * @param tuv TUV to search for unmatched tags
      */
     private void convertUnmatchedPairedTags(TUV tuv) {
@@ -287,10 +288,20 @@ public class TMXWriter {
         for (int i = 0; i < len; i++) {
         	TUVContent c = contents.get(i);
         	if (c instanceof BeginTag) {
-        		bptIValues.set(((BeginTag)c).getI());
+        	    BeginTag bpt = (BeginTag)c;
+        	    if (bptIValues.get(bpt.getI())) {
+        	        throw new OtterException("<bpt> with duplicate 'i' value "
+        	                                 + bpt.getI() + " in " + tuv);
+        	    }
+        		bptIValues.set(bpt.getI());
         	}
         	else if (c instanceof EndTag) {
-        		eptIValues.set(((EndTag)c).getI());
+        	    EndTag ept = (EndTag)c;
+                if (eptIValues.get(ept.getI())) {
+                    throw new OtterException("<ept> with duplicate 'i' value "
+                                             + ept.getI() + " in " + tuv);
+                }
+        		eptIValues.set(ept.getI());
         	}
         }
         for (int i = 0; i < len; i++) {

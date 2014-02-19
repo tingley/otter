@@ -1,5 +1,4 @@
 - remaining error todos
-    - multiple bpts with the same @i (fixed for reading, test for writing)
     - Make sure that user's can't do thing like add <hi> tags 
       in invalid locations.
 - document everything
