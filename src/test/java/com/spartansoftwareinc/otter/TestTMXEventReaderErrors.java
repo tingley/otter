@@ -41,7 +41,17 @@ public class TestTMXEventReaderErrors {
     public void testMissingVersionError() throws Exception {
         expectFatalError("/error_missing_tmx_version.tmx");
     }
-    
+
+    @Test
+    public void testMultipleHeadersError() throws Exception {
+        expectFatalError("/error_multiple_headers.tmx");
+    }
+
+    @Test
+    public void testMultipleBodyError() throws Exception {
+        expectFatalError("/error_multiple_body.tmx");
+    }
+
     @Test
     public void testMissingBptIAttrError() throws Exception {
         TMXReader reader = TestUtil.getTMXReader("/error_missing_bpt_i.tmx");

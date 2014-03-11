@@ -146,6 +146,11 @@ public class TMXReader {
             errorHandler.xmlError(e);
             return false;
         }
+        catch (SNAXUserException e) {
+            errorHandler.fatalError(new OtterInputException(e, 
+                                    e.getLocation()));
+            return false;
+        }
     }
     
     /**
@@ -179,13 +184,13 @@ public class TMXReader {
             ElementSelector<SegmentBuilder> phAnchor, bptAnchor, eptAnchor, itAnchor;
             {
                 elements("tmx").attach(new TMXHandler());
-                ElementSelector<SegmentBuilder> header = elements("tmx", "header"); 
+                ElementSelector<SegmentBuilder> header = elements("tmx", "header").only(1); 
                 header.attach(new HeaderHandler());
                 header.element("prop").attach(new HeaderPropertyHandler());
                 header.element("note").attach(new HeaderNoteHandler());
 
                 // <body> is currently a no-op for producing user data
-                ElementSelector<SegmentBuilder> body = elements("tmx", "body"); 
+                ElementSelector<SegmentBuilder> body = elements("tmx", "body").only(1); 
                 ElementSelector<SegmentBuilder> tu = body.element("tu");
                 tu.attach(new TuHandler());
                 tu.element("prop").attach(new TuPropertyHandler());

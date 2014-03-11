@@ -331,7 +331,7 @@ public class TestTMXEventReader {
             assertEquals(i, tuEvents.get(i).getSequence());
         }
     }
-    
+
     private void checkBptSubflowTuv(TUV tuv) {
         assertNotNull(tuv);
         List<TUVContent> tuvContents = tuv.getContents();
