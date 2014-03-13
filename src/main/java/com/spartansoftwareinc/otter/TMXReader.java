@@ -57,20 +57,26 @@ public class TMXReader {
         return new TMXReader(stripBOM(reader));
     }
 
-    // Thread-safe after initialization
-    private static XMLInputFactory inputFactory;
-    static {
-        inputFactory = XMLInputFactory.newFactory();
+    
+    private XMLInputFactory getInputFactory() {
+        // XMLInputFactory is thread-safe as long as you're not setting
+        // properties, so I could re-use this.  But unfortunately,
+        //   https://bugs.openjdk.java.net/browse/JDK-8028111
+        // will eventually cause that to crash under long-running
+        // (ie, server-based) circumstances in which > 64k documents
+        // are read.  So instead, create a new factory every time.
+        XMLInputFactory inputFactory = XMLInputFactory.newFactory();
         inputFactory.setProperty(XMLInputFactory.IS_COALESCING, true);
         // Disable DTD loading - this is necessary to prevent
         // Woodstox (if present) from bombing out when it can't find
         // the TMX DTD.
         inputFactory.setProperty(XMLInputFactory.SUPPORT_DTD, false);
+        return inputFactory;
     }
     
     private TMXReader(Reader r) {
         try {
-            parser = SNAXParser.createParser(inputFactory, buildModel());
+            parser = SNAXParser.createParser(getInputFactory(), buildModel());
             parser.startParsing(r, new SegmentBuilder(this));
         }
         catch (XMLStreamException e) {
