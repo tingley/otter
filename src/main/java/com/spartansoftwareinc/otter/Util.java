@@ -36,6 +36,7 @@ class Util {
             handler.fatalError(
                     new OtterInputException("Required attribute " + attrName + " is missing", 
                             el.getLocation()));
+            return null;
         }
         return a.getValue();
     }

@@ -66,4 +66,9 @@ public class TMXEvent {
         TMXEvent e = (TMXEvent)o;
         return eventType.equals(e.eventType) && eq(resource, e.resource);
     }
+
+    @Override
+    public int hashCode() {
+        return new Hasher().add(eventType).add(resource).value();
+    }
 }
