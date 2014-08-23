@@ -33,3 +33,4 @@
   sort of sed/awk-type thing for editing TUs).  Should I bundle this,
   or make it a separate project?
 - refactor segmentbuilder validation logic with stuff called from tuvbuilder
+- handle duplicate properties on a tu
