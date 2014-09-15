@@ -22,31 +22,69 @@ public class Header {
     private String creationId;
     private Date changeDate;
     private String changeId;
-    
+
     private List<Property> properties = new ArrayList<Property>();
     private List<Note> notes = new ArrayList<Note>();
 
     public Header() {
     }
-    
+
+    /**
+     * Get properties for the Header.
+     * @return properties
+     */
     public List<Property> getProperties() {
         return properties;
     }
-    
+
+    /**
+     * Add a property to this TU.
+     * @param property
+     * @return TU instance with property added
+     */
     public Header addProperty(Property prop) {
         properties.add(prop);
         return this;
     }
-    
+
+    /**
+     * Set properties for the Header
+     * @param properties
+     * @return Header instance with updated properties
+     */
+    public Header setProperties(List<Property> properties) {
+        this.properties = new ArrayList<Property>(properties);
+        return this;
+    }
+
+    /**
+     * Get notes for the Header.
+     * @return notes
+     */
     public List<Note> getNotes() {
         return notes;
     }
-    
+
+    /**
+     * Add a note to the Header.
+     * @param note
+     * @return Header instance with note added
+     */
     public Header addNote(Note note) {
         notes.add(note);
         return this;
     }
-    
+
+    /**
+     * Set notes for the Header.
+     * @param notes
+     * @return Header instance with updated notes
+     */
+    public Header setNotes(List<Note> notes) {
+        this.notes = new ArrayList<Note>(notes);
+        return this;
+    }
+
     public String getCreationTool() {
         return creationTool;
     }

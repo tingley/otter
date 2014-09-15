@@ -82,7 +82,11 @@ public class TU {
         this.tuvs = tuvs;
         return this;
     }
-    
+
+    /**
+     * Get properties for this TU.
+     * @return properties
+     */
     public List<Property> getProperties() {
         return properties;
     }
@@ -93,7 +97,7 @@ public class TU {
      * @return TU instance with updated properties
      */
     public TU setProperties(List<Property> properties) {
-        this.properties = properties;
+        this.properties = new ArrayList<Property>(properties);
         return this;
     }
 
@@ -107,6 +111,10 @@ public class TU {
         return this;
     }
 
+    /**
+     * Get notes for this TU.
+     * @return notes
+     */
     public List<Note> getNotes() {
         return notes;
     }
@@ -120,7 +128,7 @@ public class TU {
         this.notes = notes;
         return this;
     }
-    
+
     /**
      * Add a note to this TU.
      * @param note
