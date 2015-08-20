@@ -2,6 +2,7 @@ package com.spartansoftwareinc.otter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Base class for all inline tags in TUV content that can contain 
@@ -74,9 +75,7 @@ public abstract class InlineTag implements TagContent {
     
     @Override
     public int hashCode() {
-        return new Hasher()
-            .add(contents)
-            .value();
+        return Objects.hash(contents);
     }
 
     @Override

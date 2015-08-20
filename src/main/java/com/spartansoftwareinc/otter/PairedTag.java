@@ -1,6 +1,7 @@
 package com.spartansoftwareinc.otter;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Base class for paired tags. Paired tags support the <code>i</code>
@@ -81,9 +82,7 @@ public abstract class PairedTag extends InlineTag {
 
     @Override
     public int hashCode() {
-        return new Hasher(super.hashCode())
-            .add(i)
-            .value();
+        return Objects.hash(super.hashCode(), i);
     }
 
     @Override

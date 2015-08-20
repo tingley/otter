@@ -84,11 +84,7 @@ public class Note {
 
     @Override
     public int hashCode() {
-        return new Hasher()
-            .add(content)
-            .add(encoding)
-            .add(lang)
-            .value();
+        return Objects.hash(content, encoding, lang);
     }
 
     @Override

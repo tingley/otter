@@ -1,6 +1,7 @@
 package com.spartansoftwareinc.otter;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * A <code>&lt;it&gt;</code> tag.
@@ -86,9 +87,7 @@ public class IsolatedTag extends StandaloneTag {
     
     @Override
     public int hashCode() {
-        return new Hasher(super.hashCode())
-            .add(pos)
-            .value();
+        return Objects.hash(super.hashCode(), pos);
     }
     
     @Override

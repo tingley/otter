@@ -194,20 +194,19 @@ public class Header {
 
     @Override
     public int hashCode() {
-        return new Hasher()
-            .add(creationTool)
-            .add(creationVersion)
-            .add(segType)
-            .add(tmf)
-            .add(adminLang)
-            .add(srcLang)
-            .add(dataType)
-            .add(encoding)
-            .add(creationDate)
-            .add(creationId)
-            .add(changeDate)
-            .add(changeId)
-            .value();
+        return Objects.hash(
+            creationTool,
+            creationVersion,
+            segType,
+            tmf,
+            adminLang,
+            srcLang,
+            dataType,
+            encoding,
+            creationDate,
+            creationId,
+            changeDate,
+            changeId);
     }
 
     @Override

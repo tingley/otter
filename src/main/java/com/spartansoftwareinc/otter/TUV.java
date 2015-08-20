@@ -1,6 +1,7 @@
 package com.spartansoftwareinc.otter;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.ArrayList;
 
 /**
@@ -114,11 +115,7 @@ public class TUV extends BaseTUVContentSink {
 
     @Override
     public int hashCode() {
-        return new Hasher(super.hashCode())
-            .add(locale)
-            .add(notes)
-            .add(properties)
-            .value();
+        return Objects.hash(super.hashCode(), locale, notes, properties);
     }
 
     @Override

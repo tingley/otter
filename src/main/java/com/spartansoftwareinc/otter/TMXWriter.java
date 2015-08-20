@@ -42,7 +42,7 @@ import static com.spartansoftwareinc.otter.TMXConstants.*;
  * 
  * @see <a href="http://www.gala-global.org/oscarStandards/tmx/">http://www.gala-global.org/oscarStandards/tmx/</a>
  */
-public class TMXWriter {
+public class TMXWriter implements AutoCloseable {
 
     /**
      * Create a new <code>TMXWriter</code> that writes TMX to the specified 
@@ -70,7 +70,15 @@ public class TMXWriter {
         xmlWriter = factory.createXMLEventWriter(w);
         eventFactory = XMLEventFactory.newInstance();
     }
-    
+
+    /**
+     * Close the underlying writer and release resources.
+     */
+    @Override
+    public void close() throws XMLStreamException {
+        xmlWriter.close();
+    }
+
     /**
      * Write a raw {@link TMXEvent}.
      * @param event

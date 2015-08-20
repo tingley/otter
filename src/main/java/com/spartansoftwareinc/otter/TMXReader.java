@@ -45,7 +45,7 @@ import static com.spartansoftwareinc.otter.Util.*;
  * 
  * @see <a href="http://www.gala-global.org/oscarStandards/tmx/">http://www.gala-global.org/oscarStandards/tmx/</a>
  */
-public class TMXReader {
+public class TMXReader implements AutoCloseable {
     /**
      * Create a new <code>TMXReader</code> to parse TMX from the provided
      * <code>Reader</code>.
@@ -56,6 +56,10 @@ public class TMXReader {
         return new TMXReader(stripBOM(reader));
     }
 
+    @Override
+    public void close() {
+        // TODO I need to close the parser!
+    }
     
     private XMLInputFactory getInputFactory() {
         // XMLInputFactory is thread-safe as long as you're not setting

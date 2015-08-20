@@ -2,6 +2,7 @@ package com.spartansoftwareinc.otter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Base class for things that accept "text" TUV content. 
@@ -53,9 +54,7 @@ public abstract class BaseTUVContentSink implements TUVContentSink {
     
     @Override
     public int hashCode() {
-        return new Hasher()
-            .add(contents)
-            .value();
+        return Objects.hash(contents);
     }
 
     @Override

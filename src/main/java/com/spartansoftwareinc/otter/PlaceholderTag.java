@@ -61,9 +61,7 @@ public class PlaceholderTag extends StandaloneTag {
 
     @Override
     public int hashCode() {
-        return new Hasher(super.hashCode())
-            .add(assoc)
-            .hashCode();
+        return Objects.hash(super.hashCode(), assoc);
     }
     
     @Override

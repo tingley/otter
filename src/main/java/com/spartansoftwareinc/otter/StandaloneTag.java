@@ -85,10 +85,7 @@ public abstract class StandaloneTag extends InlineTag implements NumberedTag {
 
     @Override
     public int hashCode() {
-        return new Hasher(super.hashCode())
-            .add(x)
-            .add(type)
-            .value();
+        return Objects.hash(super.hashCode(), x, type);
     }
 
     @Override

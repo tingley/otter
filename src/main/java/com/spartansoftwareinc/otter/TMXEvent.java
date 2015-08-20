@@ -69,6 +69,6 @@ public class TMXEvent {
 
     @Override
     public int hashCode() {
-        return new Hasher().add(eventType).add(resource).value();
+        return Objects.hash(eventType, resource);
     }
 }

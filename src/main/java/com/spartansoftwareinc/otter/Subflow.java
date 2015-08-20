@@ -81,10 +81,7 @@ public class Subflow extends BaseTUVContentSink implements TagContent {
 
     @Override
     public int hashCode() {
-        return new Hasher(super.hashCode())
-            .add(type)
-            .add(datatype)
-            .value();
+        return Objects.hash(super.hashCode(), type, datatype);
     }
 
     @Override

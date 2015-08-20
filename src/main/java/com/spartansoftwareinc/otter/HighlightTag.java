@@ -37,10 +37,7 @@ public class HighlightTag extends BaseTUVContentSink implements NumberedTag {
     
     @Override
     public int hashCode() {
-        return new Hasher(super.hashCode())
-            .add(x)
-            .add(type)
-            .value();
+        return Objects.hash(super.hashCode(), x, type);
     }
     
     @Override

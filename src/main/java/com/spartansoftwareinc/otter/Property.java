@@ -94,12 +94,7 @@ public class Property {
 
     @Override
     public int hashCode() {
-        return new Hasher()
-            .add(type)
-            .add(value)
-            .add(encoding)
-            .add(lang)
-            .value();
+        return Objects.hash(type, value, encoding, lang);
     }
     
     @Override
