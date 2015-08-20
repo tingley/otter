@@ -1,6 +1,6 @@
 package com.spartansoftwareinc.otter;
 
-import static com.spartansoftwareinc.otter.Util.eq;
+import java.util.Objects;
 
 /**
  * Represents a simplified TMX parsing event.
@@ -64,7 +64,7 @@ public class TMXEvent {
         if (o == this) return true;
         if (o == null || !(o instanceof TMXEvent)) return false;
         TMXEvent e = (TMXEvent)o;
-        return eventType.equals(e.eventType) && eq(resource, e.resource);
+        return eventType.equals(e.eventType) && Objects.equals(resource, e.resource);
     }
 
     @Override

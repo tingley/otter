@@ -1,10 +1,9 @@
 package com.spartansoftwareinc.otter;
 
-import static com.spartansoftwareinc.otter.Util.eq;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 public class Header {
 
@@ -216,18 +215,18 @@ public class Header {
         if (o == this) return true;
         if (o == null || !(o instanceof Header)) return false;
         Header h = (Header)o;
-        return eq(creationTool, h.creationTool) &&
-               eq(creationVersion, h.creationVersion) &&
-               eq(segType, h.segType) &&
-               eq(tmf, h.tmf) &&
-               eq(adminLang, h.adminLang) &&
-               eq(srcLang, h.srcLang) &&
-               eq(dataType, h.dataType) &&
-               eq(encoding, h.encoding) &&
-               eq(creationDate, h.creationDate) &&
-               eq(creationId, h.creationId) &&
-               eq(changeDate, h.changeDate) &&
-               eq(changeId, h.changeId);
+        return Objects.equals(creationTool, h.creationTool) &&
+               Objects.equals(creationVersion, h.creationVersion) &&
+               Objects.equals(segType, h.segType) &&
+               Objects.equals(tmf, h.tmf) &&
+               Objects.equals(adminLang, h.adminLang) &&
+               Objects.equals(srcLang, h.srcLang) &&
+               Objects.equals(dataType, h.dataType) &&
+               Objects.equals(encoding, h.encoding) &&
+               Objects.equals(creationDate, h.creationDate) &&
+               Objects.equals(creationId, h.creationId) &&
+               Objects.equals(changeDate, h.changeDate) &&
+               Objects.equals(changeId, h.changeId);
     }
     
 }

@@ -5,8 +5,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import static com.spartansoftwareinc.otter.Util.eq;
+import java.util.Objects;
 
 /**
  * Representation of a <code>tu</code> element.  A TU is the basic
@@ -167,20 +166,20 @@ public class TU {
         if (o == this) return true;
         if (o == null || !(o instanceof TU)) return false;
         TU tu = (TU)o;
-        return eq(id, tu.id) &&
-               eq(encoding, tu.encoding) &&
-               eq(datatype, tu.datatype) &&
-               eq(creationTool, tu.creationTool) &&
-               eq(creationToolVersion, tu.creationToolVersion) &&
-               eq(creationId, tu.creationId) && 
-               eq(segType, tu.segType) &&
-               eq(changeId, tu.changeId) &&
-               eq(tmf, tu.tmf) &&
-               eq(srcLang, tu.srcLang) &&
-               eq(usageCount, tu.usageCount) &&
-               eq(lastUsageDate, tu.lastUsageDate) &&
-               eq(creationDate, tu.creationDate) &&
-               eq(changeDate, tu.changeDate) &&
+        return Objects.equals(id, tu.id) &&
+               Objects.equals(encoding, tu.encoding) &&
+               Objects.equals(datatype, tu.datatype) &&
+               Objects.equals(creationTool, tu.creationTool) &&
+               Objects.equals(creationToolVersion, tu.creationToolVersion) &&
+               Objects.equals(creationId, tu.creationId) &&
+               Objects.equals(segType, tu.segType) &&
+               Objects.equals(changeId, tu.changeId) &&
+               Objects.equals(tmf, tu.tmf) &&
+               Objects.equals(srcLang, tu.srcLang) &&
+               Objects.equals(usageCount, tu.usageCount) &&
+               Objects.equals(lastUsageDate, tu.lastUsageDate) &&
+               Objects.equals(creationDate, tu.creationDate) &&
+               Objects.equals(changeDate, tu.changeDate) &&
                tuvs.equals(tu.tuvs) &&
                notes.equals(tu.notes) &&
                properties.equals(tu.properties);

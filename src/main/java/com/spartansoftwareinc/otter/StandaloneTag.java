@@ -1,8 +1,7 @@
 package com.spartansoftwareinc.otter;
 
-import static com.spartansoftwareinc.otter.Util.eq;
-
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Base class for standalone inline tags.
@@ -97,6 +96,6 @@ public abstract class StandaloneTag extends InlineTag implements NumberedTag {
         return super.equals(o) && 
                 (o instanceof StandaloneTag) &&
                 x == ((StandaloneTag)o).getX() &&
-                eq(type, ((StandaloneTag)o).getType());
+                Objects.equals(type, ((StandaloneTag)o).getType());
     }
 }

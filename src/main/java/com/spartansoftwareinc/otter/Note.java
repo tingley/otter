@@ -1,6 +1,6 @@
 package com.spartansoftwareinc.otter;
 
-import static com.spartansoftwareinc.otter.Util.eq;
+import java.util.Objects;
 
 /**
  * Representation of a <code>&lt;note&gt;</code> element.  Notes
@@ -96,8 +96,9 @@ public class Note {
         if (o == this) return true;
         if (o == null || !(o instanceof Note)) return false;
         Note n = (Note)o;
-        return eq(content, n.content) && eq(encoding, n.encoding) &&
-               eq(lang, n.lang);
+        return Objects.equals(content, n.content) &&
+               Objects.equals(encoding, n.encoding) &&
+               Objects.equals(lang, n.lang);
     }
 
     @Override

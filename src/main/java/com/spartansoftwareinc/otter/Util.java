@@ -3,8 +3,6 @@ package com.spartansoftwareinc.otter;
 import java.io.IOException;
 import java.io.PushbackReader;
 import java.io.Reader;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import javax.xml.namespace.QName;
@@ -72,10 +70,5 @@ class Util {
             }
         }
         return d;
-    }
-    static boolean eq(Object o1, Object o2) {
-        if (o1 == null && o2 == null) return true;
-        if (o1 != null && o2 != null) return o1.equals(o2);
-        return false;
     }
 }

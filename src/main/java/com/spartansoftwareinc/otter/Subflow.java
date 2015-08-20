@@ -1,8 +1,7 @@
 package com.spartansoftwareinc.otter;
 
-import static com.spartansoftwareinc.otter.Util.eq;
-
 import java.util.List;
+import java.util.Objects;
 
 /**
  * A representation of a TUV subflow.  The contents of the subflow
@@ -92,7 +91,7 @@ public class Subflow extends BaseTUVContentSink implements TagContent {
     public boolean equals(Object o) {
         return super.equals(o) && 
                 (o instanceof Subflow) &&
-                eq(type, ((Subflow)o).type) &&
-                eq(datatype, ((Subflow)o).datatype);
+                Objects.equals(type, ((Subflow)o).type) &&
+                Objects.equals(datatype, ((Subflow)o).datatype);
     }
 }

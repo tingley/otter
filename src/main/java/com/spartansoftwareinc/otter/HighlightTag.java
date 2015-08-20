@@ -1,6 +1,6 @@
 package com.spartansoftwareinc.otter;
 
-import static com.spartansoftwareinc.otter.Util.eq;
+import java.util.Objects;
 
 /**
  * A representation of a <code>&lt;hi&gt;</code> tag.
@@ -48,6 +48,6 @@ public class HighlightTag extends BaseTUVContentSink implements NumberedTag {
         return super.equals(o) && 
                 (o instanceof HighlightTag) &&
                 x == ((HighlightTag)o).x &&
-                eq(type, ((HighlightTag)o).type);
+                Objects.equals(type, ((HighlightTag)o).type);
     }
 }

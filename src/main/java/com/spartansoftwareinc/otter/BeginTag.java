@@ -1,8 +1,7 @@
 package com.spartansoftwareinc.otter;
 
-import static com.spartansoftwareinc.otter.Util.eq;
-
 import java.util.List;
+import java.util.Objects;
 
 /**
  * A representation of a <code>&lt;bpt&gt;</code> tag.  A container that
@@ -129,7 +128,7 @@ public class BeginTag extends PairedTag implements NumberedTag {
             return false;
         if (!(o instanceof BeginTag)) return false;
         BeginTag bpt = (BeginTag)o;
-        return getX() == bpt.getX() && eq(getType(), bpt.getType());
+        return getX() == bpt.getX() && Objects.equals(getType(), bpt.getType());
     }
     
     @Override

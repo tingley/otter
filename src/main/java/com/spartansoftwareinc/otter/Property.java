@@ -1,6 +1,6 @@
 package com.spartansoftwareinc.otter;
 
-import static com.spartansoftwareinc.otter.Util.eq;
+import java.util.Objects;
 
 /**
  * Representation of a <code>&lt;prop&gt;</code> element.
@@ -107,8 +107,8 @@ public class Property {
         if (o == this) return true;
         if (o == null || !(o instanceof Property)) return false;
         Property p = (Property)o;
-        return eq(type, p.type) && eq(value, p.value) && 
-               eq(encoding, p.encoding) && eq(lang, p.lang);
+        return Objects.equals(type, p.type) && Objects.equals(value, p.value) &&
+               Objects.equals(encoding, p.encoding) && Objects.equals(lang, p.lang);
     }
     
     @Override

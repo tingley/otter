@@ -1,8 +1,7 @@
 package com.spartansoftwareinc.otter;
 
-import static com.spartansoftwareinc.otter.Util.eq;
-
 import java.util.List;
+import java.util.Objects;
 
 public class PlaceholderTag extends StandaloneTag {
     private String assoc;
@@ -70,8 +69,8 @@ public class PlaceholderTag extends StandaloneTag {
     @Override
     public boolean equals(Object o) {
         return super.equals(o) &&
-               (o instanceof PlaceholderTag) && 
-               eq(getAssoc(), ((PlaceholderTag)o).getAssoc());
+               (o instanceof PlaceholderTag) &&
+               Objects.equals(getAssoc(), ((PlaceholderTag)o).getAssoc());
     }
     
     @Override
