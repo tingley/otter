@@ -14,7 +14,7 @@ public class TestTMXEventReader {
 
     @Test
     public void testDateFormat() {
-        assertNotNull(Util.parseTMXDate("20100223T044327Z"));
+        assertNotNull(new TMXDateParser().parseDate("20100223T044327Z"));
     }
     
     @Test
@@ -41,7 +41,7 @@ public class TestTMXEventReader {
         assertEquals("EN-US", header.getSrcLang());
         assertEquals("rtf", header.getDataType());
         // Optional ones
-        assertEquals(Util.parseTMXDate("20100223T044327Z"), header.getCreationDate());
+        assertEquals(new TMXDateParser().parseDate("20100223T044327Z"), header.getCreationDate());
         assertEquals("TESTERSON", header.getCreationId());
         assertNull(header.getEncoding());
         assertNull(header.getChangeDate());
@@ -67,9 +67,9 @@ public class TestTMXEventReader {
         assertNotNull(tus);
         assertEquals(2, tus.size());
         TU tu = tus.get(0);
-        assertEquals(Util.parseTMXDate("20130314T060143Z"), tu.getCreationDate());
+        assertEquals(new TMXDateParser().parseDate("20130314T060143Z"), tu.getCreationDate());
         assertEquals("TESTA", tu.getCreationId());
-        assertEquals(Util.parseTMXDate("20130314T060951Z"), tu.getChangeDate());
+        assertEquals(new TMXDateParser().parseDate("20130314T060951Z"), tu.getChangeDate());
         assertEquals("TESTB", tu.getChangeId());
         Map<String, TUV> tuvs = tu.getTuvs();
         assertEquals(2, tuvs.size());

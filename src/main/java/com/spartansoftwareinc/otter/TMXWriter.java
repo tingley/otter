@@ -64,6 +64,7 @@ public class TMXWriter {
     private XMLEventFactory eventFactory;
     private String headerSrcLang;
     private boolean inBody = false;
+    private TMXDateParser dateParser = new TMXDateParser();
 
     private TMXWriter(Writer w) throws XMLStreamException {
         xmlWriter = factory.createXMLEventWriter(w);
@@ -126,7 +127,7 @@ public class TMXWriter {
         ArrayList<Attribute> attrs = new ArrayList<Attribute>();
         addAttr(attrs, CREATIONID, h.getCreationId(), false);
         if (h.getCreationDate() != null) {
-            addAttr(attrs, CREATIONDATE, Util.writeTMXDate(h.getCreationDate()), false);
+            addAttr(attrs, CREATIONDATE, dateParser.writeDate(h.getCreationDate()), false);
         }
         addAttr(attrs, CREATIONTOOL, h.getCreationTool(), true);
         addAttr(attrs, CREATIONTOOLVERSION, h.getCreationToolVersion(), true);
@@ -136,7 +137,7 @@ public class TMXWriter {
         addAttr(attrs, SRCLANG, h.getSrcLang(), true);
         addAttr(attrs, SEGTYPE, h.getSegType(), true);
         if (h.getChangeDate() != null) {
-            addAttr(attrs, CHANGEDATE, Util.writeTMXDate(h.getChangeDate()), false);
+            addAttr(attrs, CHANGEDATE, dateParser.writeDate(h.getChangeDate()), false);
         }
         addAttr(attrs, CHANGEID, h.getChangeId(), false);
         addAttr(attrs, ENCODING, h.getEncoding(), false);
@@ -433,7 +434,7 @@ public class TMXWriter {
     }
     private void dateAttr(List<Attribute> attrs, QName name, Date value) {
         if (value != null) {
-            attrs.add(eventFactory.createAttribute(name, Util.writeTMXDate(value)));
+            attrs.add(eventFactory.createAttribute(name, dateParser.writeDate(value)));
         }
     }
 }

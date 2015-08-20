@@ -34,12 +34,12 @@ class SegmentBuilder {
             tu.setEncoding(attrVal(el, ENCODING));
             tu.setDatatype(attrVal(el, DATATYPE));
             tu.setUsageCount(attrValAsInteger(el, USAGECOUNT));
-            tu.setLastUsageDate(attrValAsDate(el, LASTUSAGEDATE, null));
+            tu.setLastUsageDate(attrValAsDate(el, LASTUSAGEDATE, reader.getDateParser(), null));
             tu.setCreationTool(attrVal(el, CREATIONTOOL));
             tu.setCreationToolVersion(attrVal(el, CREATIONTOOLVERSION));
-            tu.setCreationDate(attrValAsDate(el, CREATIONDATE, null));
+            tu.setCreationDate(attrValAsDate(el, CREATIONDATE, reader.getDateParser(), null));
             tu.setCreationId(attrVal(el, CREATIONID));
-            tu.setChangeDate(attrValAsDate(el, CHANGEDATE, null));
+            tu.setChangeDate(attrValAsDate(el, CHANGEDATE, reader.getDateParser(), null));
             tu.setSegType(attrVal(el, SEGTYPE));
             tu.setChangeId(attrVal(el, CHANGEID));
             tu.setTmf(attrVal(el, TMF));

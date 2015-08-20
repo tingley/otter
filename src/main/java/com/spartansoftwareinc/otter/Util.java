@@ -51,28 +51,15 @@ class Util {
                                      el.getLocation());
         }
     }
-    // 20100223T044327Z
-    static final String TMX_DATE_FORMAT = "yyyyMMdd'T'HHmmss'Z'";
-    static final Date parseTMXDate(String s) {
-        try {
-            SimpleDateFormat df = new SimpleDateFormat(TMX_DATE_FORMAT);
-            return df.parse(s);
-        }
-        catch (ParseException e) {
-            return null;
-        }
-    }
-    static final String writeTMXDate(Date d) {
-        return new SimpleDateFormat(TMX_DATE_FORMAT).format(d);
-    }
     /**
      * If an ErrorHandler is specified, this will report an error via the error() method.
      * Otherwise, the error is reported as an OtterException.
      */
-    static Date attrValAsDate(StartElement el, QName attrName, ErrorHandler handler) throws OtterException {
+    static Date attrValAsDate(StartElement el, QName attrName, TMXDateParser dateParser,
+                              ErrorHandler handler) throws OtterException {
         Attribute a = el.getAttributeByName(attrName);
         if (a == null) return null;
-        Date d = parseTMXDate(a.getValue());
+        Date d = dateParser.parseDate(a.getValue());
         if (d == null) {
             OtterInputException e = new OtterInputException("Invalid date format '" + 
                     a.getValue() + "' for " + attrName.getLocalPart(),

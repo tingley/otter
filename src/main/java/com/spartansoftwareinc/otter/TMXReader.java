@@ -46,7 +46,6 @@ import static com.spartansoftwareinc.otter.Util.*;
  * @see <a href="http://www.gala-global.org/oscarStandards/tmx/">http://www.gala-global.org/oscarStandards/tmx/</a>
  */
 public class TMXReader {
-    
     /**
      * Create a new <code>TMXReader</code> to parse TMX from the provided
      * <code>Reader</code>.
@@ -92,7 +91,12 @@ public class TMXReader {
     private int nextSequence = 0;
     private boolean currentTuIsInError = false;
     private String srcLang = null;
-    
+    private TMXDateParser dateParser = new TMXDateParser();
+
+    TMXDateParser getDateParser() {
+        return dateParser;
+    }
+
     /**
      * Return the source language for the current TMX, as defined
      * in the header.
@@ -263,9 +267,9 @@ public class TMXReader {
                 throws SNAXUserException {
             header = new Header();
             header.setAdminLang(attrVal(element, ADMINLANG));
-            header.setChangeDate(attrValAsDate(element, CHANGEDATE, errorHandler));
+            header.setChangeDate(attrValAsDate(element, CHANGEDATE, dateParser, errorHandler));
             header.setChangeId(attrVal(element, CHANGEID));
-            header.setCreationDate(attrValAsDate(element, CREATIONDATE, errorHandler));
+            header.setCreationDate(attrValAsDate(element, CREATIONDATE, dateParser, errorHandler));
             header.setCreationId(attrVal(element, CREATIONID));
             header.setCreationTool(attrVal(element, CREATIONTOOL));
             header.setCreationToolVersion(attrVal(element, CREATIONTOOLVERSION));
