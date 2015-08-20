@@ -57,8 +57,8 @@ public class TMXReader implements AutoCloseable {
     }
 
     @Override
-    public void close() {
-        // TODO I need to close the parser!
+    public void close() throws XMLStreamException {
+        parser.close();
     }
     
     private XMLInputFactory getInputFactory() {
