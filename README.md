@@ -12,14 +12,19 @@
 Otter TMX
 =========
 
-Otter is a streaming reader and writer for [Translation Memory Exchange](http://www.gala-global.org/oscarStandards/tmx/) (TMX) documents.  It is written in Java.
+Otter is a streaming reader and writer for [Translation Memory
+Exchange](http://www.gala-global.org/oscarStandards/tmx/) (TMX) documents.
 
 It is currently under development.
 
 Building
 --------
 
-Otter builds with Maven.  It depends on the [snax-xml](https://github.com/tingley/snax-xml) library, which you will need to build and install in a local repository.
+Otter builds with Maven.  It requires Java 1.7 or later.
+
+It depends on the
+[snax-xml](https://github.com/tingley/snax-xml) library, which you will need to
+build and install in a local repository.
 
 License
 -------
