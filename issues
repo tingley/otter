@@ -34,3 +34,6 @@
   or make it a separate project?
 - refactor segmentbuilder validation logic with stuff called from tuvbuilder
 - handle duplicate properties on a tu
+
+- repackage
+- test woodstox - is it faster?
