@@ -22,10 +22,6 @@ Building
 
 Otter builds with Maven.  It requires Java 1.7 or later.
 
-It depends on the
-[snax-xml](https://github.com/tingley/snax-xml) library, which you will need to
-build and install in a local repository.
-
 License
 -------
 
