@@ -40,7 +40,7 @@ public class TUVBuilder {
 	public TUV build() {
 	    if (built) {
 	        throw new IllegalStateException(
-	                "TUVBuilder.built() called multiple times");
+	                "TUVBuilder.build() called multiple times");
 	    }
 	    built = true;
 	    if (tu != null) {

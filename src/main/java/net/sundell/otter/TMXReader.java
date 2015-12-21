@@ -92,6 +92,7 @@ public class TMXReader implements AutoCloseable {
     private SNAXParser<SegmentBuilder> parser;
     private List<TMXEvent> events = new ArrayList<TMXEvent>();
     private Deque<TUVContentSink> contentStack = new ArrayDeque<TUVContentSink>();
+    private HeaderBuilder headerBuilder = null;
     private Header header = null;
     private int nextSequence = 0;
     private boolean currentTuIsInError = false;
@@ -270,26 +271,27 @@ public class TMXReader implements AutoCloseable {
         @Override
         public void startElement(StartElement element, SegmentBuilder data)
                 throws SNAXUserException {
-            header = new Header();
-            header.setAdminLang(attrVal(element, ADMINLANG));
-            header.setChangeDate(attrValAsDate(element, CHANGEDATE, dateParser, errorHandler));
-            header.setChangeId(attrVal(element, CHANGEID));
-            header.setCreationDate(attrValAsDate(element, CREATIONDATE, dateParser, errorHandler));
-            header.setCreationId(attrVal(element, CREATIONID));
-            header.setCreationTool(attrVal(element, CREATIONTOOL));
-            header.setCreationToolVersion(attrVal(element, CREATIONTOOLVERSION));
-            header.setDataType(attrVal(element, DATATYPE));
-            header.setEncoding(attrVal(element, ENCODING));
-            header.setSegType(attrVal(element, SEGTYPE));
-            header.setSrcLang(attrVal(element, SRCLANG));
-            header.setTmf(attrVal(element, TMF));
-            srcLang = header.getSrcLang();
+            headerBuilder = new HeaderBuilder();
+            headerBuilder.setAdminLang(attrVal(element, ADMINLANG));
+            headerBuilder.setChangeDate(attrValAsDate(element, CHANGEDATE, dateParser, errorHandler));
+            headerBuilder.setChangeId(attrVal(element, CHANGEID));
+            headerBuilder.setCreationDate(attrValAsDate(element, CREATIONDATE, dateParser, errorHandler));
+            headerBuilder.setCreationId(attrVal(element, CREATIONID));
+            headerBuilder.setCreationTool(attrVal(element, CREATIONTOOL));
+            headerBuilder.setCreationToolVersion(attrVal(element, CREATIONTOOLVERSION));
+            headerBuilder.setDataType(attrVal(element, DATATYPE));
+            headerBuilder.setEncoding(attrVal(element, ENCODING));
+            headerBuilder.setSegType(attrVal(element, SEGTYPE));
+            srcLang = attrVal(element, SRCLANG);
+            headerBuilder.setSrcLang(srcLang);
+            headerBuilder.setTmf(attrVal(element, TMF));
         }
         @Override
         public void endElement(EndElement element, SegmentBuilder data)
                 throws SNAXUserException {
+            header = headerBuilder.build();
             addEvent(new TMXEvent(TMXEventType.START_TMX, header));
-            header = null;
+            headerBuilder = null;
         }
     }
     abstract class PropertyHandler extends DefaultElementHandler<SegmentBuilder> {
@@ -320,7 +322,7 @@ public class TMXReader implements AutoCloseable {
     class HeaderPropertyHandler extends PropertyHandler {
         @Override
         void handleProperty(SegmentBuilder data, Property property) {
-            header.addProperty(property);
+            headerBuilder.addProperty(property);
         }
     }
     abstract class NoteHandler extends DefaultElementHandler<SegmentBuilder> {
@@ -349,7 +351,7 @@ public class TMXReader implements AutoCloseable {
     class HeaderNoteHandler extends NoteHandler {
         @Override
         void handleNote(SegmentBuilder data, Note note) {
-            header.addNote(note);
+            headerBuilder.addNote(note);
         }
     }
     class TuHandler extends DefaultElementHandler<SegmentBuilder> {

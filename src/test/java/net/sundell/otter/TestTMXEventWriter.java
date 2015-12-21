@@ -7,8 +7,10 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.Reader;
+import java.io.StringReader;
 import java.io.StringWriter;
 import java.io.Writer;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -20,6 +22,7 @@ import javax.xml.stream.XMLStreamException;
 import static net.sundell.otter.TMXEventType.*;
 import static net.sundell.otter.TestUtil.*;
 
+import org.custommonkey.xmlunit.XMLAssert;
 import org.junit.*;
 
 import net.sundell.otter.BeginTag;
@@ -53,11 +56,12 @@ public class TestTMXEventWriter {
         File tmp = File.createTempFile("otter", ".tmx");
         Writer w = new OutputStreamWriter(new FileOutputStream(tmp), "UTF-8");
         TMXWriter writer = TMXWriter.createTMXEventWriter(w);
-        Header header = getHeader();
-        header.addProperty(new Property("type2", "value2").setEncoding("UTF-8"));
-        header.addProperty(new Property("type3", "value3").setLang("en-US"));
-        header.addNote(new Note("note2").setEncoding("UTF-16BE"));
-        header.addNote(new Note("note3").setLang("de-DE"));
+        Header header = getHeader()
+            .addProperty(new Property("type2", "value2").setEncoding("UTF-8"))
+            .addProperty(new Property("type3", "value3").setLang("en-US"))
+            .addNote(new Note("note2").setEncoding("UTF-16BE"))
+            .addNote(new Note("note3").setLang("de-DE"))
+            .build();
         writer.startTMX(header);
         writer.endTMX();
         w.close();
@@ -71,6 +75,8 @@ public class TestTMXEventWriter {
         assertEquals(header.getNotes(), rHeader.getNotes());
         assertEquals(header, rHeader);
         checkEvent(events.get(1), END_TMX);
+        XMLAssert.assertXMLEqual(getSnippetReader("testSimple"),
+                       new InputStreamReader(new FileInputStream(tmp), StandardCharsets.UTF_8));
         tmp.delete();
     }
     
@@ -86,10 +92,11 @@ public class TestTMXEventWriter {
         expectErrorWritingHeader(writer, getHeader().setDataType(null), "datatype");
     }
     
-    private void expectErrorWritingHeader(TMXWriter writer, Header header, String missingField)
+    private void expectErrorWritingHeader(TMXWriter writer, HeaderBuilder headerBuilder, String missingField)
                                           throws XMLStreamException {
         boolean caughtError = false;
         try {
+            Header header = headerBuilder.build();
             writer.startTMX(header);
         }
         catch (OtterException e) {
@@ -102,7 +109,7 @@ public class TestTMXEventWriter {
     @Test
     public void testWriterMissingRequiredTagAtributes() throws Exception {
         TMXWriter writer = TMXWriter.createTMXEventWriter(new StringWriter());
-        writer.startTMX(getHeader());
+        writer.startTMX(getHeader().build());
         testTagTUV(writer, Collections.singletonList(new IsolatedTag()), true); // missing @pos
         // The PairedTag correction code will convert unpaired bpt/ept into it,
         // which makes the check useless unless they're both there!
@@ -116,7 +123,7 @@ public class TestTMXEventWriter {
     @Test
     public void testDuplicateBPTattributeIvalues() throws Exception {
         TMXWriter writer = TMXWriter.createTMXEventWriter(new StringWriter());
-        writer.startTMX(getHeader());
+        writer.startTMX(getHeader().build());
         TU tu = new TU();
         Exception exception = null;
         try {
@@ -137,7 +144,7 @@ public class TestTMXEventWriter {
     private void testTagTUV(TMXWriter writer, Collection<? extends InlineTag> tags, boolean expectFailure)
                                         throws XMLStreamException {
         TU tu = new TU();
-        TUV tuv = new TUV(getHeader().getSrcLang());
+        TUV tuv = new TUV(getHeader().build().getSrcLang());
         tu.addTUV(tuv);
         for (InlineTag tag : tags) {
             tuv.addContent(tag);
@@ -156,7 +163,7 @@ public class TestTMXEventWriter {
         File tmp = File.createTempFile("otter", ".tmx");
         Writer w = new OutputStreamWriter(new FileOutputStream(tmp), "UTF-8");
         TMXWriter writer = TMXWriter.createTMXEventWriter(w);
-        writer.startTMX(getHeader());
+        writer.startTMX(getHeader().build());
         for (TU tu : tus) {
             writer.writeTu(tu);
         }
@@ -171,13 +178,29 @@ public class TestTMXEventWriter {
     }
 
     void verifyAgainstSnippet(String snippetFile, List<TU> tus) throws Exception {
-        Reader r = new InputStreamReader(getClass().getResourceAsStream("/snippets/" + snippetFile + ".tmx"), "UTF-8");
-        TMXReader reader = TMXReader.createTMXEventReader(r);
+        TMXReader reader = TMXReader.createTMXEventReader(getSnippetReader(snippetFile));
         List<TU> roundtripTUs = readTUs(reader);
         assertEquals(tus.size(), roundtripTUs.size());
         assertEquals(tus, roundtripTUs);
     }
-    
+
+    void verifyTMX(String snippetFile, List<TU> tus) throws Exception {
+        StringWriter sw = new StringWriter();
+        TMXWriter writer = TMXWriter.createTMXEventWriter(sw);
+        writer.startTMX(getHeader().build());
+        for (TU tu : tus) {
+            writer.writeTu(tu);
+        }
+        writer.endTMX();
+        writer.close();
+        XMLAssert.assertXMLEqual(getSnippetReader(snippetFile), new StringReader(sw.toString()));
+    }
+
+    private Reader getSnippetReader(String snippetResource) {
+        return new InputStreamReader(getClass().getResourceAsStream("/snippets/" + snippetResource + ".tmx"),
+                                     StandardCharsets.UTF_8);
+    }
+
     @Test
     public void testTu() throws Exception {
         TU tu = new TU("en-US");
@@ -275,8 +298,9 @@ public class TestTMXEventWriter {
             .build();
         testRoundtripTUs(Collections.singletonList(tu));
         verifyAgainstSnippet("testTuHighlightWithTags", Collections.singletonList(tu));
+        verifyTMX("testTuHighlightWithTags", Collections.singletonList(tu));
     }
-    
+
     @Test
     public void testDeepHiNesting() throws Exception {
         // <seg>A<hi x="1">B<hi x="2">C</hi>D</hi>.</seg>
@@ -292,8 +316,8 @@ public class TestTMXEventWriter {
         testRoundtripTUs(Collections.singletonList(tu));
         verifyAgainstSnippet("testDeepHiNesting", Collections.singletonList(tu));
     }
-    
-    
+
+
     @Test
     public void testPhAttributes() throws Exception {
         TU tu = new TU("en-US");
@@ -330,7 +354,7 @@ public class TestTMXEventWriter {
         File tmp = File.createTempFile("otter", ".tmx");
         Writer w = new OutputStreamWriter(new FileOutputStream(tmp), "UTF-8");
         TMXWriter writer = TMXWriter.createTMXEventWriter(w);
-        writer.startTMX(getHeader());
+        writer.startTMX(getHeader().build());
         TU tu = new TU();
         TUV src = new TUV("en-US");
         src.addContent(new TextContent("Dangling "));
@@ -357,8 +381,8 @@ public class TestTMXEventWriter {
         assertEquals(new TextContent(" tag"), contents.get(2));
     }
     
-    private Header getHeader() {
-        Header header = new Header();
+    private HeaderBuilder getHeader() {
+        HeaderBuilder header = new HeaderBuilder();
         header.setCreationTool("Otter TMX");
         header.setCreationToolVersion("1.0");
         header.setSegType("sentence");
