@@ -51,7 +51,7 @@ public class TMXWriter implements AutoCloseable {
      * @return new TMXWriter
      * @throws XMLStreamException
      */
-    public static TMXWriter createTMXEventWriter(Writer writer) 
+    public static TMXWriter createTMXWriter(Writer writer) 
                 throws XMLStreamException {
         return new TMXWriter(writer);
     }

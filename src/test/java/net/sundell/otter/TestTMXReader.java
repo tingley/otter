@@ -31,7 +31,7 @@ import net.sundell.otter.TextContent;
 
 import static org.junit.Assert.*;
 
-public class TestTMXEventReader {
+public class TestTMXReader {
 
     @Test
     public void testDateFormat() {

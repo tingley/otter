@@ -53,7 +53,7 @@ public class TMXReader implements AutoCloseable {
      * @param reader reader containing character content to be parsed as TMX
      * @return new TMXReader
      */
-    public static TMXReader createTMXEventReader(Reader reader) throws IOException {
+    public static TMXReader createTMXReader(Reader reader) throws IOException {
         return new TMXReader(stripBOM(reader));
     }
 

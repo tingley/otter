@@ -49,13 +49,13 @@ import net.sundell.otter.TextContent;
 
 import static org.junit.Assert.*;
 
-public class TestTMXEventWriter {
+public class TestTMXWriter {
 
     @Test
     public void testSimple() throws Exception {
         File tmp = File.createTempFile("otter", ".tmx");
         Writer w = new OutputStreamWriter(new FileOutputStream(tmp), "UTF-8");
-        TMXWriter writer = TMXWriter.createTMXEventWriter(w);
+        TMXWriter writer = TMXWriter.createTMXWriter(w);
         Header header = getHeader()
             .addProperty(new Property("type2", "value2").setEncoding("UTF-8"))
             .addProperty(new Property("type3", "value3").setLang("en-US"))
@@ -66,7 +66,7 @@ public class TestTMXEventWriter {
         writer.endTMX();
         w.close();
         Reader r = new InputStreamReader(new FileInputStream(tmp), "UTF-8");
-        TMXReader reader = TMXReader.createTMXEventReader(r);
+        TMXReader reader = TMXReader.createTMXReader(r);
         List<TMXEvent> events = readEvents(reader);
         checkEvent(events.get(0), TMXEventType.START_TMX);
         Header rHeader = events.get(0).getHeader();
@@ -82,7 +82,7 @@ public class TestTMXEventWriter {
     
     @Test
     public void testWriterMissingRequiredAttributes() throws Exception {
-        TMXWriter writer = TMXWriter.createTMXEventWriter(new StringWriter());
+        TMXWriter writer = TMXWriter.createTMXWriter(new StringWriter());
         expectErrorWritingHeader(writer, getHeader().setCreationTool(null), "creationTool");
         expectErrorWritingHeader(writer, getHeader().setCreationToolVersion(null), "creationVersion");
         expectErrorWritingHeader(writer, getHeader().setSegType(null), "segType");
@@ -108,7 +108,7 @@ public class TestTMXEventWriter {
 
     @Test
     public void testWriterMissingRequiredTagAtributes() throws Exception {
-        TMXWriter writer = TMXWriter.createTMXEventWriter(new StringWriter());
+        TMXWriter writer = TMXWriter.createTMXWriter(new StringWriter());
         writer.startTMX(getHeader().build());
         testTagTUV(writer, Collections.singletonList(new IsolatedTag()), true); // missing @pos
         // The PairedTag correction code will convert unpaired bpt/ept into it,
@@ -122,7 +122,7 @@ public class TestTMXEventWriter {
 
     @Test
     public void testDuplicateBPTattributeIvalues() throws Exception {
-        TMXWriter writer = TMXWriter.createTMXEventWriter(new StringWriter());
+        TMXWriter writer = TMXWriter.createTMXWriter(new StringWriter());
         writer.startTMX(getHeader().build());
         TU tu = new TU();
         Exception exception = null;
@@ -162,7 +162,7 @@ public class TestTMXEventWriter {
     void testRoundtripTUs(List<TU> tus) throws Exception {
         File tmp = File.createTempFile("otter", ".tmx");
         Writer w = new OutputStreamWriter(new FileOutputStream(tmp), "UTF-8");
-        TMXWriter writer = TMXWriter.createTMXEventWriter(w);
+        TMXWriter writer = TMXWriter.createTMXWriter(w);
         writer.startTMX(getHeader().build());
         for (TU tu : tus) {
             writer.writeTu(tu);
@@ -170,7 +170,7 @@ public class TestTMXEventWriter {
         writer.endTMX();
         w.close();
         Reader r = new InputStreamReader(new FileInputStream(tmp), "UTF-8");
-        TMXReader reader = TMXReader.createTMXEventReader(r);
+        TMXReader reader = TMXReader.createTMXReader(r);
         List<TU> roundtripTUs = readTUs(reader);
         assertEquals(tus.size(), roundtripTUs.size());
         assertEquals(tus, roundtripTUs);
@@ -178,7 +178,7 @@ public class TestTMXEventWriter {
     }
 
     void verifyAgainstSnippet(String snippetFile, List<TU> tus) throws Exception {
-        TMXReader reader = TMXReader.createTMXEventReader(getSnippetReader(snippetFile));
+        TMXReader reader = TMXReader.createTMXReader(getSnippetReader(snippetFile));
         List<TU> roundtripTUs = readTUs(reader);
         assertEquals(tus.size(), roundtripTUs.size());
         assertEquals(tus, roundtripTUs);
@@ -186,7 +186,7 @@ public class TestTMXEventWriter {
 
     void verifyTMX(String snippetFile, List<TU> tus) throws Exception {
         StringWriter sw = new StringWriter();
-        TMXWriter writer = TMXWriter.createTMXEventWriter(sw);
+        TMXWriter writer = TMXWriter.createTMXWriter(sw);
         writer.startTMX(getHeader().build());
         for (TU tu : tus) {
             writer.writeTu(tu);
@@ -353,7 +353,7 @@ public class TestTMXEventWriter {
     public void testUnmatchedPairedTagConversion() throws Exception {
         File tmp = File.createTempFile("otter", ".tmx");
         Writer w = new OutputStreamWriter(new FileOutputStream(tmp), "UTF-8");
-        TMXWriter writer = TMXWriter.createTMXEventWriter(w);
+        TMXWriter writer = TMXWriter.createTMXWriter(w);
         writer.startTMX(getHeader().build());
         TU tu = new TU();
         TUV src = new TUV("en-US");
@@ -365,7 +365,7 @@ public class TestTMXEventWriter {
         writer.endTMX();
         w.close();
         Reader r = new InputStreamReader(new FileInputStream(tmp), "UTF-8");
-        TMXReader reader = TMXReader.createTMXEventReader(r);
+        TMXReader reader = TMXReader.createTMXReader(r);
         List<TU> tus = readTUs(reader);
         assertEquals(1, tus.size());
         TU tgtTu = tus.get(0);
@@ -432,19 +432,19 @@ public class TestTMXEventWriter {
     
     public void testRoundtrip(String resourceName) throws Exception {
         InputStream is = getClass().getResourceAsStream(resourceName);
-        TMXReader reader = TMXReader.createTMXEventReader(
+        TMXReader reader = TMXReader.createTMXReader(
                             new InputStreamReader(is, "UTF-8"));
         File tmp = File.createTempFile("otter", ".tmx");
         List<TMXEvent> events = readEvents(reader);
         Writer w = new OutputStreamWriter(new FileOutputStream(tmp), "UTF-8");
-        TMXWriter writer = TMXWriter.createTMXEventWriter(w);
+        TMXWriter writer = TMXWriter.createTMXWriter(w);
         for (TMXEvent e : events) {
             writer.writeEvent(e);
         }
         w.close();
         
         // Now verify!
-        TMXReader roundtripReader = TMXReader.createTMXEventReader(
+        TMXReader roundtripReader = TMXReader.createTMXReader(
                         new InputStreamReader(new FileInputStream(tmp), "UTF-8"));
         List<TMXEvent> roundtripEvents = readEvents(roundtripReader);
         assertEquals(events, roundtripEvents);

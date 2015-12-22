@@ -70,7 +70,7 @@ public class TestUtil {
     
     public static TMXReader getTMXReader(String testResource) throws Exception {
         InputStream is = TestUtil.class.getResourceAsStream(testResource);
-        return TMXReader.createTMXEventReader(
+        return TMXReader.createTMXReader(
                             new InputStreamReader(is, "UTF-8"));
     }
 

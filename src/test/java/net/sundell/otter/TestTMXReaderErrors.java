@@ -20,11 +20,11 @@ import static net.sundell.otter.TestUtil.readEvents;
 import static net.sundell.otter.TestUtil.readTUEvents;
 import static org.junit.Assert.*;
 
-public class TestTMXEventReaderErrors {
+public class TestTMXReaderErrors {
 
     @Test
     public void testXMLError() throws Exception {
-        TMXReader reader = TMXReader.createTMXEventReader(
+        TMXReader reader = TMXReader.createTMXReader(
                             new StringReader("asldjalksdjalsdj"));
         TestErrorHandler handler = new TestErrorHandler();
         reader.setErrorHandler(handler);
