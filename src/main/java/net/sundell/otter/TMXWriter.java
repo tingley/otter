@@ -249,6 +249,13 @@ public class TMXWriter implements AutoCloseable {
         attr(tuAttrs, SRCLANG, tu.getSrcLang());
         xmlWriter.add(eventFactory.createStartElement(TU, tuAttrs.iterator(), null));
 
+        for (Property property : tu.getProperties()) {
+            writeProperty(property);
+        }
+        for (Note note : tu.getNotes()) {
+            writeNote(note);
+        }
+
         // Language codes are case-insensitive, so normalize them
         // to check for the source.
         Map<String, TUV> tuvs = normalizeLocaleMap(tu.getTuvs());

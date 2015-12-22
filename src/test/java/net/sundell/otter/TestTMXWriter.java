@@ -141,6 +141,22 @@ public class TestTMXWriter {
         assertNotNull("No exception thrown for duplicate @i values", exception);   
     }
 
+    @Test
+    public void testWriteTUPropertiesAndNotes() throws Exception {
+        StringWriter sw = new StringWriter();
+        TMXWriter writer = TMXWriter.createTMXWriter(sw);
+        writer.startTMX(getHeader().build());
+        TU tu = new TU();
+        tu.addProperty(new Property("test-type-1", "value1"));
+        tu.addProperty(new Property("test-type-2", "value2"));
+        tu.addNote(new Note("Test note"));
+        tu.addTUV(tu.tuvBuilder("en-US").text("hello").build());
+        tu.addTUV(tu.tuvBuilder("fr-fr").text("bonjour").build());
+        writer.writeTu(tu);
+        writer.endTMX();
+        XMLAssert.assertXMLEqual(getSnippetReader("testWriteTUPropertiesAndNotes"), new StringReader(sw.toString()));
+    }
+
     private void testTagTUV(TMXWriter writer, Collection<? extends InlineTag> tags, boolean expectFailure)
                                         throws XMLStreamException {
         TU tu = new TU();
