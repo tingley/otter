@@ -3,7 +3,9 @@ package net.sundell.otter;
 import java.io.IOException;
 import java.io.PushbackReader;
 import java.io.Reader;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import javax.xml.namespace.QName;
 import javax.xml.stream.Location;
@@ -70,5 +72,49 @@ class Util {
             }
         }
         return d;
+    }
+
+    static List<TUVContent> normalizeWhitespace(List<TUVContent> orig) {
+        List<TUVContent> normalized = new ArrayList<>(orig.size());
+        for (int i = 0; i < orig.size(); i++) {
+            TUVContent content = orig.get(i);
+            if (!(content instanceof TextContent)) {
+                normalized.add(content);
+                continue;
+            }
+
+            String text = ((TextContent)content).getValue();
+            normalized.add(new TextContent(normalizeWhitespace(text, i == 0, i + 1 == orig.size())));
+        }
+        return normalized;
+    }
+
+    // Horrendous
+    private static String normalizeWhitespace(String text, boolean trimLeading, boolean trimTrailing) {
+        StringBuilder sb = new StringBuilder();
+        int spaceCount = 0;
+        char[] raw = text.toCharArray();
+        int leadingSpaceCount = trimLeading ? text.indexOf(text.trim()) : 0;
+        for (int i = leadingSpaceCount; i < raw.length; i++) {
+            char c = raw[i];
+            if (!(Character.isWhitespace(c))) {
+                sb.append(c);
+                spaceCount = 0;
+                continue;
+            }
+            if (spaceCount == 0) {
+                sb.append(' ');
+            }
+            spaceCount++;
+        }
+        String temp = sb.toString();
+        if (trimTrailing) {
+            int end = temp.length();
+            while (end > 0 && Character.isWhitespace(temp.charAt(end - 1))) {
+                end--;
+            }
+            temp = temp.substring(0, end);
+        }
+        return temp;
     }
 }

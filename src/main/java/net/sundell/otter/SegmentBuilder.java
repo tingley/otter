@@ -3,7 +3,9 @@ package net.sundell.otter;
 import static net.sundell.otter.TMXConstants.*;
 import static net.sundell.otter.Util.*;
 
+import java.util.ArrayDeque;
 import java.util.BitSet;
+import java.util.Deque;
 import java.util.List;
 
 import javax.xml.stream.events.EndElement;
@@ -17,9 +19,11 @@ class SegmentBuilder {
     private BitSet openedTagIndices = new BitSet(8);
     // Indices that have been seen at all (matched or unmatched)
     private BitSet usedTagIndices = new BitSet(8);
+    private Deque<Boolean> preserveSpaces = new ArrayDeque<>();
     
     SegmentBuilder(TMXReader reader) {
         this.reader = reader;
+        preserveSpaces.push(false);
     }
     
     TU getTu() {
@@ -106,6 +110,27 @@ class SegmentBuilder {
         }
         else {
             openedTagIndices.clear(iValue);
+        }
+    }
+
+    void pushPreserveSpace(StartElement element) {
+        String xmlSpace = attrVal(element, XMLSPACE);
+        boolean preserveSpace = (xmlSpace != null) ? "preserve".equals(xmlSpace) : preserveSpaces.peek();
+        preserveSpaces.push(preserveSpace);
+    }
+
+    boolean popPreserveSpace() {
+        return preserveSpaces.pop();
+    }
+
+    boolean peekPreserveSpace() {
+        return preserveSpaces.peek();
+    }
+
+    void normalizeWhitespace() {
+        if (!preserveSpaces.peek()) {
+            List<TUVContent> contents = Util.normalizeWhitespace(getCurrentTuv().getContents());
+            getCurrentTuv().clear().addContents(contents);
         }
     }
 }

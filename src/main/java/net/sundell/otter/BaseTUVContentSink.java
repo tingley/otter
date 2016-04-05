@@ -10,7 +10,16 @@ import java.util.Objects;
 public abstract class BaseTUVContentSink implements TUVContentSink {
 
     private List<TUVContent> contents = new ArrayList<TUVContent>();
-    
+
+    /**
+     * Clear the contents of this object.
+     * @return
+     */
+    public BaseTUVContentSink clear() {
+        contents.clear();
+        return this;
+    }
+
     /**
      * Add an item to the contents of this object.  TUV objects
      * are restricted to {@link TextContent}, {@link InlineTag}, and

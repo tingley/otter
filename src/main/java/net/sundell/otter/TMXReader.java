@@ -182,7 +182,7 @@ public class TMXReader implements AutoCloseable {
     private void addTUVContent(TUVContent content) {
         contentStack.peek().addContent(content);
     }
-    private void addTextContent(String text) {
+    private void addTextContent(String text, boolean preserveSpace) {
         addTUVContent(new TextContent(text));
     }
     private void addCodeContent(String codes) {
@@ -200,7 +200,8 @@ public class TMXReader implements AutoCloseable {
                 header.element("note").attach(new HeaderNoteHandler());
 
                 // <body> is currently a no-op for producing user data
-                ElementSelector<SegmentBuilder> body = elements("tmx", "body").only(1); 
+                ElementSelector<SegmentBuilder> body = elements("tmx", "body").only(1);
+                body.attach(new BodyHandler());
                 ElementSelector<SegmentBuilder> tu = body.element("tu");
                 tu.attach(new TuHandler());
                 tu.element("prop").attach(new TuPropertyHandler());
@@ -250,11 +251,23 @@ public class TMXReader implements AutoCloseable {
             }
         }.build();
     }
-    
-    class TMXHandler extends DefaultElementHandler<SegmentBuilder> {
+
+    abstract class XmlSpaceAwareHandler extends DefaultElementHandler<SegmentBuilder> {
         @Override
-        public void startElement(StartElement element, SegmentBuilder data)
-                throws SNAXUserException {
+        public void startElement(StartElement element, SegmentBuilder data) {
+            data.pushPreserveSpace(element);
+        }
+
+        @Override
+        public void endElement(EndElement element, SegmentBuilder data) {
+            data.popPreserveSpace();
+        }
+    }
+
+    class TMXHandler extends XmlSpaceAwareHandler {
+        @Override
+        public void startElement(StartElement element, SegmentBuilder data) {
+            super.startElement(element, data);
             String version = requireAttrVal(element, VERSION, errorHandler);
             if (!TMX_VERSION_1_4.equals(version)) {
                 errorHandler.error(new OtterInputException("Unsupported TMX version: " +
@@ -262,11 +275,12 @@ public class TMXReader implements AutoCloseable {
             }
         }
         @Override
-        public void endElement(EndElement element, SegmentBuilder data)
-                throws SNAXUserException {
+        public void endElement(EndElement element, SegmentBuilder data) {
+            super.endElement(element, data);
             addEvent(new TMXEvent(END_TMX));
         }
     }
+    class BodyHandler extends XmlSpaceAwareHandler { }
     class HeaderHandler extends DefaultElementHandler<SegmentBuilder> {
         @Override
         public void startElement(StartElement element, SegmentBuilder data)
@@ -354,16 +368,16 @@ public class TMXReader implements AutoCloseable {
             headerBuilder.addNote(note);
         }
     }
-    class TuHandler extends DefaultElementHandler<SegmentBuilder> {
+    class TuHandler extends XmlSpaceAwareHandler {
         @Override
-        public void startElement(StartElement element, SegmentBuilder data)
-                throws SNAXUserException {
+        public void startElement(StartElement element, SegmentBuilder data) {
+            super.startElement(element, data);
             currentTuIsInError = false;
             data.startTu(element);
         }
         @Override
-        public void endElement(EndElement element, SegmentBuilder data)
-                throws SNAXUserException {
+        public void endElement(EndElement element, SegmentBuilder data) {
+            super.endElement(element, data);
         	data.endTu(element);
             if (!currentTuIsInError) {
                 TUEvent e = new TUEvent(data.getTu());
@@ -387,16 +401,16 @@ public class TMXReader implements AutoCloseable {
         }
     }
 
-    class TuvHandler extends DefaultElementHandler<SegmentBuilder> {
+    class TuvHandler extends XmlSpaceAwareHandler {
         @Override
-        public void startElement(StartElement element, SegmentBuilder data)
-                throws SNAXUserException {
+        public void startElement(StartElement element, SegmentBuilder data) {
+            super.startElement(element, data);
             data.startTuv(element);
             contentStack.push(data.getCurrentTuv());
         }
         @Override
-        public void endElement(EndElement element, SegmentBuilder data)
-                throws SNAXUserException {
+        public void endElement(EndElement element, SegmentBuilder data) {
+            super.endElement(element, data);
             data.endTuv();
             contentStack.pop();
         }
@@ -413,11 +427,16 @@ public class TMXReader implements AutoCloseable {
             data.getCurrentTuv().addNote(note);
         }
     }
-    class SegHandler extends DefaultElementHandler<SegmentBuilder> {
+    class SegHandler extends XmlSpaceAwareHandler {
         @Override
         public void characters(StartElement parent, Characters characters,
                 SegmentBuilder data) throws SNAXUserException {
-            addTextContent(characters.getData());
+             addTextContent(characters.getData(), data.peekPreserveSpace());
+        }
+        @Override
+        public void endElement(EndElement element, SegmentBuilder data) {
+            data.normalizeWhitespace();
+            super.endElement(element, data);
         }
     }
     class SegPhHandler extends DefaultElementHandler<SegmentBuilder> {
@@ -544,8 +563,7 @@ public class TMXReader implements AutoCloseable {
     }
     class SegHiHandler extends DefaultElementHandler<SegmentBuilder> {
         @Override
-        public void startElement(StartElement element, SegmentBuilder data)
-                throws SNAXUserException {
+        public void startElement(StartElement element, SegmentBuilder data) {
             HighlightTag hi = new HighlightTag();
             Integer x = attrValAsInteger(element, X);
             if (x != null) {
@@ -562,19 +580,18 @@ public class TMXReader implements AutoCloseable {
         }
         @Override
         public void characters(StartElement parent, Characters characters,
-                SegmentBuilder data) throws SNAXUserException {
-            addTextContent(characters.getData());
+                SegmentBuilder data) {
+            addTextContent(characters.getData(), data.peekPreserveSpace());
         }
         @Override
-        public void endElement(EndElement element, SegmentBuilder data)
-                throws SNAXUserException {
+        public void endElement(EndElement element, SegmentBuilder data) {
             contentStack.pop();
         }
     }
-    class SegSubHandler extends DefaultElementHandler<SegmentBuilder> {
+    class SegSubHandler extends XmlSpaceAwareHandler {
         @Override
-        public void startElement(StartElement element, SegmentBuilder data)
-                throws SNAXUserException {
+        public void startElement(StartElement element, SegmentBuilder data) {
+            super.startElement(element, data);
             Subflow subflow = new Subflow();
             String type = attrVal(element, TYPE);
             if (type != null) {
@@ -589,12 +606,12 @@ public class TMXReader implements AutoCloseable {
         }
         @Override
         public void characters(StartElement parent, Characters contents,
-                SegmentBuilder data) throws SNAXUserException {
-            addTextContent(contents.getData());
+                SegmentBuilder data) {
+            addTextContent(contents.getData(), data.peekPreserveSpace());
         }
         @Override
-        public void endElement(EndElement element, SegmentBuilder data)
-                throws SNAXUserException {
+        public void endElement(EndElement element, SegmentBuilder data) {
+            super.endElement(element, data);
             contentStack.pop();
         }
     }

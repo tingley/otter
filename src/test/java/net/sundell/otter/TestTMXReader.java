@@ -21,7 +21,6 @@ import net.sundell.otter.Property;
 import net.sundell.otter.Subflow;
 import net.sundell.otter.TMXDateParser;
 import net.sundell.otter.TMXEvent;
-import net.sundell.otter.TMXEventType;
 import net.sundell.otter.TMXReader;
 import net.sundell.otter.TU;
 import net.sundell.otter.TUEvent;
@@ -335,22 +334,28 @@ public class TestTMXReader {
         checkItSubflowTuv(tuvs.get("EN-US"));
         checkItSubflowTuv(tuvs.get("FR-FR"));
     }
-    
+
     @Test
     public void testTUEventSequenceNumbers() throws Exception {
         TMXReader reader = TestUtil.getTMXReader("/subflow.tmx");
-        List<TMXEvent> events = readEvents(reader);
-        List<TUEvent> tuEvents = new ArrayList<TUEvent>();
-        for (TMXEvent e : events) {
-            if (e.getEventType() == TMXEventType.TU){
-                assertTrue(e instanceof TUEvent);
-                tuEvents.add((TUEvent)e);
-            }
-        }
+        List<TUEvent> tuEvents = readTUEvents(reader);
         assertEquals(4, tuEvents.size());
         for (int i = 0; i < tuEvents.size(); i++) {
             assertEquals(i, tuEvents.get(i).getSequence());
         }
+    }
+
+    @Test
+    public void testXmlSpace() throws Exception {
+        TMXReader reader = TestUtil.getTMXReader("/xmlspace.tmx");
+        List<TUEvent> tuEvents = readTUEvents(reader);
+        assertEquals(3, tuEvents.size());
+        TUV tuv1 = tuEvents.get(0).getTU().getTuvs().get("EN-US");
+        assertEquals("This space should be normalized.", toString(tuv1.getContents()));
+        TUV tuv2 = tuEvents.get(1).getTU().getTuvs().get("EN-US");
+        assertEquals("    This\nspace  should\nbe preserved.", toString(tuv2.getContents()));
+        TUV tuv3 = tuEvents.get(2).getTU().getTuvs().get("EN-US");
+        assertEquals("    This\nspace  should\nbe preserved.", toString(tuv3.getContents()));
     }
 
     private void checkBptSubflowTuv(TUV tuv) {
@@ -446,5 +451,12 @@ public class TestTMXReader {
         assertEquals(1, subflowContents.size());
         assertEquals(new TextContent("Subflow text"), subflowContents.get(0));
     }
-    
+
+    private String toString(List<TUVContent> contents) {
+        StringBuilder sb = new StringBuilder();
+        for (TUVContent c : contents) {
+            sb.append(c.toString());
+        }
+        return sb.toString();
+    }
 }
