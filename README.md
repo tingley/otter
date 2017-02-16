@@ -17,7 +17,7 @@ Exchange](http://www.gala-global.org/oscarStandards/tmx/) (TMX) documents.
 
 It is currently under development.
 
-Building
+Building ![build status](https://travis-ci.org/tingley/otter.svg?branch=dev)
 --------
 
 Otter builds with Maven.  It requires Java 1.7 or later.
